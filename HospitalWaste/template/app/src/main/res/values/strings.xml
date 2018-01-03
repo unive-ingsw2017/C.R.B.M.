@@ -1,7 +1,7 @@
 <resources>
     <!-- Customize your app's name here. -->
-    <string name="app_name">Datadroid Template App</string>
-    <string name="title_activity_maps">Datadroid Template App - Map</string>
+    <string name="app_name">HospitalWaste</string>
+    <string name="title_activity_maps">HospitalWaste - Map</string>
     <!-- -->
 
     <string name="gps_disabled">GPS disattivato</string>
@@ -28,7 +28,7 @@
     <string name="credits_year">2017</string>
     <string name="credits_project">CEVID</string>
     <string name="credits_company">Università Ca\' Foscari Venezia</string>
-    <string name="credits_authors">Alvise Spanò</string>
+    <string name="credits_authors">C.R.B.M.</string>
 
     <string name="action_info">Info</string>
     <string name="action_impostazioni">Impostazioni</string>
