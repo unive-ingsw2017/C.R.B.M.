@@ -1,22 +1,18 @@
 package it.unive.dais.cevid.datadroid.template.DatabaseUtils;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.DatabaseUtils;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteDatabase;
+import java.util.LinkedList;
+import java.util.List;
 
 import it.unive.dais.cevid.datadroid.template.R;
+import it.unive.dais.cevid.datadroid.template.ULSS_stuff.ULSS;
 
 /**
  * Created by gianmarcocallegher on 04/01/18.
@@ -24,9 +20,8 @@ import it.unive.dais.cevid.datadroid.template.R;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "HospitalWaste.db";
+    private static final String DATABASE_NAME = "HospitalWaste.db";
 
-    private HashMap hp;
     private Context context;
 
     public DBHelper(Context context) {
@@ -35,30 +30,23 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public int insertFromFile(SQLiteDatabase db, Context context) throws IOException {
-        // Reseting Counter
-        int result = 0;
-
+    private void insertFromFile(SQLiteDatabase db) throws IOException {
         // Open the resource
         InputStream insertsStream = context.getResources().openRawResource(R.raw.HospitalWasteInit);
         BufferedReader insertReader = new BufferedReader(new InputStreamReader(insertsStream));
 
-        // Iterate through lines (assuming each insert has its own line and theres no other stuff)
+        // Iterate through lines (assuming each insert has its own line and there's no other stuff)
         while (insertReader.ready()) {
             String insertStmt = insertReader.readLine();
             db.execSQL(insertStmt);
-            result++;
         }
         insertReader.close();
-
-        // returning number of inserted rows
-        return result;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         try {
-            this.insertFromFile(db, context);
+            this.insertFromFile(db);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,18 +54,28 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        /// TODO: DROP TABLE
+        deleteTables(db);
         onCreate(db);
     }
 
-    public boolean initDB(String name, String path) {
-        // TODO: Inizializzare ULSS (opzionale dati sul file)
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
+    private void deleteTables(SQLiteDatabase db) {
+        List<String> tables = new LinkedList();
+        tables.add("ULSS");
+        tables.add("Bilancio");
+        tables.add("Appalti");
 
-        db.insert("ULSS", null, contentValues);
-        return true;
+
+        // call DROP TABLE on every table name
+        for (String table : tables) {
+            String dropQuery = "DROP TABLE IF EXISTS " + table;
+            db.execSQL(dropQuery);
+        }
     }
+
+    public List<ULSS> getAllULSS(SQLiteDatabase db){
+        return null;
+    }
+
 
     // TODO: Inserire metodi query
 }
