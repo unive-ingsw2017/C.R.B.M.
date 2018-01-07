@@ -12,9 +12,12 @@ import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 
+import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 import it.unive.dais.cevid.datadroid.template.R;
+import it.unive.dais.cevid.datadroid.template.ULSS_stuff.Appalto;
 import it.unive.dais.cevid.datadroid.template.ULSS_stuff.Bilancio;
+import it.unive.dais.cevid.datadroid.template.ULSS_stuff.ULSS;
 
 /**
  * Created by gianmarcocallegher on 04/01/18.
@@ -34,14 +37,15 @@ public class DBHelper extends SQLiteOpenHelper {
         this.context = context.getApplicationContext();
     }
 
-    public static DBHelper getSingleton(Context context){
-        if(instance == null){
+    public static DBHelper getSingleton(Context context) {
+        if (instance == null) {
             instance = new DBHelper(context);
         }
         return instance;
     }
-    public static DBHelper getSingleton(){
-        if(instance == null){
+
+    public static DBHelper getSingleton() {
+        if (instance == null) {
             throw new IllegalArgumentException();
         }
         return instance;
@@ -89,8 +93,10 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    /** prende un istanza della classe SoldipubbliciParser.Data e crea un array di Bilancio
+    /**
+     * prende un istanza della classe SoldipubbliciParser.Data e crea un array di Bilancio
      * ed utilizza un altro metodo per inserire oggetti di tipo Bilancio
+     *
      * @param db
      * @param bilancioData
      */
@@ -137,7 +143,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private void insertBilanci(SQLiteDatabase db, List<Bilancio> bilanci) {
         ContentValues values = new ContentValues();
 
-        for(Bilancio bilancio: bilanci){
+        for (Bilancio bilancio : bilanci) {
             values.put("codice_siope", bilancio.getCodiceSiope());
             values.put("codice_ente", bilancio.getCodiceEnte());
             values.put("anno", bilancio.getAnno());
@@ -146,7 +152,43 @@ public class DBHelper extends SQLiteOpenHelper {
 
             db.insert("Bilancio", null, values);
         }
-        
+
+    }
+
+    /**
+     * prende un appalto e l'ulss a cui si riferisce e crea un oggetto Appalto per inserire l'informazione
+     * nella relativa tabella nel database
+     * @param db
+     * @param appaltoData
+     * @param ulss
+     */
+    public void insertAppalto(SQLiteDatabase db, AppaltiParser.Data appaltoData, ULSS ulss) {
+        Appalto appalto = new Appalto(
+                appaltoData.cig,
+                appaltoData.oggetto,
+                appaltoData.aggiudicatario,
+                appaltoData.codiceFiscaleAgg,
+                appaltoData.proponente,
+                Double.parseDouble(appaltoData.importo),
+                ulss.getCodiceEnte()
+                );
+
+        insertAppalto(db, appalto);
+    }
+
+    private void insertAppalto(SQLiteDatabase db, Appalto appalto) {
+        ContentValues values = new ContentValues();
+
+        values.put("cig", appalto.getCig());
+        values.put("oggetto", appalto.getOggetto());
+        values.put("aggiudicatario", appalto.getAggiudicatario());
+        values.put("codice_fiscale", appalto.getCodiceFiscale());
+        values.put("ragione_sociale", appalto.getRagioneSociale());
+        values.put("importo", appalto.getImporto());
+        values.put("codice_ente", appalto.getCodiceEnte());
+
+        db.insert("Bilancio", null, values);
+
     }
 
 

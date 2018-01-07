@@ -8,14 +8,16 @@ public class Appalto {
     private String cig;
     private String oggetto;
     private String aggiudicatario;
+    private String codiceFiscale;
     private String ragioneSociale;
     private double importo;
     private String codiceEnte;
 
-    public Appalto(String cig, String oggetto, String aggiudicatario, String ragioneSociale, double importo, String codiceEnte) {
+    public Appalto(String cig, String oggetto, String aggiudicatario, String codiceFiscale, String ragioneSociale, double importo, String codiceEnte) {
         this.cig = cig;
         this.oggetto = oggetto;
         this.aggiudicatario = aggiudicatario;
+        this.codiceFiscale = codiceFiscale;
         this.ragioneSociale = ragioneSociale;
         this.importo = importo;
         this.codiceEnte = codiceEnte;
@@ -44,5 +46,9 @@ public class Appalto {
 
     public String getCodiceEnte() {
         return codiceEnte;
+    }
+
+    public String getCodiceFiscale() {
+        return codiceFiscale;
     }
 }
