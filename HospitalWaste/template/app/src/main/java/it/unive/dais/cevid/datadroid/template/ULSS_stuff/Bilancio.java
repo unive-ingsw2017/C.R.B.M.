@@ -7,15 +7,31 @@ package it.unive.dais.cevid.datadroid.template.ULSS_stuff;
 public class Bilancio {
     private String codiceSiope;
     private String codiceEnte;
-    private int anno;
 
-    public Bilancio(String codiceSiope, String codiceEnte, int anno, String descrizioneStringa, double importo) {
+    private int anno;
+    private double importo;
+
+    private String descrizioneCodice;
+
+    public Bilancio(String codiceSiope, String codiceEnte, int anno, String descrizioneCodice, double importo) {
         this.codiceSiope = codiceSiope;
         this.codiceEnte = codiceEnte;
         this.anno = anno;
-        this.descrizioneStringa = descrizioneStringa;
+        this.descrizioneCodice = descrizioneCodice;
         this.importo = importo;
     }
+
+    //usa un oggetto bilancio gia esistente e ne crea un altro a partire da questo e modifica solo anno e importo
+    public Bilancio generateNewBilancio(int anno, double importo){
+        return new Bilancio(
+                this.codiceSiope,
+                this.codiceEnte,
+                anno,
+                this.descrizioneCodice,
+                importo
+                );
+    }
+
 
     public String getCodiceSiope() {
         return codiceSiope;
@@ -29,15 +45,14 @@ public class Bilancio {
         return anno;
     }
 
-    public String getDescrizioneStringa() {
-        return descrizioneStringa;
+    public String getDescrizioneCodice() {
+        return descrizioneCodice;
     }
 
     public double getImporto() {
         return importo;
     }
 
-    private String descrizioneStringa;
-    private double importo;
+
 
 }

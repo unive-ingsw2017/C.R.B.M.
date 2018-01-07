@@ -1,0 +1,3 @@
+CREATE TABLE ULSS (codice_ente TEXT PRIMARY KEY ASC NOT NULL, denominazione TEXT, latitudine DECIMAL, longitudine DECIMAL, posti_letto INTEGER, ospedali_associati TEXT);
+CREATE TABLE Bilancio (codice_siope TEXT NOT NULL, codice_ente TEXT REFERENCES ULSS (codice_ente) ON DELETE CASCADE ON UPDATE CASCADE MATCH SIMPLE NOT NULL, anno INTEGER NOT NULL, descrizione_codice TEXT, importo REAL NOT NULL, PRIMARY KEY ( codice_siope ASC, codice_ente ASC, anno ASC ));
+CREATE TABLE Appalti (cig TEXT NOT NULL, oggetto TEXT, aggiudicatario TEXT, [c.f.] TEXT NOT NULL, ragione_sociale TEXT, importo REAL NOT NULL, codice_ente TEXT REFERENCES ULSS (codice_ente) ON DELETE CASCADE ON UPDATE CASCADE MATCH SIMPLE NOT NULL, PRIMARY KEY ( cig ASC, codice_ente ASC ));

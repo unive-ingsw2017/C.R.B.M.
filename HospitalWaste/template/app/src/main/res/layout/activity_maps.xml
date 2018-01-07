@@ -5,7 +5,7 @@
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="it.unive.dais.cevid.template.MapsActivity">
+    tools:context="it.unive.dais.cevid.datadroid.template.MapsActivity">
 
     <LinearLayout
         android:orientation="vertical"

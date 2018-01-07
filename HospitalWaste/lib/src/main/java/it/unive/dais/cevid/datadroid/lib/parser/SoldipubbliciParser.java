@@ -34,7 +34,6 @@ import okhttp3.RequestBody;
  * </pre></blockquote>
  *
  * @author Alvise Spanò, Università Ca' Foscari
- * @param <Progress>
  */
 public class SoldipubbliciParser extends AbstractAsyncParser<SoldipubbliciParser.Data, ProgressStepper> {
 
@@ -124,7 +123,6 @@ public class SoldipubbliciParser extends AbstractAsyncParser<SoldipubbliciParser
         public String importo_2015;
         public String importo_2016;
         public String importo_2017;
-
     }
 
 }
