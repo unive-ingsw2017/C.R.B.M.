@@ -5,8 +5,8 @@ CREATE TABLE Appalti (cig TEXT NOT NULL, oggetto TEXT, codice_fiscale_aggiudicat
 INSERT INTO ULSS
 VALUES
  (
- "",
- "ULSS 13",
+ "000059309000506",
+ "ULSS 1",
  45.5002392,
  12.110806799999978,
  10,

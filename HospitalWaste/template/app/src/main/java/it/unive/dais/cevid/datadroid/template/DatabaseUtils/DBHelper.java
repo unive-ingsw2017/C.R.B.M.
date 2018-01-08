@@ -2,8 +2,11 @@ package it.unive.dais.cevid.datadroid.template.DatabaseUtils;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -69,9 +72,44 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         try {
             this.insertFromFile(db);
+            List<ULSS> ulssList = getULSS(db);
+
+            for(ULSS ulss: ulssList){
+                SoldipubbliciParser parserSoldiPubblici = new SoldipubbliciParser("SAN", ulss.getCodiceEnte());
+                //TODO calle fai tu
+
+                insertVociBilancio(
+                        db,
+                        parserSoldiPubblici.parse()
+                );
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private List<ULSS> getULSS(SQLiteDatabase db) {
+        Cursor cursor = db.rawQuery("SELECT * FROM ULSS", null);
+        List<ULSS> ulssList = new LinkedList<>();
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            ulssList.add(
+                    new ULSS(
+                            cursor.getString(1),
+                            cursor.getString(0),
+                            cursor.getString(5),
+                            new LatLng(
+                                    cursor.getDouble(2),
+                                    cursor.getDouble(3)
+                            ),
+                            cursor.getInt(4)
+                    )
+            );
+
+        }
+        cursor.close();
+        return ulssList;
     }
 
     @Override

@@ -49,7 +49,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -60,6 +59,7 @@ import java.util.concurrent.ExecutionException;
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
 import it.unive.dais.cevid.datadroid.lib.parser.CsvRowParser;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
+import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
 
 /**
  * Questa classe è la componente principale del toolkit: fornisce servizi primari per un'app basata su Google Maps, tra cui localizzazione, pulsanti
@@ -155,6 +155,9 @@ public class MapsActivity extends AppCompatActivity
                     Log.d(TAG, "no current position available");
             }
         });
+
+
+        DBHelper dbHelper = DBHelper.getSingleton(this);
     }
 
 
@@ -586,6 +589,7 @@ public class MapsActivity extends AppCompatActivity
     @Nullable
     private Collection<Marker> markers;
 
+    /**
     private void demo() {
         try {
             InputStream is = getResources().openRawResource(R.raw.piattaforme);
@@ -616,6 +620,36 @@ public class MapsActivity extends AppCompatActivity
             e.printStackTrace();
         }
     }
+    */
+    private void demo() {
+        try {
+            InputStream is = getResources().openRawResource(R.raw.ulss_positions);
+            CsvRowParser p = new CsvRowParser(new InputStreamReader(is), true, ";");
+            List<CsvRowParser.Row> rows = p.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get();
+            List<MapItem> l = new ArrayList<>();
+            for (final CsvRowParser.Row r : rows) {
+                l.add(new MapItem() {
+                    @Override
+                    public LatLng getPosition() {
+                        String lat = r.get("lat"), lng = r.get("long");
+                        return new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
+                    }
 
+                    @Override
+                    public String getTitle() {
+                        return r.get("denominazione");
+                    }
+
+                    @Override
+                    public String getDescription() {
+                        return "descrizione";
+                    }
+                });
+            }
+            markers = putMarkersFromMapItems(l);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
