@@ -7,18 +7,16 @@ package it.unive.dais.cevid.datadroid.template.ULSS_stuff;
 public class Appalto {
     private String cig;
     private String oggetto;
+    private String codice_fiscale_aggiudicatario;
     private String aggiudicatario;
-    private String codiceFiscale;
-    private String ragioneSociale;
     private double importo;
     private String codiceEnte;
 
-    public Appalto(String cig, String oggetto, String aggiudicatario, String codiceFiscale, String ragioneSociale, double importo, String codiceEnte) {
+    public Appalto(String cig, String oggetto, String codice_fiscale_aggiudicatario, String aggiudicatario, double importo, String codiceEnte) {
         this.cig = cig;
         this.oggetto = oggetto;
+        this.codice_fiscale_aggiudicatario = codice_fiscale_aggiudicatario;
         this.aggiudicatario = aggiudicatario;
-        this.codiceFiscale = codiceFiscale;
-        this.ragioneSociale = ragioneSociale;
         this.importo = importo;
         this.codiceEnte = codiceEnte;
     }
@@ -32,12 +30,12 @@ public class Appalto {
         return oggetto;
     }
 
-    public String getAggiudicatario() {
-        return aggiudicatario;
+    public String getCodice_fiscale_aggiudicatario() {
+        return codice_fiscale_aggiudicatario;
     }
 
-    public String getRagioneSociale() {
-        return ragioneSociale;
+    public String getAggiudicatario() {
+        return aggiudicatario;
     }
 
     public double getImporto() {
@@ -46,9 +44,5 @@ public class Appalto {
 
     public String getCodiceEnte() {
         return codiceEnte;
-    }
-
-    public String getCodiceFiscale() {
-        return codiceFiscale;
     }
 }

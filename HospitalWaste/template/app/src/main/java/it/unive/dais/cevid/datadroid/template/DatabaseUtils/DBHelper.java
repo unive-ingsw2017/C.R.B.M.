@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -97,11 +98,10 @@ public class DBHelper extends SQLiteOpenHelper {
      * prende un istanza della classe SoldipubbliciParser.Data e crea un array di Bilancio
      * ed utilizza un altro metodo per inserire oggetti di tipo Bilancio
      *
-     * @param db
      * @param bilancioData
      */
-    public void insertBilancio(SQLiteDatabase db, SoldipubbliciParser.Data bilancioData) {
-        List<Bilancio> bilanci = new LinkedList();
+    private List createVociBilancio(SoldipubbliciParser.Data bilancioData) {
+        List<Bilancio> vociBilancio = new LinkedList();
         Bilancio bilancio_2013 = new Bilancio(
                 bilancioData.codice_siope,
                 bilancioData.cod_ente,
@@ -110,40 +110,46 @@ public class DBHelper extends SQLiteOpenHelper {
                 Double.parseDouble(bilancioData.importo_2013)
         );
 
-        bilanci.add(bilancio_2013);
+        vociBilancio.add(bilancio_2013);
 
-        bilanci.add(
+        vociBilancio.add(
                 bilancio_2013.generateNewBilancio(
                         2014,
                         Double.parseDouble(bilancioData.importo_2014)
                 )
         );
-        bilanci.add(
+        vociBilancio.add(
                 bilancio_2013.generateNewBilancio(
                         2015,
                         Double.parseDouble(bilancioData.importo_2015)
                 )
         );
-        bilanci.add(
+        vociBilancio.add(
                 bilancio_2013.generateNewBilancio(
                         2016,
                         Double.parseDouble(bilancioData.importo_2016)
                 )
         );
-        bilanci.add(
+        vociBilancio.add(
                 bilancio_2013.generateNewBilancio(
                         2017,
                         Double.parseDouble(bilancioData.importo_2017)
                 )
         );
 
-        insertBilanci(db, bilanci);
+        return vociBilancio;
     }
 
-    private void insertBilanci(SQLiteDatabase db, List<Bilancio> bilanci) {
+    public void insertVociBilancio(SQLiteDatabase db, List<SoldipubbliciParser.Data> vociBilancio) {
+        List<Bilancio> l = new ArrayList<>();
+
+        for (SoldipubbliciParser.Data voceBilancio : vociBilancio) {
+            l.addAll(createVociBilancio(voceBilancio));
+        }
+
         ContentValues values = new ContentValues();
 
-        for (Bilancio bilancio : bilanci) {
+        for (Bilancio bilancio : l) {
             values.put("codice_siope", bilancio.getCodiceSiope());
             values.put("codice_ente", bilancio.getCodiceEnte());
             values.put("anno", bilancio.getAnno());
@@ -166,9 +172,8 @@ public class DBHelper extends SQLiteOpenHelper {
         Appalto appalto = new Appalto(
                 appaltoData.cig,
                 appaltoData.oggetto,
-                appaltoData.aggiudicatario,
                 appaltoData.codiceFiscaleAgg,
-                appaltoData.proponente,
+                appaltoData.aggiudicatario,
                 Double.parseDouble(appaltoData.importo),
                 ulss.getCodiceEnte()
                 );
@@ -181,9 +186,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         values.put("cig", appalto.getCig());
         values.put("oggetto", appalto.getOggetto());
+        values.put("codice_fiscale_aggiudicatario", appalto.getCodice_fiscale_aggiudicatario());
         values.put("aggiudicatario", appalto.getAggiudicatario());
-        values.put("codice_fiscale", appalto.getCodiceFiscale());
-        values.put("ragione_sociale", appalto.getRagioneSociale());
         values.put("importo", appalto.getImporto());
         values.put("codice_ente", appalto.getCodiceEnte());
 
