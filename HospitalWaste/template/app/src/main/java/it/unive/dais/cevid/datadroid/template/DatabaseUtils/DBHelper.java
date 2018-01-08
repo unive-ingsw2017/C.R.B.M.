@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -15,6 +16,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
@@ -74,16 +76,15 @@ public class DBHelper extends SQLiteOpenHelper {
             this.insertFromFile(db);
             List<ULSS> ulssList = getULSS(db);
 
-            for(ULSS ulss: ulssList){
+            for(ULSS ulss: ulssList) {
                 SoldipubbliciParser parserSoldiPubblici = new SoldipubbliciParser("SAN", ulss.getCodiceEnte());
-                //TODO calle fai tu
-
-                insertVociBilancio(
-                        db,
-                        parserSoldiPubblici.parse()
-                );
+                List<SoldipubbliciParser.Data> l = new ArrayList<>(parserSoldiPubblici.getAsyncTask().get());
+                Log.e("AAA", "BBB");
+                insertVociBilancio(db, l);
             }
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
     }
