@@ -622,6 +622,7 @@ public class MapsActivity extends AppCompatActivity
     }
     */
     private void demo() {
+
         try {
             InputStream is = getResources().openRawResource(R.raw.ulss_positions);
             CsvRowParser p = new CsvRowParser(new InputStreamReader(is), true, ";");

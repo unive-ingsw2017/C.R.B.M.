@@ -74,13 +74,13 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         try {
             this.insertFromFile(db);
-            List<ULSS> ulssList = getULSS(db);
+            List<ULSS> ulssList = getULSS();
 
             for(ULSS ulss: ulssList) {
                 SoldipubbliciParser parserSoldiPubblici = new SoldipubbliciParser("SAN", ulss.getCodiceEnte());
                 List<SoldipubbliciParser.Data> l = new ArrayList<>(parserSoldiPubblici.getAsyncTask().get());
                 Log.e("AAA", "BBB");
-                insertVociBilancio(db, l);
+                insertVociBilancio(l);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -89,7 +89,8 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    private List<ULSS> getULSS(SQLiteDatabase db) {
+    public List<ULSS> getULSS() {
+        SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM ULSS", null);
         List<ULSS> ulssList = new LinkedList<>();
 
@@ -115,15 +116,17 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        deleteTables(db);
+        deleteTables();
         onCreate(db);
     }
 
-    private void deleteTables(SQLiteDatabase db) {
+    private void deleteTables() {
         List<String> tables = new LinkedList();
         tables.add("ULSS");
         tables.add("Bilancio");
         tables.add("Appalti");
+
+        SQLiteDatabase db = getWritableDatabase();
 
 
         // call DROP TABLE on every table name
@@ -131,6 +134,8 @@ public class DBHelper extends SQLiteOpenHelper {
             String dropQuery = "DROP TABLE IF EXISTS " + table;
             db.execSQL(dropQuery);
         }
+
+        db.close();
     }
 
     /**
@@ -179,7 +184,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return vociBilancio;
     }
 
-    public void insertVociBilancio(SQLiteDatabase db, List<SoldipubbliciParser.Data> vociBilancio) {
+    public void insertVociBilancio(List<SoldipubbliciParser.Data> vociBilancio) {
         List<Bilancio> l = new ArrayList<>();
 
         for (SoldipubbliciParser.Data voceBilancio : vociBilancio) {
@@ -187,6 +192,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         ContentValues values = new ContentValues();
+        SQLiteDatabase db = getWritableDatabase();
 
         for (Bilancio bilancio : l) {
             values.put("codice_siope", bilancio.getCodiceSiope());
@@ -197,6 +203,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
             db.insert("Bilancio", null, values);
         }
+
+        db.close();
 
     }
 
@@ -217,10 +225,11 @@ public class DBHelper extends SQLiteOpenHelper {
                 ulss.getCodiceEnte()
                 );
 
-        insertAppalto(db, appalto);
+        insertAppalto(appalto);
     }
 
-    private void insertAppalto(SQLiteDatabase db, Appalto appalto) {
+    private void insertAppalto(Appalto appalto) {
+        SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.put("cig", appalto.getCig());
@@ -231,6 +240,8 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put("codice_ente", appalto.getCodiceEnte());
 
         db.insert("Bilancio", null, values);
+
+        db.close();
 
     }
 
