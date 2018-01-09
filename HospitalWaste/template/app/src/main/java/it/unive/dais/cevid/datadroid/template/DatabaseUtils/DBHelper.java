@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -82,9 +83,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
             for(ULSS ulss: ulssList) {
                 SoldipubbliciParser parserSoldiPubblici = new SoldipubbliciParser("SAN", ulss.getCodiceEnte());
+                parserSoldiPubblici.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 List<SoldipubbliciParser.Data> l = new ArrayList<>(parserSoldiPubblici.getAsyncTask().get());
-                Log.e("AAA", "BBB");
-                insertVociBilancio(l);
+                insertVociBilancio(db, l);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -215,7 +216,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return vociBilancio;
     }
 
-    public void insertVociBilancio(List<SoldipubbliciParser.Data> vociBilancio) {
+    private void insertVociBilancio(SQLiteDatabase db, List<SoldipubbliciParser.Data> vociBilancio) {
         List<Bilancio> l = new ArrayList<>();
 
         for (SoldipubbliciParser.Data voceBilancio : vociBilancio) {
@@ -223,8 +224,6 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         ContentValues values = new ContentValues();
-        SQLiteDatabase db = getWritableDatabase();
-
         for (Bilancio bilancio : l) {
             values.put("codice_siope", bilancio.getCodiceSiope());
             values.put("codice_ente", bilancio.getCodiceEnte());
@@ -234,9 +233,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
             db.insert("Bilancio", null, values);
         }
-
-        db.close();
-
     }
 
     /**
@@ -245,6 +241,8 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param appaltoData
      * @param ulss
      */
+
+    // TODO: Sistemare per il doppio accesso al DB
     public void insertAppalto(AppaltiParser.Data appaltoData, ULSS ulss) {
         Appalto appalto = new Appalto(
                 appaltoData.cig,
