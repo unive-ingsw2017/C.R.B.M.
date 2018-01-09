@@ -158,7 +158,9 @@ public class MapsActivity extends AppCompatActivity
         });
 
 
-        DBHelper dbHelper = DBHelper.getSingleton(this);
+        //DBHelper dbHelper = DBHelper.getSingleton(this);
+
+        DBHelper dbHelper = new DBHelper(this);
 
         for(ULSS temp: dbHelper.getULSS()){
             Log.d("tag", temp.getCodiceEnte());

@@ -78,7 +78,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         try {
             this.insertFromFile(db);
-            List<ULSS> ulssList = getULSS();
+            List<ULSS> ulssList = getULSS(db);
 
             for(ULSS ulss: ulssList) {
                 SoldipubbliciParser parserSoldiPubblici = new SoldipubbliciParser("SAN", ulss.getCodiceEnte());
@@ -112,10 +112,36 @@ public class DBHelper extends SQLiteOpenHelper {
                             cursor.getInt(4)
                     )
             );
+            cursor.moveToNext();
 
         }
         cursor.close();
         db.close();
+        return ulssList;
+    }
+
+    private List<ULSS> getULSS(SQLiteDatabase db) {
+        Cursor cursor = db.rawQuery("SELECT * FROM ULSS", null);
+        List<ULSS> ulssList = new LinkedList<>();
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            ulssList.add(
+                    new ULSS(
+                            cursor.getString(1),
+                            cursor.getString(0),
+                            cursor.getString(5),
+                            new LatLng(
+                                    cursor.getDouble(2),
+                                    cursor.getDouble(3)
+                            ),
+                            cursor.getInt(4)
+                    )
+            );
+            cursor.moveToNext();
+
+        }
+        cursor.close();
         return ulssList;
     }
 
