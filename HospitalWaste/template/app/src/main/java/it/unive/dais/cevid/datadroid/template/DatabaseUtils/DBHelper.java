@@ -47,6 +47,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if (instance == null) {
             instance = new DBHelper(context);
         }
+
         return instance;
     }
 
@@ -65,7 +66,10 @@ public class DBHelper extends SQLiteOpenHelper {
         // Iterate through lines (assuming each insert has its own line and there's no other stuff)
         while (insertReader.ready()) {
             String insertStmt = insertReader.readLine();
-            db.execSQL(insertStmt);
+
+            if(!insertStmt.equals("")) {//TODO cambiare sta ....
+                db.execSQL(insertStmt);
+            }
         }
         insertReader.close();
     }
@@ -111,6 +115,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         }
         cursor.close();
+        db.close();
         return ulssList;
     }
 
@@ -119,7 +124,7 @@ public class DBHelper extends SQLiteOpenHelper {
         deleteTables();
         onCreate(db);
     }
-
+    
     private void deleteTables() {
         List<String> tables = new LinkedList();
         tables.add("ULSS");
@@ -211,11 +216,10 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * prende un appalto e l'ulss a cui si riferisce e crea un oggetto Appalto per inserire l'informazione
      * nella relativa tabella nel database
-     * @param db
      * @param appaltoData
      * @param ulss
      */
-    public void insertAppalto(SQLiteDatabase db, AppaltiParser.Data appaltoData, ULSS ulss) {
+    public void insertAppalto(AppaltiParser.Data appaltoData, ULSS ulss) {
         Appalto appalto = new Appalto(
                 appaltoData.cig,
                 appaltoData.oggetto,
