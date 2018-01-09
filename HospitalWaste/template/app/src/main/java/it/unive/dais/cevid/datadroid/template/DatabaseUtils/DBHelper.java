@@ -82,10 +82,17 @@ public class DBHelper extends SQLiteOpenHelper {
             List<ULSS> ulssList = getULSS(db);
 
             for(ULSS ulss: ulssList) {
-                SoldipubbliciParser parserSoldiPubblici = new SoldipubbliciParser("SAN", ulss.getCodiceEnte());
-                parserSoldiPubblici.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                List<SoldipubbliciParser.Data> l = new ArrayList<>(parserSoldiPubblici.getAsyncTask().get());
-                insertVociBilancio(db, l);
+                SoldipubbliciParser soldipubbliciParser = new SoldipubbliciParser("SAN", ulss.getCodiceEnte());
+                soldipubbliciParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                List<SoldipubbliciParser.Data> soldipubbliciList = new ArrayList<>(soldipubbliciParser.getAsyncTask().get());
+
+                insertVociBilancio(db, soldipubbliciList);
+
+                // TODO: creare lista link per ulss
+                /*AppaltiParser appaltiParser = new SoldipubbliciParser(urlList);
+                appaltiParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                List<AppaltiParser.Data> appaltiList = new ArrayList<>(appaltiParser.getAsyncTask().get());
+                insertAppalti(db, appaltiList, ulss.getCodiceEnte());*/
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -97,32 +104,17 @@ public class DBHelper extends SQLiteOpenHelper {
     public List<ULSS> getULSS() {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM ULSS", null);
-        List<ULSS> ulssList = new LinkedList<>();
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            ulssList.add(
-                    new ULSS(
-                            cursor.getString(1),
-                            cursor.getString(0),
-                            cursor.getString(5),
-                            new LatLng(
-                                    cursor.getDouble(2),
-                                    cursor.getDouble(3)
-                            ),
-                            cursor.getInt(4)
-                    )
-            );
-            cursor.moveToNext();
-
-        }
-        cursor.close();
+        List<ULSS> ulssList = fetchULSS(cursor);
         db.close();
         return ulssList;
     }
 
     private List<ULSS> getULSS(SQLiteDatabase db) {
         Cursor cursor = db.rawQuery("SELECT * FROM ULSS", null);
+        return fetchULSS(cursor);
+    }
+
+    private List fetchULSS (Cursor cursor) {
         List<ULSS> ulssList = new LinkedList<>();
 
         cursor.moveToFirst();
@@ -148,26 +140,21 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        deleteTables();
+        deleteTables(db);
         onCreate(db);
     }
     
-    private void deleteTables() {
+    private void deleteTables(SQLiteDatabase db) {
         List<String> tables = new LinkedList();
         tables.add("ULSS");
         tables.add("Bilancio");
         tables.add("Appalti");
-
-        SQLiteDatabase db = getWritableDatabase();
-
 
         // call DROP TABLE on every table name
         for (String table : tables) {
             String dropQuery = "DROP TABLE IF EXISTS " + table;
             db.execSQL(dropQuery);
         }
-
-        db.close();
     }
 
     /**
@@ -236,41 +223,37 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * prende un appalto e l'ulss a cui si riferisce e crea un oggetto Appalto per inserire l'informazione
-     * nella relativa tabella nel database
-     * @param appaltoData
-     * @param ulss
+     * inserisce nel database db gli appalti associandoli al codice dell'ente corrispondente
+     * @param db
+     * @param appalti
+     * @param codice_ente
      */
+    private void insertAppalti(SQLiteDatabase db, List<AppaltiParser.Data> appalti, String codice_ente) {
+        List<Appalto> l = new ArrayList<>();
 
-    // TODO: Sistemare per il doppio accesso al DB
-    public void insertAppalto(AppaltiParser.Data appaltoData, ULSS ulss) {
-        Appalto appalto = new Appalto(
-                appaltoData.cig,
-                appaltoData.oggetto,
-                appaltoData.codiceFiscaleAgg,
-                appaltoData.aggiudicatario,
-                Double.parseDouble(appaltoData.importo),
-                ulss.getCodiceEnte()
-                );
+        for (AppaltiParser.Data appalto : appalti) {
+            l.add(new Appalto(
+                    appalto.cig,
+                    appalto.oggetto,
+                    appalto.codiceFiscaleAgg,
+                    appalto.aggiudicatario,
+                    Double.parseDouble(appalto.importo),
+                    codice_ente
+            ));
+        }
 
-        insertAppalto(appalto);
-    }
-
-    private void insertAppalto(Appalto appalto) {
-        SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put("cig", appalto.getCig());
-        values.put("oggetto", appalto.getOggetto());
-        values.put("codice_fiscale_aggiudicatario", appalto.getCodice_fiscale_aggiudicatario());
-        values.put("aggiudicatario", appalto.getAggiudicatario());
-        values.put("importo", appalto.getImporto());
-        values.put("codice_ente", appalto.getCodiceEnte());
+        for (Appalto appalto : l) {
+            values.put("cig", appalto.getCig());
+            values.put("oggetto", appalto.getOggetto());
+            values.put("codice_fiscale_aggiudicatario", appalto.getCodice_fiscale_aggiudicatario());
+            values.put("aggiudicatario", appalto.getAggiudicatario());
+            values.put("importo", appalto.getImporto());
+            values.put("codice_ente", appalto.getCodiceEnte());
 
-        db.insert("Bilancio", null, values);
-
-        db.close();
-
+            db.insert("Appalti", null, values);
+        }
     }
 
 
