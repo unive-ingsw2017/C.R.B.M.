@@ -78,7 +78,7 @@ public class MapsActivity extends AppCompatActivity
         implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnMarkerClickListener {
+        GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     protected static final int REQUEST_CHECK_SETTINGS = 500;
     protected static final int PERMISSIONS_REQUEST_ACCESS_BOTH_LOCATION = 501;
@@ -433,6 +433,7 @@ public class MapsActivity extends AppCompatActivity
         gMap.setOnMapLongClickListener(this);
         gMap.setOnCameraMoveStartedListener(this);
         gMap.setOnMarkerClickListener(this);
+        gMap.setOnInfoWindowClickListener(this);
 
         UiSettings uis = gMap.getUiSettings();
         uis.setZoomGesturesEnabled(true);
@@ -507,6 +508,13 @@ public class MapsActivity extends AppCompatActivity
             }
         });
         return false;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Intent ric_in_dett = new Intent(this, RicercaInDettaglioActivity.class);
+        ric_in_dett.putExtra("ULSS name", marker.getTitle());
+        startActivity(ric_in_dett);
     }
 
     /**

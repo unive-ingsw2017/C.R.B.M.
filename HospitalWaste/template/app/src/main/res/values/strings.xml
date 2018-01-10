@@ -37,5 +37,10 @@
     <string name="msg_button_car">Pulsante premuto</string>
     <string name="msg_permissions_not_granted">I permessi appena negati dall\'utente sono necessari per alcune funzionalità dell\'app. Il supporto delle funzionalità sarà ridotto.</string>
     <string name="marker_title">You are HERE</string>
+    <string name="dati_bilancio">DATI BILANCIO</string>
+    <string name="dati_appalti">DATI APPALTI</string>
+    <string name="incrocio_dati">INCROCIA DATI</string>
+    <string name="osp_associati">OSPEDALI ASSOCIATI</string>
+
 
 </resources>
