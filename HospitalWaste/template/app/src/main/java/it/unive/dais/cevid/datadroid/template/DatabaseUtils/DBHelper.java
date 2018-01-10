@@ -44,7 +44,8 @@ import it.unive.dais.cevid.datadroid.template.ULSS_stuff.ULSS;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "HospitalWaste.db";
-
+    private static final int MAX_DAYS = 15;
+    
     private static DBHelper instance = null;
     private Context context;
 
@@ -84,7 +85,7 @@ public class DBHelper extends SQLiteOpenHelper {
         dataInputStream.close();
         // cannot use LocalDate because the API level TODO migliorare
         long diffTime = (currentTime - lastTime)/ (1000 * 60 * 60 * 24);// diff time in days
-        if(diffTime > 15){
+        if(diffTime > MAX_DAYS){
             return true;
         }
         return false;
