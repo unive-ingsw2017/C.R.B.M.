@@ -295,7 +295,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 cursor.moveToFirst();
                 double old_importo = cursor.getDouble(0);
                 cursor.close();
-                db.execSQL("UPDATE Appalti SET importo="+(old_importo+appalto.getImporto())+" WHERE cig='"+appalto.getCig()+"' AND oggetto='"+appalto.getOggetto()+"' AND codice_fiscale_aggiudicatario='"+appalto.getCodice_fiscale_aggiudicatario()+"' ;");
+                db.rawQuery("UPDATE Appalti SET importo=? WHERE cig=? AND oggetto=? AND codice_fiscale_aggiudicatario=? ;",new String[]{new Double(old_importo+appalto.getImporto()).toString(),appalto.getCig(),appalto.getOggetto(),appalto.getCodice_fiscale_aggiudicatario()});
             }
         }
     }
