@@ -60,6 +60,16 @@
                 android:value=".MapsActivity" />
         </activity>
 
+        <activity
+            android:name=".RicercaInDettaglioActivity"
+            android:parentActivityName=".MapsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapsActivity" />
+        </activity>
+
+
+
     </application>
 
 </manifest>
