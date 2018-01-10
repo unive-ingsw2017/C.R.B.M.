@@ -4,19 +4,25 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,7 +53,45 @@ public class DBHelper extends SQLiteOpenHelper {
     private DBHelper(Context context) {
         super(context.getApplicationContext(), DATABASE_NAME, null, 3);
         this.context = context.getApplicationContext();
+
+        // check if the DB is old
+        updateDatabase();
     }
+
+    private void updateDatabase() {
+        SQLiteDatabase db = null;
+        try{
+            db = SQLiteDatabase.openDatabase(DATABASE_NAME, null, SQLiteDatabase.OPEN_READONLY);
+            db.close();
+
+            if(databaseIsOld()){
+                deleteDatabase();
+            }
+        }
+        catch(SQLiteException e){ //the database doesn't exist
+            Log.d("Database", "the couldn't be old because not exist yet");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean databaseIsOld() throws IOException {
+        DataInputStream dataInputStream = new DataInputStream(context.openFileInput("db_creation_time.txt"));
+
+        long lastTime = dataInputStream.readLong();
+        long currentTime = System.currentTimeMillis();
+
+        dataInputStream.close();
+        // cannot use LocalDate because the API level TODO migliorare
+        long diffTime = (currentTime - lastTime)/ (1000 * 60 * 60 * 24);// diff time in days
+        if(diffTime > 15){
+            return true;
+        }
+        return false;
+
+
+    }
+
 
     public static DBHelper getSingleton(Context context) {
         if (instance == null) {
@@ -80,12 +124,14 @@ public class DBHelper extends SQLiteOpenHelper {
         insertReader.close();
     }
 
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         try {
             this.insertFromFile(db);
-            List<ULSS> ulssList = getULSS(db);
 
+            //to insert vodi di appalto for the ULSS
+            List<ULSS> ulssList = getULSS(db);
             for(ULSS ulss: ulssList) {
                 SoldipubbliciParser soldipubbliciParser = new SoldipubbliciParser("SAN", ulss.getCodiceEnte());
                 soldipubbliciParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -94,8 +140,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 insertVociBilancio(db, soldipubbliciList);
             }
 
+            // to insert the appalti for the ULSS
             Map<String,List<URL>> appalti = takeUrlFromFile();
-
             for (String codiceEnte : appalti.keySet()) {
                 List<URL> urlList = appalti.get(codiceEnte);
                 AppaltiParser appaltiParser = new AppaltiParser(urlList);
@@ -103,6 +149,14 @@ public class DBHelper extends SQLiteOpenHelper {
                 List<AppaltiParser.Data> appaltiList = new ArrayList<>(appaltiParser.getAsyncTask().get());
                 insertAppalti(db, appaltiList, codiceEnte);
             }
+
+            // serialize date of creation object to a file
+            Date currentDate = new Date();
+
+            DataOutputStream dataOutputStream = new DataOutputStream(context.openFileOutput("db_creation_time.txt", Context.MODE_PRIVATE));
+            dataOutputStream.writeLong(currentDate.getTime());
+            dataOutputStream.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException | ExecutionException e) {
@@ -189,6 +243,10 @@ public class DBHelper extends SQLiteOpenHelper {
             String dropQuery = "DROP TABLE IF EXISTS " + table;
             db.execSQL(dropQuery);
         }
+    }
+
+    public void deleteDatabase(){
+        context.deleteDatabase(DATABASE_NAME); // remove the database
     }
 
     /**
