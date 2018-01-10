@@ -45,7 +45,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //Singleton
     private DBHelper(Context context) {
-        super(context.getApplicationContext(), DATABASE_NAME, null, 1);
+        super(context.getApplicationContext(), DATABASE_NAME, null, 3);
         this.context = context.getApplicationContext();
     }
 
@@ -101,7 +101,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 AppaltiParser appaltiParser = new AppaltiParser(urlList);
                 appaltiParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 List<AppaltiParser.Data> appaltiList = new ArrayList<>(appaltiParser.getAsyncTask().get());
-                insertAppalti(db, appaltiList,codiceEnte);
+                insertAppalti(db, appaltiList, codiceEnte);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -121,7 +121,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 if (map.containsKey(codiceEnte)) {
                     map.get(codiceEnte).add(new URL(r.get("link")));
                 } else {
-                    List<URL> l = new LinkedList<URL>();
+                    List<URL> l = new LinkedList<>();
                     l.add(new URL(r.get("link")));
                     map.put(codiceEnte, l);
                 }
@@ -269,6 +269,7 @@ public class DBHelper extends SQLiteOpenHelper {
             l.add(new Appalto(
                     appalto.cig,
                     appalto.oggetto,
+                    appalto.sceltac,
                     appalto.codiceFiscaleAgg,
                     appalto.aggiudicatario,
                     Double.parseDouble(appalto.importo),
@@ -279,17 +280,25 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         for (Appalto appalto : l) {
-            values.put("cig", appalto.getCig());
-            values.put("oggetto", appalto.getOggetto());
-            values.put("codice_fiscale_aggiudicatario", appalto.getCodice_fiscale_aggiudicatario());
-            values.put("aggiudicatario", appalto.getAggiudicatario());
-            values.put("importo", appalto.getImporto());
-            values.put("codice_ente", appalto.getCodiceEnte());
-
-            db.insert("Appalti", null, values);
+                values.put("cig", appalto.getCig());
+                values.put("oggetto", appalto.getOggetto());
+                values.put("scelta_contraente",appalto.getSceltaContraente());
+                values.put("codice_fiscale_aggiudicatario", appalto.getCodice_fiscale_aggiudicatario());
+                values.put("aggiudicatario", appalto.getAggiudicatario());
+                values.put("importo", appalto.getImporto());
+                values.put("codice_ente", appalto.getCodiceEnte());
+            try{
+                db.insertOrThrow("Appalti", null, values);
+            }
+            catch (android.database.sqlite.SQLiteConstraintException e){
+                Cursor cursor = db.rawQuery("SELECT importo FROM Appalti WHERE cig=? AND oggetto=? AND codice_fiscale_aggiudicatario=?",new String[]{appalto.getCig(),appalto.getOggetto(),appalto.getCodice_fiscale_aggiudicatario()});
+                cursor.moveToFirst();
+                double old_importo = cursor.getDouble(0);
+                cursor.close();
+                db.execSQL("UPDATE Appalti SET importo="+(old_importo+appalto.getImporto())+" WHERE cig='"+appalto.getCig()+"' AND oggetto='"+appalto.getOggetto()+"' AND codice_fiscale_aggiudicatario='"+appalto.getCodice_fiscale_aggiudicatario()+"' ;");
+            }
         }
     }
-
 
     // TODO: Inserire metodi query
 }
