@@ -14,12 +14,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
+import it.unive.dais.cevid.datadroid.lib.parser.CsvRowParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 import it.unive.dais.cevid.datadroid.template.R;
 import it.unive.dais.cevid.datadroid.template.ULSS_stuff.Appalto;
@@ -87,12 +92,16 @@ public class DBHelper extends SQLiteOpenHelper {
                 List<SoldipubbliciParser.Data> soldipubbliciList = new ArrayList<>(soldipubbliciParser.getAsyncTask().get());
 
                 insertVociBilancio(db, soldipubbliciList);
+            }
 
-                // TODO: creare lista link per ulss
-                /*AppaltiParser appaltiParser = new SoldipubbliciParser(urlList);
+            Map<String,List<URL>> appalti = takeUrlFromFile();
+
+            for (String codiceEnte : appalti.keySet()) {
+                List<URL> urlList = appalti.get(codiceEnte);
+                AppaltiParser appaltiParser = new AppaltiParser(urlList);
                 appaltiParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 List<AppaltiParser.Data> appaltiList = new ArrayList<>(appaltiParser.getAsyncTask().get());
-                insertAppalti(db, appaltiList, ulss.getCodiceEnte());*/
+                insertAppalti(db, appaltiList,codiceEnte);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -100,6 +109,31 @@ public class DBHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
     }
+
+    private Map<String,List<URL>> takeUrlFromFile() throws InterruptedException, ExecutionException{
+        HashMap<String,List<URL>> map = new HashMap<>();
+        InputStream is = context.getResources().openRawResource(R.raw.link_appalti);
+        CsvRowParser csvRowParser = new CsvRowParser(new InputStreamReader(is), true, ";");
+        List<CsvRowParser.Row> rows = csvRowParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get();
+        for (final CsvRowParser.Row r : rows) {
+            String codiceEnte = r.get("ULSS");
+            try {
+                if (map.containsKey(codiceEnte)) {
+                    map.get(codiceEnte).add(new URL(r.get("link")));
+                } else {
+                    List<URL> l = new LinkedList<URL>();
+                    l.add(new URL(r.get("link")));
+                    map.put(codiceEnte, l);
+                }
+            }
+            catch (MalformedURLException e){
+                e.printStackTrace();
+                Log.e("URLError",r.get("link"));
+            }
+        }
+        return map;
+    }
+
 
     public List<ULSS> getULSS() {
         SQLiteDatabase db = getReadableDatabase();
