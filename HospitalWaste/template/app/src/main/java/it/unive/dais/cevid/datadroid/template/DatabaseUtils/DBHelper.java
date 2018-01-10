@@ -45,7 +45,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "HospitalWaste.db";
     private static final int MAX_DAYS = 15;
-    
+
     private static DBHelper instance = null;
     private Context context;
 
@@ -154,6 +154,7 @@ public class DBHelper extends SQLiteOpenHelper {
             // serialize date of creation object to a file
             Date currentDate = new Date();
 
+            //TODO check if the file is open in append mode or like erase everything and write
             DataOutputStream dataOutputStream = new DataOutputStream(context.openFileOutput("db_creation_time.txt", Context.MODE_PRIVATE));
             dataOutputStream.writeLong(currentDate.getTime());
             dataOutputStream.close();
