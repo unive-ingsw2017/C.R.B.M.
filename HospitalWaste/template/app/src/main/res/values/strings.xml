@@ -41,6 +41,7 @@
     <string name="dati_appalti">DATI APPALTI</string>
     <string name="incrocio_dati">INCROCIA DATI</string>
     <string name="osp_associati">OSPEDALI ASSOCIATI</string>
+    <string name="search_title">Search</string>
 
 
 </resources>
