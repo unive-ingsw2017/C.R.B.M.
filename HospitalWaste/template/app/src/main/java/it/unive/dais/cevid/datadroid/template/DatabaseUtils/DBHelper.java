@@ -257,7 +257,7 @@ public class DBHelper extends SQLiteOpenHelper {
      *
      * @param bilancioData
      */
-    private List createVociBilancio(SoldipubbliciParser.Data bilancioData) {
+    private List<Bilancio> createVociBilancio(SoldipubbliciParser.Data bilancioData) {
         List<Bilancio> vociBilancio = new LinkedList();
         Bilancio bilancio_2013 = new Bilancio(
                 bilancioData.codice_siope,
@@ -361,4 +361,8 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     // TODO: Inserire metodi query
+
+    public List<Bilancio> getBilanci(){
+        return null;//TODO
+    }
 }
