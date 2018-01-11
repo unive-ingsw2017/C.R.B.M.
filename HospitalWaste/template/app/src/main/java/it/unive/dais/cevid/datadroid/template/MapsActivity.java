@@ -53,7 +53,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
@@ -110,6 +113,8 @@ public class MapsActivity extends AppCompatActivity
     @Nullable
     protected Marker hereMarker = null;
 
+
+    private Map<String, String> mappingDenCodice = Collections.EMPTY_MAP;
     /**
      * Questo metodo viene invocato quando viene inizializzata questa activity.
      * Si tratta di una sorta di "main" dell'intera activity.
@@ -121,6 +126,8 @@ public class MapsActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        mappingDenCodice = new HashMap(); // mapping between name and codice ente for the ULSS
 
         // inizializza le preferenze
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -513,7 +520,9 @@ public class MapsActivity extends AppCompatActivity
     @Override
     public void onInfoWindowClick(Marker marker) {
         Intent ric_in_dett = new Intent(this, RicercaInDettaglioActivity.class);
+
         ric_in_dett.putExtra("ULSS name", marker.getTitle());
+        ric_in_dett.putExtra("codice_ente", mappingDenCodice.get(marker.getTitle()));
         startActivity(ric_in_dett);
     }
 
@@ -661,6 +670,8 @@ public class MapsActivity extends AppCompatActivity
                         return "descrizione";
                     }
                 });
+
+                mappingDenCodice.put(r.get("denominazione"), r.get("codice_ente"));
             }
             markers = putMarkersFromMapItems(l);
         } catch (InterruptedException | ExecutionException e) {

@@ -362,7 +362,22 @@ public class DBHelper extends SQLiteOpenHelper {
 
     // TODO: Inserire metodi query
 
-    public List<Bilancio> getBilanci(){
-        return null;//TODO
+    public List<Bilancio> getVociBilancio(String codiceEnte){
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Bilancio> bilanci = new LinkedList();
+
+        Cursor cur = db.rawQuery("SELECT * from Bilancio where codice_ente = ? and importo != 0 ORDER BY importo DESC", new String[]{codiceEnte});
+        for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
+            bilanci.add(
+                    new Bilancio(
+                            cur.getString(0),
+                            cur.getString(1),
+                            Integer.parseInt(cur.getString(2)),
+                            cur.getString(3),
+                            Double.parseDouble(cur.getString(4))
+                    )
+            );
+        }
+        return bilanci;
     }
 }

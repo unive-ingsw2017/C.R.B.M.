@@ -13,7 +13,6 @@ import android.view.MenuItem;
 
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
 import it.unive.dais.cevid.datadroid.template.R;
-import it.unive.dais.cevid.datadroid.template.ULSS_stuff.ULSS;
 
 /**
  * Created by francescobenvenuto on 11/01/2018.
@@ -31,17 +30,17 @@ public class DatiDiBilancioActivity extends Activity implements AppCompatCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ricerca_in_dettaglio_layout);
+        setContentView(R.layout.activity_dati_di_bilancio);
 
         Intent intent = getIntent();
-        ULSS ulss = (ULSS)intent.getSerializableExtra("ULSS");
+        String codiceEnte = intent.getStringExtra("codice_ente");
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.bilancio);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new RecyclerViewAdapter(
                 this,
-                DBHelper.getSingleton().getBilanci()
+                DBHelper.getSingleton().getVociBilancio(codiceEnte)
         );
         recyclerView.setAdapter(adapter);
 

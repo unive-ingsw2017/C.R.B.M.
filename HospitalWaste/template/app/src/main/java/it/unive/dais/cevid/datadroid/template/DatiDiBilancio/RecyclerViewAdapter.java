@@ -40,7 +40,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         Bilancio bilancio = bilanci.get(position);
 
-        holder.importo.setText(bilancio.getImporto() +"");
+        holder.importo.setText(bilancio.getImporto() + "");
         holder.voceDiSpesa.setText(bilancio.getDescrizioneCodice());
         holder.spesaProCapite.setText("TODO"); //TODO mettere spesa procapite
     }
@@ -63,8 +63,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             voceDiSpesa = (TextView) itemView.findViewById(R.id.voce_di_spesa);
             importo = (TextView) itemView.findViewById(R.id.importo);
             spesaProCapite = (TextView) itemView.findViewById(R.id.spesa_pro_capite);
-
-            itemView.setOnClickListener(this);
         }
 
         @Override
