@@ -4,9 +4,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <EditText
+        android:id="@+id/appalto_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/appalto_hint"
+        android:inputType="textPersonName"
+        android:text="@string/appalto_hardcoded"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
+
+        android:backgroundTint="@android:color/transparent"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+    <!--  ^ in this way not editable and not underlined -->
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/appalto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/appalto_text" />
 
 </RelativeLayout>

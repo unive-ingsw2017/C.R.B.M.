@@ -43,5 +43,12 @@
     <string name="osp_associati">OSPEDALI ASSOCIATI</string>
     <string name="search_title">Search</string>
 
+    <string name="ospedali_associati">Ospedali Associati</string>
+    <string name="ospedali_hint">hardcoded string for Ospedali Associati</string>
+    <string name="appalto_hint">text box fo the word Appalti</string>
+    <string name="appalto_hardcoded">Appalti</string>
+    <string name="bilanci_hardcode">Bilanci</string>
+    <string name="bilanci_hint">EditText for the work Bianci</string>
+
 
 </resources>

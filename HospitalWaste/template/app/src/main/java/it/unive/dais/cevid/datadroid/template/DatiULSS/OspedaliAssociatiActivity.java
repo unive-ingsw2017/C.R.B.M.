@@ -26,6 +26,8 @@ public class OspedaliAssociatiActivity extends Activity implements AppCompatCall
         setContentView(R.layout.activity_ospedali_associati);
         AppCompatDelegate delegate = AppCompatDelegate.create(this, this);
 
+        //((EditText)findViewById(R.id.ospedali_text)).setKeyListener(null);
+
         Intent intent = getIntent();
         String codiceEnte = intent.getStringExtra("codice_ente");
         String ulssName = intent.getStringExtra("ULSS name");
