@@ -49,8 +49,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -60,7 +58,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
-import it.unive.dais.cevid.datadroid.lib.parser.CsvRowParser;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
 import it.unive.dais.cevid.datadroid.template.DatiULSS.RicercaInDettaglioActivity;
@@ -115,7 +112,8 @@ public class MapsActivity extends AppCompatActivity
     protected Marker hereMarker = null;
 
 
-    private Map<String, String> mappingDenCodice = Collections.EMPTY_MAP;
+    private Map<String, String> mapDenominazioneCodice = Collections.EMPTY_MAP;
+
     /**
      * Questo metodo viene invocato quando viene inizializzata questa activity.
      * Si tratta di una sorta di "main" dell'intera activity.
@@ -128,7 +126,7 @@ public class MapsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        mappingDenCodice = new HashMap(); // mapping between name and codice ente for the ULSS
+        mapDenominazioneCodice = new HashMap(); // mapping between name and codice ente for the ULSS
 
         // inizializza le preferenze
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -169,10 +167,6 @@ public class MapsActivity extends AppCompatActivity
         DBHelper dbHelper = DBHelper.getSingleton(this);
 
         dbHelper.deleteDatabase();
-
-        for(ULSS temp: dbHelper.getULSS()){
-            Log.d("tag", temp.getCodiceEnte());
-        }
     }
 
 
@@ -458,9 +452,11 @@ public class MapsActivity extends AppCompatActivity
         uis.setZoomControlsEnabled(true);
         uis.setMapToolbarEnabled(true);
 
+        gMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(45.6670603,12.0536513) , 8.0f) );
+
         applyMapSettings();
 
-        demo();
+        putMarkers();
     }
 
     /**
@@ -523,7 +519,7 @@ public class MapsActivity extends AppCompatActivity
         Intent ric_in_dett = new Intent(this, RicercaInDettaglioActivity.class);
 
         ric_in_dett.putExtra("ULSS name", marker.getTitle());
-        ric_in_dett.putExtra("codice_ente", mappingDenCodice.get(marker.getTitle()));
+        ric_in_dett.putExtra("codice_ente", mapDenominazioneCodice.get(marker.getTitle()));
         startActivity(ric_in_dett);
     }
 
@@ -531,7 +527,8 @@ public class MapsActivity extends AppCompatActivity
      * Metodo di utilità che permette di posizionare rapidamente sulla mappa una lista di MapItem.
      * Attenzione: l'oggetto gMap deve essere inizializzato, questo metodo va pertanto chiamato preferibilmente dalla
      * callback onMapReady().
-     * @param l la lista di oggetti di tipo I tale che I sia sottotipo di MapItem.
+     *
+     * @param l   la lista di oggetti di tipo I tale che I sia sottotipo di MapItem.
      * @param <I> sottotipo di MapItem.
      * @return ritorna la collection di oggetti Marker aggiunti alla mappa.
      */
@@ -609,75 +606,35 @@ public class MapsActivity extends AppCompatActivity
     }
 
 
-    // demo code
+    // putMarkers code
 
     @Nullable
     private Collection<Marker> markers;
 
-    /**
-    private void demo() {
-        try {
-            InputStream is = getResources().openRawResource(R.raw.piattaforme);
-            CsvRowParser p = new CsvRowParser(new InputStreamReader(is), true, ";");
-            List<CsvRowParser.Row> rows = p.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get();
-            List<MapItem> l = new ArrayList<>();
-            for (final CsvRowParser.Row r : rows) {
-                l.add(new MapItem() {
-                    @Override
-                    public LatLng getPosition() {
-                        String lat = r.get("Latitudine (WGS84)"), lng = r.get("Longitudine (WGS 84)");
-                        return new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
-                    }
+    private void putMarkers() {
+        List<MapItem> l = new ArrayList<>();
 
-                    @Override
-                    public String getTitle() {
-                        return r.get("Codice");
-                    }
+        for (ULSS ulss : DBHelper.getSingleton().getULSS()) {
+            l.add(new MapItem() {
+                @Override
+                public LatLng getPosition() {
+                    return ulss.getCoordinate();
+                }
 
-                    @Override
-                    public String getDescription() {
-                        return r.get("Denominazione");
-                    }
-                });
-            }
-            markers = putMarkersFromMapItems(l);
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+                @Override
+                public String getTitle() {
+                    return ulss.getDescrizione();
+                }
+
+                @Override
+                public String getDescription() {
+                    return "";
+                }
+            });
+
+            mapDenominazioneCodice.put(ulss.getDescrizione(), ulss.getCodiceEnte());
         }
-    }
-    */
-    private void demo() {
-
-        try {
-            InputStream is = getResources().openRawResource(R.raw.ulss_positions);
-            CsvRowParser p = new CsvRowParser(new InputStreamReader(is), true, ";");
-            List<CsvRowParser.Row> rows = p.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get();
-            List<MapItem> l = new ArrayList<>();
-            for (final CsvRowParser.Row r : rows) {
-                l.add(new MapItem() {
-                    @Override
-                    public LatLng getPosition() {
-                        String lat = r.get("lat"), lng = r.get("long");
-                        return new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
-                    }
-
-                    @Override
-                    public String getTitle() {
-                        return r.get("denominazione");
-                    }
-
-                    @Override
-                    public String getDescription() {
-                        return "descrizione";
-                    }
-                });
-
-                mappingDenCodice.put(r.get("denominazione"), r.get("codice_ente"));
-            }
-            markers = putMarkersFromMapItems(l);
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
+        markers = putMarkersFromMapItems(l);
     }
 
 }
