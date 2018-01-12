@@ -70,26 +70,26 @@ public class RicercaInDettaglioActivity extends Activity implements AppCompatCal
 
         Button incroci = (Button)findViewById(R.id.mostra_incrocio);
             incroci.setOnClickListener(v -> {
-                Intent ricAppalto = new Intent(
+                Intent ricIncrocio = new Intent(
                     RicercaInDettaglioActivity.this,
                     IncrocioDatiActivity.class
                 );
 
-                ricAppalto.putExtra("codice_ente", codice_ente);
-                ricAppalto.putExtra("ULSS name", ulssName);
-                startActivity(ricAppalto);
+                ricIncrocio.putExtra("codice_ente", codice_ente);
+                ricIncrocio.putExtra("ULSS name", ulssName);
+                startActivity(ricIncrocio);
             });
 
         Button ospedali = (Button)findViewById(R.id.mostra_ospedali);
         ospedali.setOnClickListener(v -> {
-            Intent ricAppalto = new Intent(
+            Intent ricOspedali = new Intent(
                     RicercaInDettaglioActivity.this,
                     OspedaliAssociatiActivity.class
             );
 
-            ricAppalto.putExtra("codice_ente", codice_ente);
-            ricAppalto.putExtra("ULSS name", ulssName);
-            startActivity(ricAppalto);
+            ricOspedali.putExtra("codice_ente", codice_ente);
+            ricOspedali.putExtra("ULSS name", ulssName);
+            startActivity(ricOspedali);
         });
     }
 
