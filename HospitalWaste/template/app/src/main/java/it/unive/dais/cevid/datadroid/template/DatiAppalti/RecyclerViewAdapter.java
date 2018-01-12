@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.List;
 
 import it.unive.dais.cevid.datadroid.template.R;
-import it.unive.dais.cevid.datadroid.template.ULSS_stuff.Appalto;
 
 /**
  * Created by francescobenvenuto on 11/01/2018.

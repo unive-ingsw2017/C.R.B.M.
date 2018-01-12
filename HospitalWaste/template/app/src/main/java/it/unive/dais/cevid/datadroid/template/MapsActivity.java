@@ -63,7 +63,8 @@ import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
 import it.unive.dais.cevid.datadroid.lib.parser.CsvRowParser;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
-import it.unive.dais.cevid.datadroid.template.ULSS_stuff.ULSS;
+import it.unive.dais.cevid.datadroid.template.DatiULSS.RicercaInDettaglioActivity;
+import it.unive.dais.cevid.datadroid.template.DatiULSS.ULSS;
 
 /**
  * Questa classe è la componente principale del toolkit: fornisce servizi primari per un'app basata su Google Maps, tra cui localizzazione, pulsanti
@@ -167,7 +168,7 @@ public class MapsActivity extends AppCompatActivity
 
         DBHelper dbHelper = DBHelper.getSingleton(this);
 
-        //DBHelper dbHelper = new DBHelper(this);
+        dbHelper.deleteDatabase();
 
         for(ULSS temp: dbHelper.getULSS()){
             Log.d("tag", temp.getCodiceEnte());

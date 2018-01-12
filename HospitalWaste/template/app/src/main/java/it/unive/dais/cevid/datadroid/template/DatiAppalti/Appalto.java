@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.datadroid.template.ULSS_stuff;
+package it.unive.dais.cevid.datadroid.template.DatiAppalti;
 
 /**
  * Created by francescobenvenuto on 04/01/2018.

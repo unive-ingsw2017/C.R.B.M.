@@ -61,7 +61,7 @@
         </activity>
 
         <activity
-            android:name=".RicercaInDettaglioActivity"
+            android:name=".DatiULSS.RicercaInDettaglioActivity"
             android:parentActivityName=".MapsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -70,14 +70,23 @@
 
         <activity
             android:name=".DatiDiBilancio.DatiDiBilancioActivity"
-            android:parentActivityName=".RicercaInDettaglioActivity">
+            android:parentActivityName=".DatiULSS.RicercaInDettaglioActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MapsActivity" />
         </activity>
+
         <activity
             android:name=".DatiAppalti.DatiAppaltiActivity"
-            android:parentActivityName=".RicercaInDettaglioActivity">
+            android:parentActivityName=".DatiULSS.RicercaInDettaglioActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapsActivity" />
+        </activity>
+
+        <activity
+            android:name=".DatiULSS.OspedaliAssociatiActivity"
+            android:parentActivityName=".DatiULSS.RicercaInDettaglioActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MapsActivity" />

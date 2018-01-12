@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.datadroid.template;
+package it.unive.dais.cevid.datadroid.template.DatiULSS;
 
 
 import android.app.Activity;
@@ -13,6 +13,7 @@ import android.widget.Button;
 
 import it.unive.dais.cevid.datadroid.template.DatiAppalti.DatiAppaltiActivity;
 import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.DatiDiBilancioActivity;
+import it.unive.dais.cevid.datadroid.template.R;
 
 /**
  * Created by Aure on 10/01/2018.
@@ -43,8 +44,8 @@ public class RicercaInDettaglioActivity extends Activity implements AppCompatCal
         /**
          * Prova per collegare il bottone del layout ad un'azione
          */
-        Button b1 = (Button)findViewById(R.id.b1);
-        b1.setOnClickListener(v -> {
+        Button bilanci = (Button)findViewById(R.id.mostra_bilanci);
+        bilanci.setOnClickListener(v -> {
             Intent ricDatiBilancio = new Intent(
                     RicercaInDettaglioActivity.this,
                     DatiDiBilancioActivity.class
@@ -54,8 +55,9 @@ public class RicercaInDettaglioActivity extends Activity implements AppCompatCal
             ricDatiBilancio.putExtra("ULSS name", ulssName);
             startActivity(ricDatiBilancio);
         });
-            Button b2 = (Button)findViewById(R.id.b2);
-            b2.setOnClickListener(v -> {
+
+        Button appalti = (Button)findViewById(R.id.mostra_appalti);
+            appalti.setOnClickListener(v -> {
                 Intent ricAppalto = new Intent(
                         RicercaInDettaglioActivity.this,
                         DatiAppaltiActivity.class
@@ -65,6 +67,18 @@ public class RicercaInDettaglioActivity extends Activity implements AppCompatCal
                 ricAppalto.putExtra("ULSS name", ulssName);
                 startActivity(ricAppalto);
             });
+
+        Button ospedali = (Button)findViewById(R.id.mostra_ospedali);
+        ospedali.setOnClickListener(v -> {
+            Intent ricAppalto = new Intent(
+                    RicercaInDettaglioActivity.this,
+                    OspedaliAssociatiActivity.class
+            );
+
+            ricAppalto.putExtra("codice_ente", codice_ente);
+            ricAppalto.putExtra("ULSS name", ulssName);
+            startActivity(ricAppalto);
+        });
     }
 
 

@@ -1,8 +1,6 @@
-package it.unive.dais.cevid.datadroid.template.ULSS_stuff;
+package it.unive.dais.cevid.datadroid.template.DatiULSS;
 
 import com.google.android.gms.maps.model.LatLng;
-
-import java.util.List;
 
 /**
  * Created by francescobenvenuto on 04/01/2018.

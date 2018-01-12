@@ -20,6 +20,8 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -31,9 +33,9 @@ import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.CsvRowParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 import it.unive.dais.cevid.datadroid.template.R;
-import it.unive.dais.cevid.datadroid.template.ULSS_stuff.Appalto;
-import it.unive.dais.cevid.datadroid.template.ULSS_stuff.Bilancio;
-import it.unive.dais.cevid.datadroid.template.ULSS_stuff.ULSS;
+import it.unive.dais.cevid.datadroid.template.DatiAppalti.Appalto;
+import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.Bilancio;
+import it.unive.dais.cevid.datadroid.template.DatiULSS.ULSS;
 
 /**
  * Created by gianmarcocallegher on 04/01/18.
@@ -399,5 +401,21 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         cur.close();
         return appalti;
+    }
+
+    //get the string of the ospedali_associati and split to have a list of ospedali_associati
+    public List<String> getOspedali(String codiceEnte) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<String> ospedali = Collections.emptyList();
+
+        Cursor cur = db.rawQuery("SELECT ospedali_associati from ULSS where codice_ente = ?", new String[]{codiceEnte});
+        cur.moveToFirst();
+
+        if(!cur.isAfterLast()){
+            ospedali = Arrays.asList(cur.getString(0).split(";"));
+        }
+
+        cur.close();
+        return ospedali;
     }
 }
