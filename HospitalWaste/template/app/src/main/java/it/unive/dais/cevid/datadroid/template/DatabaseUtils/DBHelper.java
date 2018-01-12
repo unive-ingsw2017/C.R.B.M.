@@ -11,14 +11,12 @@ import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -65,7 +63,7 @@ public class DBHelper extends SQLiteOpenHelper {
             db = SQLiteDatabase.openDatabase(DATABASE_NAME, null, SQLiteDatabase.OPEN_READONLY);
             db.close();
 
-            if(databaseIsOld()){
+            if(isOldDatabase()){
                 deleteDatabase();
             }
         }
@@ -76,7 +74,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    private boolean databaseIsOld() throws IOException {
+    private boolean isOldDatabase() throws IOException {
         DataInputStream dataInputStream = new DataInputStream(context.openFileInput("db_creation_time.txt"));
 
         long lastTime = dataInputStream.readLong();
@@ -351,7 +349,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 db.insertOrThrow("Appalti", null, values);
             }
             catch (android.database.sqlite.SQLiteConstraintException e){
-                Cursor cursor = db.rawQuery("SELECT importo FROM Appalti WHERE cig=? AND oggetto=? AND codice_fiscale_aggiudicatario=?",new String[]{appalto.getCig(),appalto.getOggetto(),appalto.getCodice_fiscale_aggiudicatario()});
+                Cursor cursor = db.rawQuery("SELECT importo FROM Appalti WHERE cig=? AND oggetto=? AND codice_fiscale_aggiudicatario=? ;",new String[]{appalto.getCig(),appalto.getOggetto(),appalto.getCodice_fiscale_aggiudicatario()});
                 cursor.moveToFirst();
                 double old_importo = cursor.getDouble(0);
                 cursor.close();
@@ -378,6 +376,28 @@ public class DBHelper extends SQLiteOpenHelper {
                     )
             );
         }
+        cur.close();
         return bilanci;
+    }
+    public List<Appalto> getAppalti(String codiceEnte){
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Appalto> appalti = new LinkedList();
+
+        Cursor cur = db.rawQuery("SELECT * from Appalti where codice_ente = ? and importo != 0 ORDER BY importo DESC", new String[]{codiceEnte});
+        for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
+            appalti.add(
+                    new Appalto(
+                            cur.getString(0),
+                            cur.getString(1),
+                            cur.getString(2),
+                            cur.getString(3),
+                            cur.getString(4),
+                            Double.parseDouble(cur.getString(5)),
+                            cur.getString(6)
+                    )
+            );
+        }
+        cur.close();
+        return appalti;
     }
 }

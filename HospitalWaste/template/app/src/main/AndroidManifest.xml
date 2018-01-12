@@ -75,6 +75,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MapsActivity" />
         </activity>
+        <activity
+            android:name=".DatiAppalti.DatiAppaltiActivity"
+            android:parentActivityName=".RicercaInDettaglioActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapsActivity" />
+        </activity>
 
 
 

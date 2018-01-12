@@ -1,5 +1,4 @@
-package it.unive.dais.cevid.datadroid.template;
-
+package it.unive.dais.cevid.datadroid.template.DatiAppalti;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,63 +7,46 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatCallback;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.view.ActionMode;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
-import android.widget.Button;
 
-import it.unive.dais.cevid.datadroid.template.DatiAppalti.DatiAppaltiActivity;
-import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.DatiDiBilancioActivity;
+import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
+import it.unive.dais.cevid.datadroid.template.R;
 
 /**
- * Created by Aure on 10/01/2018.
+ * Created by francescobenvenuto on 11/01/2018.
  */
 
-public class RicercaInDettaglioActivity extends Activity implements AppCompatCallback {
+public class DatiAppaltiActivity extends Activity implements AppCompatCallback {
 
+    private RecyclerViewAdapter adapter;
     /**
      * Questo metodo viene chiamato quando questa activity parte.
-     *
+     * l'intent deve essere inviato con anche l'oggetto ULSS in modo da sapere cosa
+     * visualizzare
      * @param savedInstanceState stato dell'activity salvato precedentemente (opzionale).
      */
-        @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ricerca_in_dettaglio_layout);
-        AppCompatDelegate delegate = AppCompatDelegate.create(this, this);
+        setContentView(R.layout.activity_dati_appalti);
 
         Intent intent = getIntent();
-        String codice_ente = intent.getStringExtra("codice_ente");
-        String ulssName = intent.getStringExtra("ULSS name");
+        String codiceEnte = intent.getStringExtra("codice_ente");
 
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.appalto);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        adapter = new RecyclerViewAdapter(
+                this,
+                DBHelper.getSingleton().getAppalti(codiceEnte)
+        );
+        recyclerView.setAdapter(adapter);
+
+        AppCompatDelegate delegate = AppCompatDelegate.create(this, this);
         delegate.onCreate(savedInstanceState);
-        delegate.getSupportActionBar().setTitle(ulssName);
-
-
-
-        /**
-         * Prova per collegare il bottone del layout ad un'azione
-         */
-        Button b1 = (Button)findViewById(R.id.b1);
-        b1.setOnClickListener(v -> {
-            Intent ricDatiBilancio = new Intent(
-                    RicercaInDettaglioActivity.this,
-                    DatiDiBilancioActivity.class
-            );
-
-            ricDatiBilancio.putExtra("codice_ente", codice_ente);
-            ricDatiBilancio.putExtra("ULSS name", ulssName);
-            startActivity(ricDatiBilancio);
-        });
-            Button b2 = (Button)findViewById(R.id.b2);
-            b2.setOnClickListener(v -> {
-                Intent ricAppalto = new Intent(
-                        RicercaInDettaglioActivity.this,
-                        DatiAppaltiActivity.class
-                );
-
-                ricAppalto.putExtra("codice_ente", codice_ente);
-                ricAppalto.putExtra("ULSS name", ulssName);
-                startActivity(ricAppalto);
-            });
+        delegate.getSupportActionBar().setTitle(intent.getStringExtra("ULSS name"));
     }
 
 
