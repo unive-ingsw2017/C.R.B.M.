@@ -1,5 +1,8 @@
 package it.unive.dais.cevid.datadroid.template.DatiDiBilancio;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Created by francescobenvenuto on 04/01/2018.
  */
@@ -53,6 +56,8 @@ public class Bilancio {
         return importo;
     }
 
-
+    public boolean isOfYear(int year){
+        return getAnno()==year;
+    }
 
 }

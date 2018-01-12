@@ -47,6 +47,7 @@
     <string name="ospedali_hint">hardcoded string for Ospedali Associati</string>
     <string name="appalto_hint">text box for the word Appalti</string>
     <string name="appalto_hardcoded">Appalti</string>
+    <string name="incrocio_text">Incrocio Dati</string>
     <string name="bilanci_hardcode">Voci di Bilancio</string>
     <string name="bilanci_hint">EditText for the work Bianci</string>
 

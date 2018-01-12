@@ -92,6 +92,13 @@
                 android:value=".MapsActivity" />
         </activity>
 
+        <activity
+            android:name=".DatiULSS.IncrocioDatiActivity"
+            android:parentActivityName=".DatiULSS.RicercaInDettaglioActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapsActivity" />
+        </activity>
 
 
     </application>

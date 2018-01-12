@@ -132,9 +132,10 @@ public class MapsActivity extends AppCompatActivity
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         // trova gli oggetti che rappresentano i bottoni e li salva come campi d'istanza
+        /*
         button_here = (ImageButton) findViewById(R.id.button_here);
         button_car = (ImageButton) findViewById(R.id.button_car);
-
+        */
         // API per i servizi di localizzazione
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 

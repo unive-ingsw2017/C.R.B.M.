@@ -68,6 +68,18 @@ public class RicercaInDettaglioActivity extends Activity implements AppCompatCal
                 startActivity(ricAppalto);
             });
 
+        Button incroci = (Button)findViewById(R.id.mostra_incrocio);
+            incroci.setOnClickListener(v -> {
+                Intent ricAppalto = new Intent(
+                    RicercaInDettaglioActivity.this,
+                    IncrocioDatiActivity.class
+                );
+
+                ricAppalto.putExtra("codice_ente", codice_ente);
+                ricAppalto.putExtra("ULSS name", ulssName);
+                startActivity(ricAppalto);
+            });
+
         Button ospedali = (Button)findViewById(R.id.mostra_ospedali);
         ospedali.setOnClickListener(v -> {
             Intent ricAppalto = new Intent(

@@ -18,7 +18,7 @@
         android:text="@string/dati_appalti" />
 
     <Button
-        android:id="@+id/b3"
+        android:id="@+id/mostra_incrocio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/incrocio_dati" />
