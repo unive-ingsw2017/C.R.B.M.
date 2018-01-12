@@ -104,7 +104,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static DBHelper getSingleton() {
         if (instance == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalStateException();
         }
         return instance;
     }
