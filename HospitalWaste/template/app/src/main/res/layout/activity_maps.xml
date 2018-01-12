@@ -5,7 +5,9 @@
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="it.unive.dais.cevid.datadroid.template.MapsActivity">
+    tools:context="it.unive.dais.cevid.datadroid.template.MapsActivity"
+    android:textAlignment="center"
+    >
 
     <LinearLayout
         android:orientation="vertical"
@@ -21,7 +23,7 @@
 
 
 
-        <ImageButton
+        <!--<ImageButton
             android:id="@+id/button_car"
             android:scaleType="fitStart"
             android:layout_width="wrap_content"
@@ -42,7 +44,7 @@
             android:visibility="visible"
             android:layout_weight="1"
             android:layout_marginTop="@dimen/button_margin"
-            />
+            />-->
 
     </LinearLayout>
 

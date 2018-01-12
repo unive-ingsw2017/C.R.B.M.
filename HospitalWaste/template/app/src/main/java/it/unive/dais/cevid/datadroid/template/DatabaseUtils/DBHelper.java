@@ -45,6 +45,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "HospitalWaste.db";
     private static final int MAX_DAYS = 15;
+    private static final int ANNO_APPALTI = 2016;
 
     private static DBHelper instance = null;
     private Context context;
@@ -69,10 +70,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 deleteDatabase();
             }
         }
-        catch(SQLiteException e){ //the database doesn't exist
+        catch(Exception e){ //the database doesn't exist
             Log.d("Database", "the couldn't be old because not exist yet");
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -417,5 +416,68 @@ public class DBHelper extends SQLiteOpenHelper {
 
         cur.close();
         return ospedali;
+    }
+
+    public CrossData getDatiIncrociati (String codiceEnte, String keyword) {
+        return getDatiIncrociati(codiceEnte, keyword, ANNO_APPALTI);
+    }
+
+    public CrossData getDatiIncrociati (String codiceEnte, String keyword, int anno) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Appalto> appalti = new LinkedList<>();
+        List<Bilancio> bilancio = new LinkedList<>();
+
+        Cursor cursorBilancio = db.rawQuery("SELECT * from Bilancio where codice_ente = ? AND descrizione_codice like %?% AND anno = ?", new String[]{codiceEnte, keyword, String.valueOf(anno)});
+        Cursor cursorAppalti = db.rawQuery("SELECT * from Appalti where codice_ente = ? AND oggetto like %?%", new String[]{codiceEnte, keyword});
+
+        cursorBilancio.moveToFirst();
+        cursorAppalti.moveToFirst();
+
+        while (!cursorBilancio.isAfterLast()) {
+            bilancio.add(
+                    new Bilancio(
+                            cursorBilancio.getString(0),
+                            cursorBilancio.getString(1),
+                            Integer.parseInt(cursorBilancio.getString(2)),
+                            cursorBilancio.getString(3),
+                            Double.parseDouble(cursorBilancio.getString(4))
+                    )
+            );
+            cursorBilancio.moveToNext();
+        }
+
+        while (!cursorAppalti.isAfterLast()) {
+            appalti.add(
+                new Appalto(cursorAppalti.getString(0),
+                    cursorAppalti.getString(1),
+                    cursorAppalti.getString(2),
+                    cursorAppalti.getString(3),
+                    cursorAppalti.getString(4),
+                    Double.parseDouble(cursorAppalti.getString(5)),
+                    cursorAppalti.getString(6)
+                    )
+            );
+            cursorAppalti.moveToNext();
+        }
+
+        return new CrossData(appalti, bilancio);
+    }
+
+    public class CrossData {
+        private List<Appalto> appalti;
+        private List<Bilancio> vociBilancio;
+
+        public CrossData(List<Appalto> appalti, List<Bilancio> vociBilancio) {
+            this.appalti = appalti;
+            this.vociBilancio = vociBilancio;
+        }
+
+        public List<Appalto> getAppalti() {
+            return appalti;
+        }
+
+        public List<Bilancio> getVociBilancio() {
+            return vociBilancio;
+        }
     }
 }

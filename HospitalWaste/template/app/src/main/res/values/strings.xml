@@ -37,17 +37,17 @@
     <string name="msg_button_car">Pulsante premuto</string>
     <string name="msg_permissions_not_granted">I permessi appena negati dall\'utente sono necessari per alcune funzionalità dell\'app. Il supporto delle funzionalità sarà ridotto.</string>
     <string name="marker_title">You are HERE</string>
-    <string name="dati_bilancio">DATI BILANCIO</string>
-    <string name="dati_appalti">DATI APPALTI</string>
+    <string name="dati_bilancio">DATI DI BILANCIO</string>
+    <string name="dati_appalti">APPALTI</string>
     <string name="incrocio_dati">INCROCIA DATI</string>
     <string name="osp_associati">OSPEDALI ASSOCIATI</string>
     <string name="search_title">Search</string>
 
     <string name="ospedali_associati">Ospedali Associati</string>
     <string name="ospedali_hint">hardcoded string for Ospedali Associati</string>
-    <string name="appalto_hint">text box fo the word Appalti</string>
+    <string name="appalto_hint">text box for the word Appalti</string>
     <string name="appalto_hardcoded">Appalti</string>
-    <string name="bilanci_hardcode">Bilanci</string>
+    <string name="bilanci_hardcode">Voci di Bilancio</string>
     <string name="bilanci_hint">EditText for the work Bianci</string>
 
 

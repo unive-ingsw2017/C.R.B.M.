@@ -13,7 +13,7 @@
         android:inputType="textPersonName"
         android:text="@string/bilanci_hardcode"
         android:textAlignment="center"
-        android:textSize="24sp"
+        android:textSize="18sp"
         android:textStyle="bold"
 
         android:backgroundTint="@android:color/transparent"
