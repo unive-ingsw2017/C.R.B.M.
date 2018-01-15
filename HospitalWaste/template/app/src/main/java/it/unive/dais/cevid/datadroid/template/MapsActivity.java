@@ -24,13 +24,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
@@ -44,6 +43,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -53,8 +53,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
@@ -62,6 +64,8 @@ import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
 import it.unive.dais.cevid.datadroid.template.DatiULSS.RicercaInDettaglioActivity;
 import it.unive.dais.cevid.datadroid.template.DatiULSS.ULSS;
+
+
 
 /**
  * Questa classe è la componente principale del toolkit: fornisce servizi primari per un'app basata su Google Maps, tra cui localizzazione, pulsanti
@@ -93,7 +97,8 @@ public class MapsActivity extends AppCompatActivity
      * Pulsanti in sovraimpressione gestiti da questa app. Da non confondere con i pulsanti che GoogleMaps mette in sovraimpressione e che non
      * fanno parte degli oggetti gestiti manualmente dal codice.
      */
-    protected ImageButton button_here, button_car;
+    //protected ImageButton button_here, button_car;
+
     /**
      * API per i servizi di localizzazione.
      */
@@ -128,6 +133,10 @@ public class MapsActivity extends AppCompatActivity
 
         mapDenominazioneCodice = new HashMap(); // mapping between name and codice ente for the ULSS
 
+        longPressedMarker = new HashSet();
+        confrontoMultiploButton = (Button) MapsActivity.this.findViewById(R.id.confronto_button);
+
+
         // inizializza le preferenze
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -144,25 +153,22 @@ public class MapsActivity extends AppCompatActivity
         mapFragment.getMapAsync(this);
 
         // quando viene premito il pulsante HERE viene eseguito questo codice
-        button_here.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "here button clicked");
-                gpsCheck();
-                updateCurrentPosition();
-                if (hereMarker != null) hereMarker.remove();
-                if (currentPosition != null) {
-                    MarkerOptions opts = new MarkerOptions();
-                    opts.position(currentPosition);
-                    opts.title(getString(R.string.marker_title));
-                    opts.snippet(String.format("lat: %g\nlng: %g", currentPosition.latitude, currentPosition.longitude));
-                    hereMarker = gMap.addMarker(opts);
-                    if (gMap != null)
-                        gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, getResources().getInteger(R.integer.zoomFactor_button_here)));
-                } else
-                    Log.d(TAG, "no current position available");
-            }
-        });
+        /**button_here.setOnClickListener(v -> {
+         Log.d(TAG, "here button clicked");
+         gpsCheck();
+         updateCurrentPosition();
+         if (hereMarker != null) hereMarker.remove();
+         if (currentPosition != null) {
+         MarkerOptions opts = new MarkerOptions();
+         opts.position(currentPosition);
+         opts.title(getString(R.string.marker_title));
+         opts.snippet(String.format("lat: %g\nlng: %g", currentPosition.latitude, currentPosition.longitude));
+         hereMarker = gMap.addMarker(opts);
+         if (gMap != null)
+         gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, getResources().getInteger(R.integer.zoomFactor_button_here)));
+         } else
+         Log.d(TAG, "no current position available");
+         });*/
 
 
         DBHelper dbHelper = DBHelper.getSingleton(this);
@@ -369,7 +375,7 @@ public class MapsActivity extends AppCompatActivity
     @Override
     public void onMapClick(LatLng latLng) {
         // nascondi il pulsante della navigazione (non quello di google maps, ma il nostro pulsante custom)
-        button_car.setVisibility(View.INVISIBLE);
+        //button_car.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -403,10 +409,10 @@ public class MapsActivity extends AppCompatActivity
     public void setHereButtonVisibility() {
         if (gMap != null) {
             if (gMap.getCameraPosition().zoom < SettingsActivity.getZoomThreshold(this)) {
-                button_here.setVisibility(View.INVISIBLE);
-            } else {
+                //button_here.setVisibility(View.INVISIBLE);
+            }/* else {
                 button_here.setVisibility(View.VISIBLE);
-            }
+            }*/
         }
     }
 
@@ -442,18 +448,34 @@ public class MapsActivity extends AppCompatActivity
         uis.setZoomGesturesEnabled(true);
         uis.setMyLocationButtonEnabled(true);
         gMap.setOnMyLocationButtonClickListener(
-                new GoogleMap.OnMyLocationButtonClickListener() {
-                    @Override
-                    public boolean onMyLocationButtonClick() {
-                        gpsCheck();
-                        return false;
-                    }
+                () -> {
+                    gpsCheck();
+                    return false;
                 });
+        gMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+
+                for (Marker marker : markers) {
+                    // c'è solo onMapLongClickListner quindi vediamo se ha schiacciato abbastanza vicino al marker
+                    if (Math.abs(marker.getPosition().latitude - latLng.latitude) < 0.095 //verticale
+                            && Math.abs(marker.getPosition().longitude - latLng.longitude) < 0.05 // orizontale
+                            && marker.getPosition().latitude <= latLng.latitude + 0.01  // dove l'utente ha cliccato deve essere sopra al marker
+                            ) {
+                        longPressedMarker(marker);
+                    }
+                }
+
+            }
+        });
+
         uis.setCompassEnabled(true);
         uis.setZoomControlsEnabled(true);
         uis.setMapToolbarEnabled(true);
 
-        gMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(45.6670603,12.0536513) , 8.0f) );
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new
+
+                LatLng(45.6670603, 12.0536513), 8.0f));
 
         applyMapSettings();
 
@@ -463,6 +485,7 @@ public class MapsActivity extends AppCompatActivity
     /**
      * Metodo proprietario che forza l'applicazione le impostazioni (o preferenze) che riguardano la mappa.
      */
+
     protected void applyMapSettings() {
         if (gMap != null) {
             Log.d(TAG, "applying map settings");
@@ -502,6 +525,7 @@ public class MapsActivity extends AppCompatActivity
     @Override
     public boolean onMarkerClick(final Marker marker) {
         marker.showInfoWindow();
+        /*
         button_car.setVisibility(View.VISIBLE);
         button_car.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -512,6 +536,7 @@ public class MapsActivity extends AppCompatActivity
                 }
             }
         });
+        */
         return false;
     }
 
@@ -580,30 +605,28 @@ public class MapsActivity extends AppCompatActivity
         builder.setAlwaysShow(true);
 
         PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-            @Override
-            public void onResult(@NonNull LocationSettingsResult result) {
-                final Status status = result.getStatus();
-                switch (status.getStatusCode()) {
-                    case LocationSettingsStatusCodes.SUCCESS:
-                        Log.i(TAG, "All location settings are satisfied.");
-                        break;
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
-                        try {
-                            // Show the dialog by calling startResolutionForResult(), and check the result
-                            // in onActivityResult().
-                            status.startResolutionForResult(MapsActivity.this, REQUEST_CHECK_SETTINGS);
-                        } catch (IntentSender.SendIntentException e) {
-                            Log.i(TAG, "PendingIntent unable to execute request.");
-                        }
-                        break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        Log.i(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog not created.");
-                        break;
-                }
-            }
-        });
+        result.setResultCallback(
+                result1 -> {
+                    final Status status = result1.getStatus();
+                    switch (status.getStatusCode()) {
+                        case LocationSettingsStatusCodes.SUCCESS:
+                            Log.i(TAG, "All location settings are satisfied.");
+                            break;
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
+                            try {
+                                // Show the dialog by calling startResolutionForResult(), and check the result
+                                // in onActivityResult().
+                                status.startResolutionForResult(MapsActivity.this, REQUEST_CHECK_SETTINGS);
+                            } catch (IntentSender.SendIntentException e) {
+                                Log.i(TAG, "PendingIntent unable to execute request.");
+                            }
+                            break;
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            Log.i(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog not created.");
+                            break;
+                    }
+                });
     }
 
 
@@ -638,4 +661,51 @@ public class MapsActivity extends AppCompatActivity
         markers = putMarkersFromMapItems(l);
     }
 
+    // confronto multiplo stuff from here
+    Button confrontoMultiploButton;
+    Set<Marker> longPressedMarker; // will contains the long pressed marker
+
+
+    private void removeLongPressedMarker(Marker marker){
+        longPressedMarker.remove(marker); // remove from the list of pressed marker
+        marker.setIcon(BitmapDescriptorFactory.defaultMarker()); // back to normal color
+
+        if(longPressedMarker.size() == 0){
+            confrontoMultiploButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void addLongPressedMarker(Marker marker){
+        longPressedMarker.add(marker);
+        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+
+        confrontoMultiploButton.setVisibility(View.VISIBLE);
+    }
+
+    private void longPressedMarker(Marker marker) {
+        if(longPressedMarker.contains(marker)){
+            removeLongPressedMarker(marker);
+        }
+        else{
+            addLongPressedMarker(marker);
+        }
+    }
+
+    /**
+     * here there
+     * @param view
+     */
+    public void confrontoMultiplo(View view) {
+        Intent confrontoMultiploIntent = new Intent(this, ConfrontoMultiploActivity.class);
+
+        HashMap ulssNameCodiceEnte = new HashMap();
+
+        for(Marker marker: new HashSet<>(longPressedMarker)){//for avoid ConcurrentModificationException
+            ulssNameCodiceEnte.put(marker.getTitle(), mapDenominazioneCodice.get(marker.getTitle()));
+            removeLongPressedMarker(marker);
+        }
+
+        confrontoMultiploIntent.putExtra("map", ulssNameCodiceEnte);
+        startActivity(confrontoMultiploIntent);
+    }
 }
