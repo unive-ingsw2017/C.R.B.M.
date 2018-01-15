@@ -50,6 +50,7 @@
     <string name="incrocio_text">Incrocio Dati</string>
     <string name="bilanci_hardcode">Voci di Bilancio</string>
     <string name="bilanci_hint">EditText for the work Bianci</string>
+    <string name="confronta_string">Confronta</string>
 
 
 </resources>
