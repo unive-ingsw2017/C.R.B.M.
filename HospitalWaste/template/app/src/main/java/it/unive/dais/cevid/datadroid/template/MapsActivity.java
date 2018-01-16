@@ -173,6 +173,8 @@ public class MapsActivity extends AppCompatActivity
 
         DBHelper dbHelper = DBHelper.getSingleton(this);
 
+        
+
         //dbHelper.deleteDatabase();
     }
 
