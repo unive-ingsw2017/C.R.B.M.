@@ -61,10 +61,10 @@ import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
+import it.unive.dais.cevid.datadroid.template.ConfrontoMultiplo.ConfrontoMultiploActivity;
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
 import it.unive.dais.cevid.datadroid.template.DatiULSS.RicercaInDettaglioActivity;
 import it.unive.dais.cevid.datadroid.template.DatiULSS.ULSS;
-
 
 
 /**
@@ -173,7 +173,6 @@ public class MapsActivity extends AppCompatActivity
 
         DBHelper dbHelper = DBHelper.getSingleton(this);
 
-        
 
         //dbHelper.deleteDatabase();
     }
@@ -389,6 +388,15 @@ public class MapsActivity extends AppCompatActivity
     @Override
     public void onMapLongClick(LatLng latLng) {
 
+        for (Marker marker : markers) {
+            // c'è solo onMapLongClickListner quindi vediamo se ha schiacciato abbastanza vicino al marker
+            if (Math.abs(marker.getPosition().latitude - latLng.latitude) < 0.098  //verticale
+                    && Math.abs(marker.getPosition().longitude - latLng.longitude) < 0.045// orizontale
+                    && marker.getPosition().latitude <= latLng.latitude + 0.01  // dove l'utente ha cliccato deve essere sopra al marker
+                    ) {
+                longPressedMarker(marker);
+            }
+        }
     }
 
     /**
@@ -417,6 +425,9 @@ public class MapsActivity extends AppCompatActivity
             }*/
         }
     }
+
+
+    LatLng POSIZIONE_VENETO_CENTRALE = new LatLng(45.6670603, 12.0536513);
 
     /**
      * Questo metodo è molto importante: esso viene invocato dal sistema quando la mappa è pronta.
@@ -454,30 +465,14 @@ public class MapsActivity extends AppCompatActivity
                     gpsCheck();
                     return false;
                 });
-        gMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng latLng) {
-
-                for (Marker marker : markers) {
-                    // c'è solo onMapLongClickListner quindi vediamo se ha schiacciato abbastanza vicino al marker
-                    if (Math.abs(marker.getPosition().latitude - latLng.latitude) < 0.095 //verticale
-                            && Math.abs(marker.getPosition().longitude - latLng.longitude) < 0.05 // orizontale
-                            && marker.getPosition().latitude <= latLng.latitude + 0.01  // dove l'utente ha cliccato deve essere sopra al marker
-                            ) {
-                        longPressedMarker(marker);
-                    }
-                }
-
-            }
-        });
 
         uis.setCompassEnabled(true);
         uis.setZoomControlsEnabled(true);
         uis.setMapToolbarEnabled(true);
 
-        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new
-
-                LatLng(45.6670603, 12.0536513), 8.0f));
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                POSIZIONE_VENETO_CENTRALE, 8.0f)
+        );
 
         applyMapSettings();
 
@@ -564,7 +559,10 @@ public class MapsActivity extends AppCompatActivity
     protected <I extends MapItem> Collection<Marker> putMarkersFromMapItems(List<I> l) {
         Collection<Marker> r = new ArrayList<>();
         for (MapItem i : l) {
-            MarkerOptions opts = new MarkerOptions().title(i.getTitle()).position(i.getPosition()).snippet(i.getDescription());
+            MarkerOptions opts = new MarkerOptions()
+                    .title(i.getTitle())
+                    .position(i.getPosition())
+                    .snippet(i.getDescription());
             r.add(gMap.addMarker(opts));
         }
         return r;
@@ -668,16 +666,16 @@ public class MapsActivity extends AppCompatActivity
     Set<Marker> longPressedMarker; // will contains the long pressed marker
 
 
-    private void removeLongPressedMarker(Marker marker){
+    private void removeLongPressedMarker(Marker marker) {
         longPressedMarker.remove(marker); // remove from the list of pressed marker
         marker.setIcon(BitmapDescriptorFactory.defaultMarker()); // back to normal color
 
-        if(longPressedMarker.size() == 0){
+        if (longPressedMarker.size() == 0) {
             confrontoMultiploButton.setVisibility(View.INVISIBLE);
         }
     }
 
-    private void addLongPressedMarker(Marker marker){
+    private void addLongPressedMarker(Marker marker) {
         longPressedMarker.add(marker);
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 
@@ -685,16 +683,16 @@ public class MapsActivity extends AppCompatActivity
     }
 
     private void longPressedMarker(Marker marker) {
-        if(longPressedMarker.contains(marker)){
+        if (longPressedMarker.contains(marker)) {
             removeLongPressedMarker(marker);
-        }
-        else{
+        } else {
             addLongPressedMarker(marker);
         }
     }
 
     /**
      * here there
+     *
      * @param view
      */
     public void confrontoMultiplo(View view) {
@@ -702,7 +700,7 @@ public class MapsActivity extends AppCompatActivity
 
         HashMap ulssNameCodiceEnte = new HashMap();
 
-        for(Marker marker: new HashSet<>(longPressedMarker)){//for avoid ConcurrentModificationException
+        for (Marker marker : new HashSet<>(longPressedMarker)) {//for avoid ConcurrentModificationException
             ulssNameCodiceEnte.put(marker.getTitle(), mapDenominazioneCodice.get(marker.getTitle()));
             removeLongPressedMarker(marker);
         }
