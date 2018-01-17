@@ -669,7 +669,7 @@ public class MapsActivity extends AppCompatActivity
         longPressedMarker.remove(marker); // remove from the list of pressed marker
         marker.setIcon(BitmapDescriptorFactory.defaultMarker()); // back to normal color
 
-        if (longPressedMarker.size() == 0) {
+        if (longPressedMarker.size() <= 1) {
             confrontoMultiploButton.setVisibility(View.INVISIBLE);
         }
     }
@@ -678,7 +678,9 @@ public class MapsActivity extends AppCompatActivity
         longPressedMarker.add(marker);
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 
-        confrontoMultiploButton.setVisibility(View.VISIBLE);
+        if(longPressedMarker.size() >= 2) {
+            confrontoMultiploButton.setVisibility(View.VISIBLE);
+        }
     }
 
     private void longPressedMarker(Marker marker) {
