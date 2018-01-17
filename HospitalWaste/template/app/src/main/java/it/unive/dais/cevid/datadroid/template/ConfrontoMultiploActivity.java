@@ -8,44 +8,82 @@ import android.support.v7.app.AppCompatCallback;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.view.ActionMode;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import de.codecrafters.tableview.TableDataAdapter;
+import de.codecrafters.tableview.TableHeaderAdapter;
+import de.codecrafters.tableview.TableView;
+import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
+import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
+import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
 
 /**
  * Created by francescobenvenuto on 15/01/2018.
  */
 
 public class ConfrontoMultiploActivity extends Activity implements AppCompatCallback {
+    Map<String, String> ullsNameCodiceEnteMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //TODO fare il confronto veramente questo è solo per mostrare cosa è stato selezionato
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ospedali_associati); // è solo per visualizzare le robe premute
+
         AppCompatDelegate delegate = AppCompatDelegate.create(this, this);
 
-        //((EditText)findViewById(R.id.ospedali_text)).setKeyListener(null);
 
         Intent intent = getIntent();
+        List<String> dati = new LinkedList();
+        ullsNameCodiceEnteMap = (Map<String, String>) intent.getSerializableExtra("map");
+
+        DBHelper instance = DBHelper.getSingleton();
+        List<DBHelper.DatiConfrontoContainer> confrontoData = instance.
+                getConfrontoMultiploDati(ullsNameCodiceEnteMap.keySet(), 2016);
 
 
+        TableView<String[]> table = new TableView(getApplicationContext());
+        TableDataAdapter<String[]> myDataAdapter =
+                new SimpleTableDataAdapter(this.getApplicationContext(), genTableData(confrontoData));
+
+        List<String> header = new LinkedList();
+        header.add("voce di bilancio");
+        header.addAll(ullsNameCodiceEnteMap.values());
+
+        TableHeaderAdapter myHeaderAdapter =
+                new SimpleTableHeaderAdapter(this.getApplicationContext(),
+                        Arrays.copyOf(header.toArray(), header.size(), String[].class)
+                );
+
+        table.setDataAdapter(myDataAdapter);
+        table.setHeaderAdapter(myHeaderAdapter);
+        setContentView(table);
         delegate.onCreate(savedInstanceState);
         delegate.getSupportActionBar().setTitle("Confronto Multiplo");
+    }
 
-        List<String> dati = new LinkedList();
-        Map<String, String> ullsNameCodiceEnteMap = (Map<String, String>) intent.getSerializableExtra("map");
-        for(String key: ullsNameCodiceEnteMap.keySet()){
-            dati.add(key + "\t" + ullsNameCodiceEnteMap.get(key));
+    //from the DatiConfrontoContainer generate a list containing all the table data in a list
+    private String[][] genTableData(List<DBHelper.DatiConfrontoContainer> data){
+        String[][] tableData = new String[data.size()][];
+        int index = 0;
+
+        for(DBHelper.DatiConfrontoContainer dataContainer: data) {
+
+            ArrayList<String> row = new ArrayList();
+            row.add(dataContainer.getVoceBilancio());
+
+            for (String codiceEnte : ullsNameCodiceEnteMap.keySet()) {
+                row.add(dataContainer.getImporto(codiceEnte) +"");
+            }
+
+            tableData[index] = row.toArray(new String[row.size()]);
+            index++;
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter(this,
-                R.layout.listview_row, dati);
-
-        ListView listView = (ListView) findViewById(R.id.ospedali_list);
-        listView.setAdapter(adapter);
-
+        return tableData;
     }
 
     @Override
