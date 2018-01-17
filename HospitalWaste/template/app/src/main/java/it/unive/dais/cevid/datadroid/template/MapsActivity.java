@@ -61,7 +61,6 @@ import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
-import it.unive.dais.cevid.datadroid.template.ConfrontoMultiplo.ConfrontoMultiploActivity;
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
 import it.unive.dais.cevid.datadroid.template.DatiULSS.RicercaInDettaglioActivity;
 import it.unive.dais.cevid.datadroid.template.DatiULSS.ULSS;
@@ -701,7 +700,7 @@ public class MapsActivity extends AppCompatActivity
         HashMap ulssNameCodiceEnte = new HashMap();
 
         for (Marker marker : new HashSet<>(longPressedMarker)) {//for avoid ConcurrentModificationException
-            ulssNameCodiceEnte.put(marker.getTitle(), mapDenominazioneCodice.get(marker.getTitle()));
+            ulssNameCodiceEnte.put(mapDenominazioneCodice.get(marker.getTitle()), marker.getTitle());
             removeLongPressedMarker(marker);
         }
 
