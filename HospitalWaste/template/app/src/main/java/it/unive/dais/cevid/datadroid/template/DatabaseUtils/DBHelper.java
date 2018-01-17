@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -21,6 +20,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,10 +32,10 @@ import java.util.concurrent.ExecutionException;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.CsvRowParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
-import it.unive.dais.cevid.datadroid.template.R;
 import it.unive.dais.cevid.datadroid.template.DatiAppalti.Appalto;
 import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.Bilancio;
 import it.unive.dais.cevid.datadroid.template.DatiULSS.ULSS;
+import it.unive.dais.cevid.datadroid.template.R;
 
 /**
  * Created by gianmarcocallegher on 04/01/18.
@@ -62,15 +62,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private void updateDatabase() {
         SQLiteDatabase db = null;
-        try{
+        try {
             db = SQLiteDatabase.openDatabase(DATABASE_NAME, null, SQLiteDatabase.OPEN_READONLY);
             db.close();
 
-            if(isOldDatabase()){
+            if (isOldDatabase()) {
                 deleteDatabase();
             }
-        }
-        catch(Exception e){ //the database doesn't exist
+        } catch (Exception e) { //the database doesn't exist
             Log.d("Database", "the couldn't be old because not exist yet");
         }
     }
@@ -83,8 +82,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         dataInputStream.close();
         // cannot use LocalDate because the API level TODO migliorare
-        long diffTime = (currentTime - lastTime)/ (1000 * 60 * 60 * 24);// diff time in days
-        if(diffTime > MAX_DAYS){
+        long diffTime = (currentTime - lastTime) / (1000 * 60 * 60 * 24);// diff time in days
+        if (diffTime > MAX_DAYS) {
             return true;
         }
         return false;
@@ -117,7 +116,7 @@ public class DBHelper extends SQLiteOpenHelper {
         while (insertReader.ready()) {
             String insertStmt = insertReader.readLine();
 
-            if(!insertStmt.equals("")) {//TODO cambiare sta ....
+            if (!insertStmt.equals("")) {//TODO cambiare sta ....
                 db.execSQL(insertStmt);
             }
         }
@@ -132,7 +131,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             //to insert vodi di appalto for the ULSS
             List<ULSS> ulssList = getULSS(db);
-            for(ULSS ulss: ulssList) {
+            for (ULSS ulss : ulssList) {
                 SoldipubbliciParser soldipubbliciParser = new SoldipubbliciParser("SAN", ulss.getCodiceEnte());
                 soldipubbliciParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 List<SoldipubbliciParser.Data> soldipubbliciList = new ArrayList<>(soldipubbliciParser.getAsyncTask().get());
@@ -141,7 +140,7 @@ public class DBHelper extends SQLiteOpenHelper {
             }
 
             // to insert the appalti for the ULSS
-            Map<String,List<URL>> appalti = takeUrlFromFile();
+            Map<String, List<URL>> appalti = takeUrlFromFile();
             for (String codiceEnte : appalti.keySet()) {
                 List<URL> urlList = appalti.get(codiceEnte);
                 AppaltiParser appaltiParser = new AppaltiParser(urlList);
@@ -165,8 +164,8 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    private Map<String,List<URL>> takeUrlFromFile() throws InterruptedException, ExecutionException{
-        HashMap<String,List<URL>> map = new HashMap<>();
+    private Map<String, List<URL>> takeUrlFromFile() throws InterruptedException, ExecutionException {
+        HashMap<String, List<URL>> map = new HashMap<>();
         InputStream is = context.getResources().openRawResource(R.raw.link_appalti);
         CsvRowParser csvRowParser = new CsvRowParser(new InputStreamReader(is), true, ";");
         List<CsvRowParser.Row> rows = csvRowParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get();
@@ -180,10 +179,9 @@ public class DBHelper extends SQLiteOpenHelper {
                     l.add(new URL(r.get("link")));
                     map.put(codiceEnte, l);
                 }
-            }
-            catch (MalformedURLException e){
+            } catch (MalformedURLException e) {
                 e.printStackTrace();
-                Log.e("URLError",r.get("link"));
+                Log.e("URLError", r.get("link"));
             }
         }
         return map;
@@ -203,7 +201,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return fetchULSS(cursor);
     }
 
-    private List fetchULSS (Cursor cursor) {
+    private List fetchULSS(Cursor cursor) {
         List<ULSS> ulssList = new LinkedList<>();
 
         cursor.moveToFirst();
@@ -232,7 +230,7 @@ public class DBHelper extends SQLiteOpenHelper {
         deleteTables(db);
         onCreate(db);
     }
-    
+
     private void deleteTables(SQLiteDatabase db) {
         List<String> tables = new LinkedList();
         tables.add("ULSS");
@@ -246,7 +244,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void deleteDatabase(){
+    public void deleteDatabase() {
         context.deleteDatabase(DATABASE_NAME); // remove the database
     }
 
@@ -317,6 +315,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     /**
      * inserisce nel database db gli appalti associandoli al codice dell'ente corrispondente
+     *
      * @param db
      * @param appalti
      * @param codice_ente
@@ -339,33 +338,37 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         for (Appalto appalto : l) {
-                values.put("cig", appalto.getCig());
-                values.put("oggetto", appalto.getOggetto());
-                values.put("scelta_contraente",appalto.getSceltaContraente());
-                values.put("codice_fiscale_aggiudicatario", appalto.getCodice_fiscale_aggiudicatario());
-                values.put("aggiudicatario", appalto.getAggiudicatario());
-                values.put("importo", appalto.getImporto());
-                values.put("codice_ente", appalto.getCodiceEnte());
-            try{
+            values.put("cig", appalto.getCig());
+            values.put("oggetto", appalto.getOggetto());
+            values.put("scelta_contraente", appalto.getSceltaContraente());
+            values.put("codice_fiscale_aggiudicatario", appalto.getCodice_fiscale_aggiudicatario());
+            values.put("aggiudicatario", appalto.getAggiudicatario());
+            values.put("importo", appalto.getImporto());
+            values.put("codice_ente", appalto.getCodiceEnte());
+            try {
                 db.insertOrThrow("Appalti", null, values);
-            }
-            catch (android.database.sqlite.SQLiteConstraintException e){
-                Cursor cursor = db.rawQuery("SELECT importo FROM Appalti WHERE cig=? AND oggetto=? AND codice_fiscale_aggiudicatario=? ;",new String[]{appalto.getCig(),appalto.getOggetto(),appalto.getCodice_fiscale_aggiudicatario()});
+            } catch (android.database.sqlite.SQLiteConstraintException e) {
+
+                String query = "SELECT importo FROM Appalti WHERE cig=? AND oggetto=? AND codice_fiscale_aggiudicatario=? ;";
+                Cursor cursor = db.rawQuery(query, new String[]{appalto.getCig(), appalto.getOggetto(), appalto.getCodice_fiscale_aggiudicatario()});
                 cursor.moveToFirst();
                 double old_importo = cursor.getDouble(0);
                 cursor.close();
-                db.rawQuery("UPDATE Appalti SET importo=? WHERE cig=? AND oggetto=? AND codice_fiscale_aggiudicatario=? ;",new String[]{new Double(old_importo+appalto.getImporto()).toString(),appalto.getCig(),appalto.getOggetto(),appalto.getCodice_fiscale_aggiudicatario()});
+
+                String updateQuery = "UPDATE Appalti SET importo=? WHERE cig=? AND oggetto=? AND codice_fiscale_aggiudicatario=? ;";
+                db.rawQuery(updateQuery, new String[]{new Double(old_importo + appalto.getImporto()).toString(), appalto.getCig(), appalto.getOggetto(), appalto.getCodice_fiscale_aggiudicatario()});
             }
         }
     }
 
     // TODO: Inserire metodi query
 
-    public List<Bilancio> getVociBilancio(String codiceEnte){
+    public List<Bilancio> getVociBilancio(String codiceEnte) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Bilancio> bilanci = new LinkedList();
 
-        Cursor cur = db.rawQuery("SELECT * from Bilancio where codice_ente = ? and importo != 0 ORDER BY importo DESC", new String[]{codiceEnte});
+        String query = "SELECT * from Bilancio where codice_ente = ? and importo != 0 ORDER BY importo DESC";
+        Cursor cur = db.rawQuery(query, new String[]{codiceEnte});
         for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
             bilanci.add(
                     new Bilancio(
@@ -380,11 +383,13 @@ public class DBHelper extends SQLiteOpenHelper {
         cur.close();
         return bilanci;
     }
-    public List<Appalto> getAppalti(String codiceEnte){
+
+    public List<Appalto> getAppalti(String codiceEnte) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Appalto> appalti = new LinkedList();
 
-        Cursor cur = db.rawQuery("SELECT * from Appalti where codice_ente = ? and importo != 0 ORDER BY importo DESC", new String[]{codiceEnte});
+        String query = "SELECT * from Appalti where codice_ente = ? and importo != 0 ORDER BY importo DESC";
+        Cursor cur = db.rawQuery(query, new String[]{codiceEnte});
         for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
             appalti.add(
                     new Appalto(
@@ -407,10 +412,11 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         List<String> ospedali = Collections.emptyList();
 
-        Cursor cur = db.rawQuery("SELECT ospedali_associati from ULSS where codice_ente = ?", new String[]{codiceEnte});
+        String query = "SELECT ospedali_associati from ULSS where codice_ente = ?";
+        Cursor cur = db.rawQuery(query, new String[]{codiceEnte});
         cur.moveToFirst();
 
-        if(!cur.isAfterLast()){
+        if (!cur.isAfterLast()) {
             ospedali = Arrays.asList(cur.getString(0).split(";"));
         }
 
@@ -418,17 +424,21 @@ public class DBHelper extends SQLiteOpenHelper {
         return ospedali;
     }
 
-    public CrossData getDatiIncrociati (String codiceEnte, String keyword) {
+    public CrossData getDatiIncrociati(String codiceEnte, String keyword) {
         return getDatiIncrociati(codiceEnte, keyword, ANNO_APPALTI);
     }
 
-    public CrossData getDatiIncrociati (String codiceEnte, String keyword, int anno) {
+    public CrossData getDatiIncrociati(String codiceEnte, String keyword, int anno) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Appalto> appalti = new LinkedList<>();
         List<Bilancio> bilancio = new LinkedList<>();
 
-        Cursor cursorBilancio = db.rawQuery("SELECT * from Bilancio where codice_ente = ? AND descrizione_codice like %?% AND anno = ?", new String[]{codiceEnte, keyword, String.valueOf(anno)});
-        Cursor cursorAppalti = db.rawQuery("SELECT * from Appalti where codice_ente = ? AND oggetto like %?%", new String[]{codiceEnte, keyword});
+
+        String queryBilancio = "SELECT * from Bilancio where codice_ente = ? AND descrizione_codice like %?% AND anno = ?";
+        String queryAppalto = "SELECT * from Appalti where codice_ente = ? AND oggetto like %?%";
+
+        Cursor cursorBilancio = db.rawQuery(queryBilancio, new String[]{codiceEnte, keyword, String.valueOf(anno)});
+        Cursor cursorAppalti = db.rawQuery(queryAppalto, new String[]{codiceEnte, keyword});
 
         cursorBilancio.moveToFirst();
         cursorAppalti.moveToFirst();
@@ -448,13 +458,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
         while (!cursorAppalti.isAfterLast()) {
             appalti.add(
-                new Appalto(cursorAppalti.getString(0),
-                    cursorAppalti.getString(1),
-                    cursorAppalti.getString(2),
-                    cursorAppalti.getString(3),
-                    cursorAppalti.getString(4),
-                    Double.parseDouble(cursorAppalti.getString(5)),
-                    cursorAppalti.getString(6)
+                    new Appalto(cursorAppalti.getString(0),
+                            cursorAppalti.getString(1),
+                            cursorAppalti.getString(2),
+                            cursorAppalti.getString(3),
+                            cursorAppalti.getString(4),
+                            Double.parseDouble(cursorAppalti.getString(5)),
+                            cursorAppalti.getString(6)
                     )
             );
             cursorAppalti.moveToNext();
@@ -480,4 +490,87 @@ public class DBHelper extends SQLiteOpenHelper {
             return vociBilancio;
         }
     }
+
+
+    public List<DatiConfrontoContainer> getConfrontoMultiploDati(Collection<String> codiciEnte, int anno) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        FactoryDatiConfronto factory = new FactoryDatiConfronto();
+
+        String query = "SELECT descrizione_codice, importo " +
+                "FROM Bilancio " +
+                "WHERE codice_ente = ? and anno = ? and importo != 0";
+
+        for (String codiceEnte : codiciEnte) {
+            Cursor cursorBilancio = db.rawQuery(query, new String[]{codiceEnte, anno + ""});
+            cursorBilancio.moveToFirst();
+
+            while (!cursorBilancio.isAfterLast()) {
+                String voceBilancio = cursorBilancio.getString(0);
+                Double importo = Double.parseDouble(cursorBilancio.getString(1));
+
+                DatiConfrontoContainer tempContainer = factory.getDataContainer(voceBilancio);
+                tempContainer.putData(codiceEnte, importo);
+
+                cursorBilancio.moveToNext();
+            }
+
+        }
+
+        return factory.genList(codiciEnte.size());
+    }
+
+    private class FactoryDatiConfronto {
+        Map<String, DatiConfrontoContainer> factoryMap;
+
+        private FactoryDatiConfronto() {
+            factoryMap = new HashMap<>();
+        }
+
+        private DatiConfrontoContainer getDataContainer(String voceBilancio) {
+            if (!factoryMap.containsKey(voceBilancio)) {
+                factoryMap.put(voceBilancio, new DatiConfrontoContainer(voceBilancio));
+            }
+            return factoryMap.get(voceBilancio);
+        }
+
+        //get all the DatiConfrontoContainer that have at least sizeRequired ULSS
+        private List<DatiConfrontoContainer> genList(int sizeRequired) {
+            List<DatiConfrontoContainer> result = new LinkedList();
+
+            for(String voceDiBilancio: factoryMap.keySet()){
+
+                DatiConfrontoContainer tempData = factoryMap.get(voceDiBilancio);
+                if(tempData.size() == sizeRequired){
+                    result.add(tempData);
+                }
+            }
+            return result;
+        }
+    }
+
+    public class DatiConfrontoContainer {
+        String voceBilancio;
+        Map<String, Double> ulssImporto;
+
+        private int size(){
+            return ulssImporto.size();
+        }
+        private DatiConfrontoContainer(String voceBilancio) {
+            this.voceBilancio = voceBilancio;
+
+            ulssImporto = new HashMap<>();
+        }
+
+        private void putData(String codiceEnte, Double importo) {
+            ulssImporto.put(codiceEnte, importo);
+        }
+
+        public Double getImporto(String codiceEnte){
+            return ulssImporto.get(codiceEnte);
+        }
+        public String getVoceBilancio(){
+            return voceBilancio;
+        }
+    }
+
 }
