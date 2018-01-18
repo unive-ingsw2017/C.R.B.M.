@@ -11,7 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 
-import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
+import it.unive.dais.cevid.datadroid.template.DatabaseUtils.BilanciHelper;
 import it.unive.dais.cevid.datadroid.template.R;
 
 /**
@@ -38,9 +38,10 @@ public class DatiDiBilancioActivity extends Activity implements AppCompatCallbac
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.bilancio);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        BilanciHelper helper = new BilanciHelper();
         adapter = new RecyclerViewAdapter(
                 this,
-                DBHelper.getSingleton().getVociBilancio(codiceEnte)
+                helper.getVociBilancio(codiceEnte)
         );
         recyclerView.setAdapter(adapter);
 

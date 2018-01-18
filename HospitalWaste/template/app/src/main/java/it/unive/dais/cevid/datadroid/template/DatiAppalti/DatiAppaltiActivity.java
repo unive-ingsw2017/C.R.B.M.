@@ -11,7 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 
-import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
+import it.unive.dais.cevid.datadroid.template.DatabaseUtils.AppaltiHelper;
 import it.unive.dais.cevid.datadroid.template.R;
 
 /**
@@ -38,9 +38,10 @@ public class DatiAppaltiActivity extends Activity implements AppCompatCallback {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.appalto);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        AppaltiHelper helper = new AppaltiHelper();
         adapter = new RecyclerViewAdapter(
                 this,
-                DBHelper.getSingleton().getAppalti(codiceEnte)
+                helper.getAppalti(codiceEnte)
         );
         recyclerView.setAdapter(adapter);
 

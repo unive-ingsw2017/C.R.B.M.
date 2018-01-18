@@ -20,7 +20,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -188,14 +187,27 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
+    private List<ULSS> ulss = Collections.EMPTY_LIST;
     public List<ULSS> getULSS() {
+        if(ulss != Collections.EMPTY_LIST){
+            return ulss;
+        }
+
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM ULSS", null);
-        List<ULSS> ulssList = fetchULSS(cursor);
+        ulss = fetchULSS(cursor);
         db.close();
-        return ulssList;
-    }
 
+        return ulss;
+    }
+    public String getCodiceEnte(String ulssName){
+        for(ULSS ulss: this.ulss){
+            if(ulss.getDescrizione() == ulssName){
+                return ulss.getCodiceEnte();
+            }
+        }
+        return "";// ulssname is wrong
+    }
     private List<ULSS> getULSS(SQLiteDatabase db) {
         Cursor cursor = db.rawQuery("SELECT * FROM ULSS", null);
         return fetchULSS(cursor);
@@ -361,51 +373,6 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    // TODO: Inserire metodi query
-
-    public List<Bilancio> getVociBilancio(String codiceEnte) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        List<Bilancio> bilanci = new LinkedList();
-
-        String query = "SELECT * from Bilancio where codice_ente = ? and importo != 0 ORDER BY importo DESC";
-        Cursor cur = db.rawQuery(query, new String[]{codiceEnte});
-        for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
-            bilanci.add(
-                    new Bilancio(
-                            cur.getString(0),
-                            cur.getString(1),
-                            Integer.parseInt(cur.getString(2)),
-                            cur.getString(3),
-                            Double.parseDouble(cur.getString(4))
-                    )
-            );
-        }
-        cur.close();
-        return bilanci;
-    }
-
-    public List<Appalto> getAppalti(String codiceEnte) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        List<Appalto> appalti = new LinkedList();
-
-        String query = "SELECT * from Appalti where codice_ente = ? and importo != 0 ORDER BY importo DESC";
-        Cursor cur = db.rawQuery(query, new String[]{codiceEnte});
-        for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
-            appalti.add(
-                    new Appalto(
-                            cur.getString(0),
-                            cur.getString(1),
-                            cur.getString(2),
-                            cur.getString(3),
-                            cur.getString(4),
-                            Double.parseDouble(cur.getString(5)),
-                            cur.getString(6)
-                    )
-            );
-        }
-        cur.close();
-        return appalti;
-    }
 
     //get the string of the ospedali_associati and split to have a list of ospedali_associati
     public List<String> getOspedali(String codiceEnte) {
@@ -490,87 +457,4 @@ public class DBHelper extends SQLiteOpenHelper {
             return vociBilancio;
         }
     }
-
-
-    public List<DatiConfrontoContainer> getConfrontoMultiploDati(Collection<String> codiciEnte, int anno) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        FactoryDatiConfronto factory = new FactoryDatiConfronto();
-
-        String query = "SELECT descrizione_codice, importo " +
-                "FROM Bilancio " +
-                "WHERE codice_ente = ? and anno = ? and importo != 0";
-
-        for (String codiceEnte : codiciEnte) {
-            Cursor cursorBilancio = db.rawQuery(query, new String[]{codiceEnte, anno + ""});
-            cursorBilancio.moveToFirst();
-
-            while (!cursorBilancio.isAfterLast()) {
-                String voceBilancio = cursorBilancio.getString(0);
-                Double importo = Double.parseDouble(cursorBilancio.getString(1));
-
-                DatiConfrontoContainer tempContainer = factory.getDataContainer(voceBilancio);
-                tempContainer.putData(codiceEnte, importo);
-
-                cursorBilancio.moveToNext();
-            }
-
-        }
-
-        return factory.genList(codiciEnte.size());
-    }
-
-    private class FactoryDatiConfronto {
-        Map<String, DatiConfrontoContainer> factoryMap;
-
-        private FactoryDatiConfronto() {
-            factoryMap = new HashMap<>();
-        }
-
-        private DatiConfrontoContainer getDataContainer(String voceBilancio) {
-            if (!factoryMap.containsKey(voceBilancio)) {
-                factoryMap.put(voceBilancio, new DatiConfrontoContainer(voceBilancio));
-            }
-            return factoryMap.get(voceBilancio);
-        }
-
-        //get all the DatiConfrontoContainer that have at least sizeRequired ULSS
-        private List<DatiConfrontoContainer> genList(int sizeRequired) {
-            List<DatiConfrontoContainer> result = new LinkedList();
-
-            for(String voceDiBilancio: factoryMap.keySet()){
-
-                DatiConfrontoContainer tempData = factoryMap.get(voceDiBilancio);
-                if(tempData.size() == sizeRequired){
-                    result.add(tempData);
-                }
-            }
-            return result;
-        }
-    }
-
-    public class DatiConfrontoContainer {
-        String voceBilancio;
-        Map<String, Double> ulssImporto;
-
-        private int size(){
-            return ulssImporto.size();
-        }
-        private DatiConfrontoContainer(String voceBilancio) {
-            this.voceBilancio = voceBilancio;
-
-            ulssImporto = new HashMap<>();
-        }
-
-        private void putData(String codiceEnte, Double importo) {
-            ulssImporto.put(codiceEnte, importo);
-        }
-
-        public Double getImporto(String codiceEnte){
-            return ulssImporto.get(codiceEnte);
-        }
-        public String getVoceBilancio(){
-            return voceBilancio;
-        }
-    }
-
 }
