@@ -52,5 +52,8 @@
     <string name="bilanci_hint">EditText for the work Bianci</string>
     <string name="confronta_string">Confronta</string>
 
+    <string name="search_hint">Cerca per voce di bilancio</string>
+    <string name="icona_fornitori">icona fornitori</string>
+    <string name="fornitori_hardcoded">Fornitori</string>
 
 </resources>
