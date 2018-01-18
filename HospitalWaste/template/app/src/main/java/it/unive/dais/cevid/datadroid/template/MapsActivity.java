@@ -62,6 +62,7 @@ import java.util.concurrent.ExecutionException;
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
+import it.unive.dais.cevid.datadroid.template.DatiFornitori.FornitoriActivity;
 import it.unive.dais.cevid.datadroid.template.DatiULSS.RicercaInDettaglioActivity;
 import it.unive.dais.cevid.datadroid.template.DatiULSS.ULSS;
 
@@ -273,6 +274,7 @@ public class MapsActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.maps_with_options, menu);
+
         return true;
     }
 
@@ -291,6 +293,9 @@ public class MapsActivity extends AppCompatActivity
                 break;
             case R.id.MENU_INFO:
                 startActivity(new Intent(this, InfoActivity.class));
+                break;
+            case R.id.WORK_ICON:
+                startActivity(new Intent(this, FornitoriActivity.class));
                 break;
         }
         return false;
