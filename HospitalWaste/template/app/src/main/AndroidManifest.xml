@@ -42,6 +42,13 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".MapsActivity" />
+
         </activity>
 
         <activity
@@ -108,6 +115,21 @@
                 android:value=".MapsActivity" />
         </activity>
 
+        <activity
+            android:name=".DatiFornitori.FornitoriActivity"
+            android:parentActivityName=".MapsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapsActivity" />
+        </activity>
+        <activity
+            android:name=".DatiFornitori.ulssFornite.UlssFornite"
+            android:parentActivityName=".DatiFornitori.FornitoriActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapsActivity" />
+        </activity>
 
     </application>
 
