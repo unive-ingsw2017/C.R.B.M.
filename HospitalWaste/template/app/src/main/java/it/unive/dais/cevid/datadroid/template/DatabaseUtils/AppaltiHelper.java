@@ -22,11 +22,21 @@ public class AppaltiHelper {
     }
 
     public List<Appalto> getAppalti(String codiceEnte) {
+        return getAppaltiByFornitore(codiceEnte, "");
+    }
+
+    public List<Appalto> getAppaltiByFornitore(String codiceEnte, String fornitore) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         List<Appalto> appalti = new LinkedList();
 
-        String query = "SELECT * from Appalti where codice_ente = ? and importo != 0 ORDER BY importo DESC";
-        Cursor cur = db.rawQuery(query, new String[]{codiceEnte});
+        String query = "SELECT * from Appalti where codice_ente = ? and importo != 0 and (aggiudicatario = ? or ?) ORDER BY importo DESC";
+
+        // if fornitoreSet = 0 then aggiudicatario = ? must be true
+        String fornitoreSet = "0";
+        if(fornitore.isEmpty()){
+            fornitoreSet = "1";
+        }
+        Cursor cur = db.rawQuery(query, new String[]{codiceEnte, fornitore, fornitoreSet});
         for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
             appalti.add(
                     new Appalto(
@@ -42,5 +52,8 @@ public class AppaltiHelper {
         }
         cur.close();
         return appalti;
+        
+        
+        
     }
 }

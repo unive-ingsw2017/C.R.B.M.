@@ -54,6 +54,7 @@ public class ConfrontoMultiploActivity extends Activity implements AppCompatCall
         header.add("voce di bilancio");
         header.addAll(ullsNameCodiceEnteMap.values());
 
+        //TODO check if the creation is right
         TableHeaderAdapter myHeaderAdapter =
                 new SimpleTableHeaderAdapter(this.getApplicationContext(),
                         Arrays.copyOf(header.toArray(), header.size(), String[].class)

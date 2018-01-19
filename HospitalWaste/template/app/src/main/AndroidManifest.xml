@@ -121,6 +121,12 @@
                 android:value=".MapsActivity" />
         </activity>
         <activity android:name=".MapsActivity"></activity>
+
+        <activity android:name=".DatiFornitori.ulssFornite.vociPerUlss.VociPerUlssActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DatiFornitori.ulssFornite.UlssFornite" />
+        </activity>
     </application>
 
 </manifest>

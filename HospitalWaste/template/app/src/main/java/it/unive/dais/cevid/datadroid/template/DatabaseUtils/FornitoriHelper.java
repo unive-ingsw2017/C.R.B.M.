@@ -43,7 +43,7 @@ public class FornitoriHelper {
 
         String query = "SELECT DISTINCT u.denominazione " +
                 "FROM Appalti a join ULSS u " +
-                "WHERE a.aggiudicatario = ? and a.codice_ente = u.codice_ente";
+                "WHERE a.aggiudicatario = ? and a.codice_ente = u.codice_ente and a.importo != 0";
 
         Cursor cursorUlss = db.rawQuery(query, new String[]{fornitore});
         cursorUlss.moveToFirst();

@@ -201,8 +201,8 @@ public class DBHelper extends SQLiteOpenHelper {
         return ulss;
     }
     public String getCodiceEnte(String ulssName){
-        for(ULSS ulss: this.ulss){
-            if(ulss.getDescrizione() == ulssName){
+        for(ULSS ulss: getULSS()){
+            if(ulss.getDescrizione().equals(ulssName)){
                 return ulss.getCodiceEnte();
             }
         }

@@ -1,12 +1,13 @@
 package it.unive.dais.cevid.datadroid.template.DatiFornitori.ulssFornite;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
 import java.util.List;
 
-import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
+import it.unive.dais.cevid.datadroid.template.DatiFornitori.ulssFornite.vociPerUlss.VociPerUlssActivity;
 
 /**
  * Created by francescobenvenuto on 18/01/2018.
@@ -20,8 +21,13 @@ public class RecyclerViewAdapter extends it.unive.dais.cevid.datadroid.template.
     protected void manageOnClick(View view){
         TextView text = (TextView) view;
 
-        String ulssName = DBHelper.getSingleton().getCodiceEnte((String) text.getText());
+        String ulssName = (String) text.getText();
         String fornitore = ((UlssFornite) getContext()).getIntent().getStringExtra("fornitore");
-        //TODO creare l'intent per l'activity che mostra cosa il fornitore a fornito a quella determinata ulss
+
+        Intent intent = new Intent(getContext(), VociPerUlssActivity.class);
+        intent.putExtra("fornitore", fornitore);
+        intent.putExtra("ulss", ulssName);
+
+        getContext().startActivity(intent);
     }
 }
