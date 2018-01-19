@@ -25,6 +25,7 @@ public class AppaltiHelper {
         return getAppaltiByFornitore(codiceEnte, "");
     }
 
+
     public List<Appalto> getAppaltiByFornitore(String codiceEnte, String fornitore) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         List<Appalto> appalti = new LinkedList();
@@ -52,8 +53,5 @@ public class AppaltiHelper {
         }
         cur.close();
         return appalti;
-        
-        
-        
     }
 }

@@ -1,26 +1,25 @@
 package it.unive.dais.cevid.datadroid.template.DatiDiBilancio;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatCallback;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.view.ActionMode;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 
-import it.unive.dais.cevid.datadroid.template.DatabaseUtils.BilanciHelper;
+import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.FragmentStuff.FragmentAdapter;
 import it.unive.dais.cevid.datadroid.template.R;
 
 /**
  * Created by francescobenvenuto on 11/01/2018.
  */
 
-public class DatiDiBilancioActivity extends Activity implements AppCompatCallback {
-
-    private RecyclerViewAdapter adapter;
+public class DatiDiBilancioActivity extends FragmentActivity implements AppCompatCallback {
+    private String codiceEnte;
     /**
      * Questo metodo viene chiamato quando questa activity parte.
      * l'intent deve essere inviato con anche l'oggetto ULSS in modo da sapere cosa
@@ -30,20 +29,49 @@ public class DatiDiBilancioActivity extends Activity implements AppCompatCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dati_di_bilancio);
+        setContentView(R.layout.fragment_layout);
 
         Intent intent = getIntent();
-        String codiceEnte = intent.getStringExtra("codice_ente");
+        codiceEnte = intent.getStringExtra("codice_ente");
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.bilancio);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        BilanciHelper helper = new BilanciHelper();
-        adapter = new RecyclerViewAdapter(
-                this,
-                helper.getVociBilancio(codiceEnte)
+        //table layout stuff
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_one)));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_two)));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_three)));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+
+        //view pager stuff
+        Bundle bundle = new Bundle();
+        bundle.putString("codice_ente", codiceEnte);
+
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        final FragmentAdapter adapter = new FragmentAdapter(
+                getSupportFragmentManager(),
+                tabLayout.getTabCount(),
+                bundle, // to send codice_ente
+                getApplicationContext() // to get string resources
         );
-        recyclerView.setAdapter(adapter);
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
         AppCompatDelegate delegate = AppCompatDelegate.create(this, this);
         delegate.onCreate(savedInstanceState);

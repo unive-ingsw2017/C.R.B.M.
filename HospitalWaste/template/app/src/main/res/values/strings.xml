@@ -56,4 +56,8 @@
     <string name="icona_fornitori">icona fornitori</string>
     <string name="fornitori_hardcoded">Fornitori</string>
 
+    <string name="tab_one">2015</string>
+    <string name="tab_two">2016</string>
+    <string name="tab_three">2017</string>
+
 </resources>
