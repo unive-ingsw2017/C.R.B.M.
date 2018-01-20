@@ -11,8 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 
-import it.unive.dais.cevid.datadroid.template.DatabaseUtils.BilanciHelper;
-import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.RecyclerViewAdapter;
+import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
 import it.unive.dais.cevid.datadroid.template.R;
 
 /**
@@ -20,8 +19,13 @@ import it.unive.dais.cevid.datadroid.template.R;
  */
 
 public class IncrocioDatiActivity extends Activity implements AppCompatCallback {
+    private it.unive.dais.cevid.datadroid.template.DatiDiBilancio.RecyclerViewAdapter adapterVociBilancio;
+    private it.unive.dais.cevid.datadroid.template.DatiAppalti.RecyclerViewAdapter adapterAppalti;
 
-    private RecyclerViewAdapter adapterVociBilancio;
+    private String criterio;
+    private String codiceEnte;
+    private String ulssName;
+    //TODO fragment per bilanci e appalti e poi per anno
     /**
      * Questo metodo viene chiamato quando questa activity parte.
      * l'intent deve essere inviato con anche l'oggetto ULSS in modo da sapere cosa
@@ -34,21 +38,38 @@ public class IncrocioDatiActivity extends Activity implements AppCompatCallback 
         setContentView(R.layout.activity_incrocio_dati);
 
         Intent intent = getIntent();
-        String codiceEnte = intent.getStringExtra("codice_ente");
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.bilancio);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        codiceEnte = intent.getStringExtra("codiceEnte");
+        ulssName = intent.getStringExtra("ulssName");
+        criterio = intent.getStringExtra("criterio");
 
-        BilanciHelper helper = new BilanciHelper();
-        adapterVociBilancio = new RecyclerViewAdapter(
+        //get the recycler layout(there's two in the same layout)
+        RecyclerView recyclerAppalto = (RecyclerView) findViewById(R.id.appalto_incrocio);
+        recyclerAppalto.setLayoutManager(new LinearLayoutManager(this));
+
+        RecyclerView recyclerBilanci = (RecyclerView) findViewById(R.id.bilancio_incrocio);
+        recyclerBilanci.setLayoutManager(new LinearLayoutManager(this));
+
+        //get the crossed data
+        DBHelper helper = DBHelper.getSingleton();
+        DBHelper.CrossData datiIncrociati = helper.getDatiIncrociati(codiceEnte, criterio);
+
+        //adapter set stuff
+        adapterVociBilancio = new it.unive.dais.cevid.datadroid.template.DatiDiBilancio.RecyclerViewAdapter(
                 this,
-                helper.getVociBilancio(codiceEnte)
+                datiIncrociati.getVociBilancio()
         );
-        recyclerView.setAdapter(adapterVociBilancio);
+        recyclerBilanci.setAdapter(adapterVociBilancio);
+
+        adapterAppalti = new it.unive.dais.cevid.datadroid.template.DatiAppalti.RecyclerViewAdapter(
+                this,
+                datiIncrociati.getAppalti()
+        );
+        recyclerAppalto.setAdapter(adapterAppalti);
 
         AppCompatDelegate delegate = AppCompatDelegate.create(this, this);
         delegate.onCreate(savedInstanceState);
-        delegate.getSupportActionBar().setTitle(intent.getStringExtra("ULSS name"));
+        delegate.getSupportActionBar().setTitle(ulssName);
     }
 
 

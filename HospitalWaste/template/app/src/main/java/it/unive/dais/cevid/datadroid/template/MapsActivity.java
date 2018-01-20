@@ -545,7 +545,7 @@ public class MapsActivity extends AppCompatActivity
         Intent ric_in_dett = new Intent(this, RicercaInDettaglioActivity.class);
 
         ric_in_dett.putExtra("ULSS name", marker.getTitle());
-        ric_in_dett.putExtra("codice_ente", mapDenominazioneCodice.get(marker.getTitle()));
+        ric_in_dett.putExtra("codiceEnte", mapDenominazioneCodice.get(marker.getTitle()));
         startActivity(ric_in_dett);
     }
 

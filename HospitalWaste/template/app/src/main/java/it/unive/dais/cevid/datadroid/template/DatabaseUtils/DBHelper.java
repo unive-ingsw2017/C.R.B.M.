@@ -401,8 +401,8 @@ public class DBHelper extends SQLiteOpenHelper {
         List<Bilancio> bilancio = new LinkedList<>();
 
 
-        String queryBilancio = "SELECT * from Bilancio where codice_ente = ? AND descrizione_codice like %?% AND anno = ?";
-        String queryAppalto = "SELECT * from Appalti where codice_ente = ? AND oggetto like %?%";
+        String queryBilancio = "SELECT * from Bilancio where codice_ente = ? AND descrizione_codice like '%' || ? || '%' AND anno = ?";
+        String queryAppalto = "SELECT * from Appalti where codice_ente = ? AND oggetto like '%' || ? || '%'";
 
         Cursor cursorBilancio = db.rawQuery(queryBilancio, new String[]{codiceEnte, keyword, String.valueOf(anno)});
         Cursor cursorAppalti = db.rawQuery(queryAppalto, new String[]{codiceEnte, keyword});
