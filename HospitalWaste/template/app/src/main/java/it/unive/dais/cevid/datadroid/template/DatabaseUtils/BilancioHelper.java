@@ -119,7 +119,7 @@ public class BilancioHelper {
 
     public List<Bilancio> getVociBilancio(String codiceEnte, String anno) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        List<Bilancio> bilanci = new LinkedList();
+        List<Bilancio> vociBilancio = new LinkedList();
 
         // if annoSet = 0 then al the year will be take
         String annoSet = "0";
@@ -129,7 +129,7 @@ public class BilancioHelper {
         String query = "SELECT * from Bilancio where codice_ente = ? and importo != 0 and (anno = ? or ?) ORDER BY importo DESC";
         Cursor cur = db.rawQuery(query, new String[]{codiceEnte, anno, annoSet});
         for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
-            bilanci.add(
+            vociBilancio.add(
                     new Bilancio(
                             cur.getString(0),
                             cur.getString(1),
@@ -140,6 +140,6 @@ public class BilancioHelper {
             );
         }
         cur.close();
-        return bilanci;
+        return vociBilancio;
     }
 }

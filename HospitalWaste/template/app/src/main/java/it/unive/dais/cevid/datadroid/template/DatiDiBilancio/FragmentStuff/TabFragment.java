@@ -25,8 +25,8 @@ public class TabFragment extends Fragment {
 
     private String anno;
     private String codiceEnte;
-
-    private List<Bilancio> vociBilancio;
+    private BilancioHelper helper;
+    //private List<Bilancio> vociBilancio;
 
     public void onCreate(Bundle fragmentBundle) {
         super.onCreate(fragmentBundle);
@@ -45,14 +45,14 @@ public class TabFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.bilancio);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
-        BilancioHelper helper = new BilancioHelper();
+        helper = new BilancioHelper();
 
-        vociBilancio = new ArrayList<>();
-        vociBilancio.addAll(helper.getVociBilancio(codiceEnte, anno));
+        /*vociBilancio = new ArrayList<>();
+        vociBilancio.addAll(helper.getVociBilancio(codiceEnte, anno));*/
 
         adapter = new it.unive.dais.cevid.datadroid.template.DatiDiBilancio.RecyclerViewAdapter(
                 this.getContext(),
-                vociBilancio
+                helper.getVociBilancio(codiceEnte, anno)
         );
         recyclerView.setAdapter(adapter);
 
@@ -65,11 +65,12 @@ public class TabFragment extends Fragment {
     public void onQueryTextChange (String query) {
         List<Bilancio> vociBilancioFiltered = new ArrayList<>();
 
-        for (Bilancio voceBilancio : vociBilancio) {
+        vociBilancioFiltered.add(new Bilancio("a", "b", 1, "c", 1.0));
+        /*for (Bilancio voceBilancio : helper.getVociBilancio(codiceEnte, anno)) {
             String descrizione = voceBilancio.getDescrizioneCodice().toLowerCase();
             if (descrizione.contains(query))
                 vociBilancioFiltered.add(voceBilancio);
-        }
+        }*/
 
         adapter.setFilter(vociBilancioFiltered);
     }

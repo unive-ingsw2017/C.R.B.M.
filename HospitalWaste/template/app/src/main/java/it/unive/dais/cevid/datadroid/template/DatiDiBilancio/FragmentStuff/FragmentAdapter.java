@@ -15,7 +15,7 @@ import it.unive.dais.cevid.datadroid.template.R;
 public class FragmentAdapter extends FragmentStatePagerAdapter {
     private final String tabOne;
     private final String tabTwo;
-    private final String tabThre;
+    private final String tabThree;
 
     int mNumOfTabs;
     Bundle fragmentBundle;
@@ -27,7 +27,7 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
 
         tabOne = context.getString(R.string.tab_one);
         tabTwo = context.getString(R.string.tab_two);
-        tabThre = context.getString(R.string.tab_three);
+        tabThree = context.getString(R.string.tab_three);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
                 tab.setArguments(fragmentBundle);
                 return tab;
             case 2:
-                fragmentBundle.putString("anno", tabThre);
+                fragmentBundle.putString("anno", tabThree);
 
                 tab.setArguments(fragmentBundle);
                 return tab;

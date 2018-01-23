@@ -148,21 +148,16 @@ public class DatiDiBilancioActivity extends AppCompatActivity {
                     searchView.setIconified(true);
                 myMenuItem.collapseActionView();
 
-                filter(query);
-
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                adapter.onQueryTextChange(newText.toLowerCase());
                 return false;
             }
         });
         //return true;
         return super.onCreateOptionsMenu(menu);
-    }
-
-    private void filter(String query) {
-        adapter.onQueryTextChange(query.toLowerCase());
     }
 }

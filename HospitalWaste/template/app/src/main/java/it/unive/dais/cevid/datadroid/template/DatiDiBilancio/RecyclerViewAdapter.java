@@ -78,8 +78,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public void setFilter (List<Bilancio> vociBilancioFiltered) {
-        vociBilancio = new ArrayList<>();
-        vociBilancio.addAll(vociBilancioFiltered);
+        vociBilancio = vociBilancioFiltered;
         notifyDataSetChanged();
     }
 }
