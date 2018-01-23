@@ -16,18 +16,18 @@ public class SplashScreen extends AppCompatActivity {
         Thread myThread = new Thread() {
             @Override
             public void run() {
-                //try {
+                try {
                     DBHelper db = DBHelper.getSingleton(getApplicationContext());
                     db.getReadableDatabase();
                     db.getULSS();
-                    //sleep(2000);
+                    sleep(2000);
                     db.close();
                     Intent main = new Intent(getApplicationContext(), MapsActivity.class);
                     startActivity(main);
                     finish();
-                //} catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                     //e.printStackTrace();
-                //}
+                }
 
 
             }
