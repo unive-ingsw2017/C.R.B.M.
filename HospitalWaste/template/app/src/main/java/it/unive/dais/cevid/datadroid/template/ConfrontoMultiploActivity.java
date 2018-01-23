@@ -20,7 +20,7 @@ import de.codecrafters.tableview.TableHeaderAdapter;
 import de.codecrafters.tableview.TableView;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
-import it.unive.dais.cevid.datadroid.template.DatabaseUtils.BilanciHelper;
+import it.unive.dais.cevid.datadroid.template.DatabaseUtils.BilancioHelper;
 
 /**
  * Created by francescobenvenuto on 15/01/2018.
@@ -41,8 +41,8 @@ public class ConfrontoMultiploActivity extends Activity implements AppCompatCall
         List<String> dati = new LinkedList();
         ullsNameCodiceEnteMap = (Map<String, String>) intent.getSerializableExtra("map");
 
-        BilanciHelper helper = new BilanciHelper();
-        List<BilanciHelper.DatiConfrontoContainer> confrontoData = helper.
+        BilancioHelper helper = new BilancioHelper();
+        List<BilancioHelper.DatiConfrontoContainer> confrontoData = helper.
                 getConfrontoMultiploDati(ullsNameCodiceEnteMap.keySet(), 2016);
 
 
@@ -68,11 +68,11 @@ public class ConfrontoMultiploActivity extends Activity implements AppCompatCall
     }
 
     //from the DatiConfrontoContainer generate a list containing all the table data in a list
-    private String[][] genTableData(List<BilanciHelper.DatiConfrontoContainer> data){
+    private String[][] genTableData(List<BilancioHelper.DatiConfrontoContainer> data){
         String[][] tableData = new String[data.size()][];
         int index = 0;
 
-        for(BilanciHelper.DatiConfrontoContainer dataContainer: data) {
+        for(BilancioHelper.DatiConfrontoContainer dataContainer: data) {
 
             ArrayList<String> row = new ArrayList();
             row.add(dataContainer.getVoceBilancio());

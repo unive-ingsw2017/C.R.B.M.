@@ -5,8 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,13 +20,13 @@ import it.unive.dais.cevid.datadroid.template.R;
  */
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-    private List<Bilancio> bilanci = Collections.emptyList();
+    private List<Bilancio> vociBilancio = Collections.emptyList();
     private LayoutInflater mInflater;
 
     // data is passed into the constructor
     public RecyclerViewAdapter(Context context, List<Bilancio> data) {
         this.mInflater = LayoutInflater.from(context);
-        this.bilanci = data;
+        this.vociBilancio = data;
     }
 
     // inflates the row layout from xml when needed
@@ -37,7 +40,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     // binds the data to the textview in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Bilancio bilancio = bilanci.get(position);
+        Bilancio bilancio = vociBilancio.get(position);
 
         holder.importo.setText(bilancio.getImporto() + "");
         holder.voceDiSpesa.setText(bilancio.getDescrizioneCodice());
@@ -47,9 +50,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     // total number of rows
     @Override
     public int getItemCount() {
-        return bilanci.size();
+        return vociBilancio.size();
     }
-
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -72,8 +74,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     // convenience method for getting data at click position
     public Bilancio getItem(int id) {
-        return bilanci.get(id);
+        return vociBilancio.get(id);
     }
 
+    public void setFilter (List<Bilancio> vociBilancioFiltered) {
+        vociBilancio = new ArrayList<>();
+        vociBilancio.addAll(vociBilancioFiltered);
+        notifyDataSetChanged();
+    }
 }
 

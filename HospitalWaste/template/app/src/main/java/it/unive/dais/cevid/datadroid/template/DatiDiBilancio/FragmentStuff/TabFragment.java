@@ -8,7 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import it.unive.dais.cevid.datadroid.template.DatabaseUtils.BilanciHelper;
+import java.util.ArrayList;
+import java.util.List;
+
+import it.unive.dais.cevid.datadroid.template.DatabaseUtils.BilancioHelper;
+import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.Bilancio;
 import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.RecyclerViewAdapter;
 import it.unive.dais.cevid.datadroid.template.R;
 
@@ -21,6 +25,8 @@ public class TabFragment extends Fragment {
 
     private String anno;
     private String codiceEnte;
+
+    private List<Bilancio> vociBilancio;
 
     public void onCreate(Bundle fragmentBundle) {
         super.onCreate(fragmentBundle);
@@ -39,10 +45,14 @@ public class TabFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.bilancio);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
-        BilanciHelper helper = new BilanciHelper();
+        BilancioHelper helper = new BilancioHelper();
+
+        vociBilancio = new ArrayList<>();
+        vociBilancio.addAll(helper.getVociBilancio(codiceEnte, anno));
+
         adapter = new it.unive.dais.cevid.datadroid.template.DatiDiBilancio.RecyclerViewAdapter(
                 this.getContext(),
-                helper.getVociBilancio(codiceEnte, anno)
+                vociBilancio
         );
         recyclerView.setAdapter(adapter);
 
@@ -50,6 +60,18 @@ public class TabFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
         return view;
+    }
+
+    public void onQueryTextChange (String query) {
+        List<Bilancio> vociBilancioFiltered = new ArrayList<>();
+
+        for (Bilancio voceBilancio : vociBilancio) {
+            String descrizione = voceBilancio.getDescrizioneCodice().toLowerCase();
+            if (descrizione.contains(query))
+                vociBilancioFiltered.add(voceBilancio);
+        }
+
+        adapter.setFilter(vociBilancioFiltered);
     }
 
 }

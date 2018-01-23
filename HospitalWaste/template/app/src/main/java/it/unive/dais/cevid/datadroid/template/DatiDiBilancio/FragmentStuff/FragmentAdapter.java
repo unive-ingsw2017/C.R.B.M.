@@ -58,4 +58,11 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return mNumOfTabs;
     }
+
+    public void onQueryTextChange(String query) {
+        for (int i = 0; i < mNumOfTabs; i++) {
+            TabFragment tab = (TabFragment) getItem(i);
+            tab.onQueryTextChange(query);
+        }
+    }
 }

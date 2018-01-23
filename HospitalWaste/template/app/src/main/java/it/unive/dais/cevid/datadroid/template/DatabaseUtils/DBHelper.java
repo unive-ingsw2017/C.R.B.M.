@@ -80,7 +80,7 @@ public class DBHelper extends SQLiteOpenHelper {
         long currentTime = System.currentTimeMillis();
 
         dataInputStream.close();
-        // cannot use LocalDate because the API level TODO migliorare
+        // cannot use LocalDate because of the API level TODO migliorare
         long diffTime = (currentTime - lastTime) / (1000 * 60 * 60 * 24);// diff time in days
         if (diffTime > MAX_DAYS) {
             return true;

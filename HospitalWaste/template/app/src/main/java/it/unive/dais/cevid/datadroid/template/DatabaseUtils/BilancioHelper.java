@@ -15,14 +15,15 @@ import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.Bilancio;
  * Created by francescobenvenuto on 18/01/2018.
  */
 
-public class BilanciHelper {
+public class BilancioHelper {
     private static DBHelper dbHelper;
 
-    public BilanciHelper() {
+    public BilancioHelper() {
         if (dbHelper == null) {
             dbHelper = DBHelper.getSingleton();
         }
     }
+
 
     /**
      * genera una lista di DatiConfrontoContainer che rappresentano per ogni voce di bilancio in comune tra tutte
