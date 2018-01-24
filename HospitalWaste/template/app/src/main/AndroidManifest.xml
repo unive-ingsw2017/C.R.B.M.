@@ -35,7 +35,8 @@
 
         <activity
             android:name=".SplashScreen"
-            android:label="@string/title_activity_maps">
+            android:label="@string/title_activity_maps"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
@@ -52,28 +53,32 @@
         </activity>
         <activity
             android:name=".InfoActivity"
-            android:parentActivityName=".MapsActivity">
+            android:parentActivityName=".MapsActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MapsActivity" />
         </activity>
         <activity
             android:name=".SettingsActivity"
-            android:parentActivityName=".MapsActivity">
+            android:parentActivityName=".MapsActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MapsActivity" />
         </activity>
         <activity
             android:name=".DatiULSS.RicercaInDettaglioActivity"
-            android:parentActivityName=".MapsActivity">
+            android:parentActivityName=".MapsActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MapsActivity" />
         </activity>
         <activity
             android:name=".DatiDiBilancio.DatiDiBilancioActivity"
-            android:parentActivityName=".DatiULSS.RicercaInDettaglioActivity">
+            android:parentActivityName=".DatiULSS.RicercaInDettaglioActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MapsActivity" />
@@ -86,49 +91,63 @@
         </activity>
         <activity
             android:name=".DatiAppalti.DatiAppaltiActivity"
-            android:parentActivityName=".DatiULSS.RicercaInDettaglioActivity">
+            android:parentActivityName=".DatiULSS.RicercaInDettaglioActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MapsActivity" />
         </activity>
         <activity
             android:name=".DatiULSS.OspedaliAssociatiActivity"
-            android:parentActivityName=".DatiULSS.RicercaInDettaglioActivity">
+            android:parentActivityName=".DatiULSS.RicercaInDettaglioActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MapsActivity" />
         </activity>
         <activity
             android:name=".DatiULSS.IncrocioDatiActivity"
-            android:parentActivityName=".DatiULSS.RicercaInDettaglioActivity">
+            android:parentActivityName=".DatiULSS.RicercaInDettaglioActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MapsActivity" />
         </activity>
         <activity
             android:name=".ConfrontoMultiploActivity"
-            android:parentActivityName=".MapsActivity">
+            android:parentActivityName=".MapsActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MapsActivity" />
         </activity>
         <activity
             android:name=".DatiFornitori.FornitoriActivity"
-            android:parentActivityName=".MapsActivity">
+            android:parentActivityName=".MapsActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MapsActivity" />
         </activity>
         <activity
             android:name=".DatiFornitori.ulssFornite.UlssFornite"
-            android:parentActivityName=".DatiFornitori.FornitoriActivity">
+            android:parentActivityName=".DatiFornitori.FornitoriActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MapsActivity" />
         </activity>
-        <activity android:name=".MapsActivity"></activity>
+        <activity
+            android:name=".MapsActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SplashScreen" />
+        </activity>
 
-        <activity android:name=".DatiFornitori.ulssFornite.vociPerUlss.VociPerUlssActivity">
+        <activity
+            android:name=".DatiFornitori.ulssFornite.vociPerUlss.VociPerUlssActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DatiFornitori.ulssFornite.UlssFornite" />
