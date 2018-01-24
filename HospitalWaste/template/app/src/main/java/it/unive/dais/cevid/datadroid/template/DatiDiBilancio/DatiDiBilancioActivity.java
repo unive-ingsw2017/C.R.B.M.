@@ -138,17 +138,14 @@ public class DatiDiBilancioActivity extends AppCompatActivity {
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         MenuItem myMenuItem = menu.findItem(R.id.search);
-        //myMenuItem.setActionView(new SearchView(this));
         searchView = (SearchView) myMenuItem.getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (!searchView.isIconified())
-                    searchView.setIconified(true);
                 myMenuItem.collapseActionView();
-
-                return false;
+                adapter.onQueryTextChange(query.toLowerCase());
+                return true;
             }
 
             @Override
@@ -157,7 +154,6 @@ public class DatiDiBilancioActivity extends AppCompatActivity {
                 return false;
             }
         });
-        //return true;
         return super.onCreateOptionsMenu(menu);
     }
 }

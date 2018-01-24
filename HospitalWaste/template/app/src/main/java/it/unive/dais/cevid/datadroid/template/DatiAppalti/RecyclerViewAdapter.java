@@ -29,7 +29,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     // inflates the row layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.recyclerview_row, parent, false);
+        View view = mInflater.inflate(R.layout.recyclerview_row_appalti, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
@@ -41,7 +41,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.importo.setText(appalto.getImporto() + "");
         holder.voceDiSpesa.setText(appalto.getOggetto());
-        holder.spesaProCapite.setText("TODO"); //TODO mettere spesa procapite
     }
 
     // total number of rows
@@ -55,13 +54,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView voceDiSpesa;
         public TextView importo;
-        public TextView spesaProCapite;
 
         public ViewHolder(View itemView) {
             super(itemView);
             voceDiSpesa = (TextView) itemView.findViewById(R.id.voce_di_spesa);
             importo = (TextView) itemView.findViewById(R.id.importo);
-            spesaProCapite = (TextView) itemView.findViewById(R.id.spesa_pro_capite);
         }
 
         @Override

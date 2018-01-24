@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -80,6 +81,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public void onClick(View view) {
             manageOnClick(view);
         }
+    }
+
+    public void filter (List<String> filteredFornitori) {
+        stringList = new ArrayList<>();
+        stringList.addAll(filteredFornitori);
+        notifyDataSetChanged();
     }
 }
 

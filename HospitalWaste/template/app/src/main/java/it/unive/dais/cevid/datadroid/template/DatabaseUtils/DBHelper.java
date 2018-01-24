@@ -144,7 +144,15 @@ public class DBHelper extends SQLiteOpenHelper {
                 List<URL> urlList = appalti.get(codiceEnte);
                 AppaltiParser appaltiParser = new AppaltiParser(urlList);
                 appaltiParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                List<AppaltiParser.Data> appaltiList = new ArrayList<>(appaltiParser.getAsyncTask().get());
+                List<AppaltiParser.Data> l = new ArrayList<>(appaltiParser.getAsyncTask().get());
+
+                List<AppaltiParser.Data> appaltiList = new ArrayList<>();
+
+                for (AppaltiParser.Data appalto : l) {
+                    if (!appalto.aggiudicatario.toLowerCase().equals("dati assenti o mal formattati"));
+                        appaltiList.add(appalto);
+                }
+
                 insertAppalti(db, appaltiList, codiceEnte);
             }
 

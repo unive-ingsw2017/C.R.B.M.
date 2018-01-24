@@ -80,7 +80,6 @@ public class TabFragment extends Fragment {
         BilancioHelper helper = new BilancioHelper();
         List<Bilancio> vociBilancioFiltered = new ArrayList<>();
 
-        //vociBilancioFiltered.add(new Bilancio("a", "b", 1, "c", 1.0));
         for (Bilancio voceBilancio : helper.getVociBilancio(codiceEnte, anno)) {
             String descrizione = voceBilancio.getDescrizioneCodice().toLowerCase();
             if (descrizione.contains(query))
