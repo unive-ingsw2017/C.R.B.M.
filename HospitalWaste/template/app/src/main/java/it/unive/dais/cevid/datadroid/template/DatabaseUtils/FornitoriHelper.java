@@ -24,6 +24,8 @@ public class FornitoriHelper {
         if (fornitori != Collections.EMPTY_LIST)
             return fornitori;
 
+        fornitori = new LinkedList<>();
+
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String query = "SELECT DISTINCT aggiudicatario " +

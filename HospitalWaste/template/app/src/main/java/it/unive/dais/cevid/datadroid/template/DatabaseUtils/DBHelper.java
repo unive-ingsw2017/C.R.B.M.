@@ -130,7 +130,7 @@ public class DBHelper extends SQLiteOpenHelper {
         try {
             this.insertFromFile(db);
 
-            //to insert vodi di appalto for the ULSS
+            //to insert voci di appalto for the ULSS
             List<ULSS> ulssList = getULSS(db);
             for (ULSS ulss : ulssList) {
                 SoldipubbliciParser soldipubbliciParser = new SoldipubbliciParser("SAN", ulss.getCodiceEnte());
@@ -361,25 +361,27 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         for (Appalto appalto : l) {
-            values.put("cig", appalto.getCig());
-            values.put("oggetto", appalto.getOggetto());
-            values.put("scelta_contraente", appalto.getSceltaContraente());
-            values.put("codice_fiscale_aggiudicatario", appalto.getCodice_fiscale_aggiudicatario());
-            values.put("aggiudicatario", appalto.getAggiudicatario());
-            values.put("importo", appalto.getImporto());
-            values.put("codice_ente", appalto.getCodiceEnte());
-            try {
-                db.insertOrThrow("Appalti", null, values);
-            } catch (android.database.sqlite.SQLiteConstraintException e) {
+            if (!appalto.getAggiudicatario().equals("Dati assenti o mal formattati")) {
+                values.put("cig", appalto.getCig());
+                values.put("oggetto", appalto.getOggetto());
+                values.put("scelta_contraente", appalto.getSceltaContraente());
+                values.put("codice_fiscale_aggiudicatario", appalto.getCodice_fiscale_aggiudicatario());
+                values.put("aggiudicatario", appalto.getAggiudicatario());
+                values.put("importo", appalto.getImporto());
+                values.put("codice_ente", appalto.getCodiceEnte());
+                try {
+                    db.insertOrThrow("Appalti", null, values);
+                } catch (android.database.sqlite.SQLiteConstraintException e) {
 
-                String query = "SELECT importo FROM Appalti WHERE cig=? AND oggetto=? AND codice_fiscale_aggiudicatario=? ;";
-                Cursor cursor = db.rawQuery(query, new String[]{appalto.getCig(), appalto.getOggetto(), appalto.getCodice_fiscale_aggiudicatario()});
-                cursor.moveToFirst();
-                double old_importo = cursor.getDouble(0);
-                cursor.close();
+                    String query = "SELECT importo FROM Appalti WHERE cig=? AND oggetto=? AND codice_fiscale_aggiudicatario=? ;";
+                    Cursor cursor = db.rawQuery(query, new String[]{appalto.getCig(), appalto.getOggetto(), appalto.getCodice_fiscale_aggiudicatario()});
+                    cursor.moveToFirst();
+                    double old_importo = cursor.getDouble(0);
+                    cursor.close();
 
-                String updateQuery = "UPDATE Appalti SET importo=? WHERE cig=? AND oggetto=? AND codice_fiscale_aggiudicatario=? ;";
-                db.rawQuery(updateQuery, new String[]{new Double(old_importo + appalto.getImporto()).toString(), appalto.getCig(), appalto.getOggetto(), appalto.getCodice_fiscale_aggiudicatario()});
+                    String updateQuery = "UPDATE Appalti SET importo=? WHERE cig=? AND oggetto=? AND codice_fiscale_aggiudicatario=? ;";
+                    db.rawQuery(updateQuery, new String[]{new Double(old_importo + appalto.getImporto()).toString(), appalto.getCig(), appalto.getOggetto(), appalto.getCodice_fiscale_aggiudicatario()});
+                }
             }
         }
     }
@@ -389,6 +391,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public List<String> getOspedali(String codiceEnte) {
         if (ospedali.containsKey(codiceEnte))
             return ospedali.get(codiceEnte);
+        ospedali = new HashMap<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
         List<String> ospedaliList = Collections.emptyList();
