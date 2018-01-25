@@ -67,7 +67,6 @@ import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.BilancioHelper;
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
-import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.Bilancio;
 import it.unive.dais.cevid.datadroid.template.DatiFornitori.FornitoriActivity;
 import it.unive.dais.cevid.datadroid.template.DatiULSS.RicercaInDettaglioActivity;
 import it.unive.dais.cevid.datadroid.template.DatiULSS.ULSS;
