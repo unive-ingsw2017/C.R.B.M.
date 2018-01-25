@@ -51,7 +51,7 @@ public class ConfrontoMultiploActivity extends Activity implements AppCompatCall
                 new SimpleTableDataAdapter(this.getApplicationContext(), genTableData(confrontoData));
 
         List<String> header = new LinkedList();
-        header.add("voce di bilancio");
+        header.add("Voce di bilancio");
         header.addAll(ullsNameCodiceEnteMap.values());
 
         //TODO check if the creation is right
