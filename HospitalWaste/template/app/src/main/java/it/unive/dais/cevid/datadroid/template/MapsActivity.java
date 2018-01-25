@@ -18,10 +18,15 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -84,11 +89,12 @@ import it.unive.dais.cevid.datadroid.template.DatiULSS.ULSS;
  *
  * @author Alvise Spanò, Università Ca' Foscari
  */
-public class MapsActivity extends AppCompatActivity
-        implements OnMapReadyCallback,
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
+        GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener,
+        GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnMarkerClickListener,
+        GoogleMap.OnInfoWindowClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     protected static final int REQUEST_CHECK_SETTINGS = 500;
     protected static final int PERMISSIONS_REQUEST_ACCESS_BOTH_LOCATION = 501;
@@ -150,6 +156,7 @@ public class MapsActivity extends AppCompatActivity
         descrizioneCodice = bilancioHelper.getDescrizioneCodici();
 
         setContentView(R.layout.activity_maps);
+        setDrawerMenu();
 
         mapDenominazioneCodice = new HashMap(); // mapping between name and codice ente for the ULSS
 
@@ -165,6 +172,7 @@ public class MapsActivity extends AppCompatActivity
         // inizializza la mappa asincronamente
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
 
         // quando viene premito il pulsante HERE viene eseguito questo codice
         /**button_here.setOnClickListener(v -> {
@@ -185,6 +193,30 @@ public class MapsActivity extends AppCompatActivity
          });*/
     }
 
+    private DrawerLayout drawer;
+    private ActionBarDrawerToggle toggle;
+    private void setDrawerMenu() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     // ciclo di vita della app
     //
@@ -330,18 +362,12 @@ public class MapsActivity extends AppCompatActivity
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.MENU_SETTINGS:
-                startActivity(new Intent(this, SettingsActivity.class));
-                break;
-            case R.id.MENU_INFO:
-                startActivity(new Intent(this, InfoActivity.class));
-                break;
-            case R.id.WORK_ICON:
-                startActivity(new Intent(this, FornitoriActivity.class));
-                break;
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (toggle.onOptionsItemSelected(item)) {
+            return true;
         }
-        return false;
+        return super.onOptionsItemSelected(item);
     }
 
     // onConnection callbacks
@@ -752,5 +778,25 @@ public class MapsActivity extends AppCompatActivity
 
         confrontoMultiploIntent.putExtra("map", ulssNameCodiceEnte);
         startActivity(confrontoMultiploIntent);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.drawer_confronta) {
+            // Handle the camera action
+        } else if (id == R.id.drawer_fornitori) {
+            startActivity(new Intent(this, FornitoriActivity.class));
+        } else if (id == R.id.drawer_impostazioni) {
+            startActivity(new Intent(this, SettingsActivity.class));
+        } else if (id == R.id.drawer_info) {
+            startActivity(new Intent(this, InfoActivity.class));
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

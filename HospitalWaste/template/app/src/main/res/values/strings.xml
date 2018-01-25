@@ -61,4 +61,7 @@
     <string name="tab_two">2016</string>
     <string name="tab_three">2017</string>
 
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
 </resources>

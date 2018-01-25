@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/drawer_confronta"
+            android:icon="@drawable/ic_attach_money_black"
+            android:title="Confronta ULSS" />
+        <item
+            android:id="@+id/drawer_fornitori"
+            android:icon="@drawable/ic_work"
+            android:title="Fornitori" />
+        <item
+            android:id="@+id/drawer_info"
+            android:icon="@drawable/ic_info_black"
+            android:title="Informazioni" />
+        <item
+            android:id="@+id/drawer_impostazioni"
+            android:icon="@drawable/ic_settings_black"
+            android:title="Impostazioni" />
+    </group>
+</menu>
