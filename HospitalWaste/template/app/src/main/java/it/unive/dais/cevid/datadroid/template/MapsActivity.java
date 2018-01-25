@@ -57,6 +57,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -130,6 +131,11 @@ public class MapsActivity extends AppCompatActivity
     @Nullable
     private Collection<Marker> markers;
 
+    private BilancioHelper bilancioHelper;
+
+    private List<String> descrizioneCodice;
+
+
     /**
      * Questo metodo viene invocato quando viene inizializzata questa activity.
      * Si tratta di una sorta di "main" dell'intera activity.
@@ -140,6 +146,10 @@ public class MapsActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        bilancioHelper = new BilancioHelper();
+        descrizioneCodice = bilancioHelper.getDescrizioneCodici();
+
         setContentView(R.layout.activity_maps);
 
         mapDenominazioneCodice = new HashMap(); // mapping between name and codice ente for the ULSS
@@ -287,12 +297,29 @@ public class MapsActivity extends AppCompatActivity
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                BilancioHelper helper = new BilancioHelper();
+                List<String> filteredList = filter(newText.toLowerCase());
+                List<String> codiciEnti = bilancioHelper.filteredULSS(filteredList);
 
+                for (Marker marker : markers) {
+                    if (codiciEnti.contains(mapDenominazioneCodice.get(marker.getTitle())))
+                        marker.setVisible(true);
+                    else
+                        marker.setVisible(false);
+                }
                 return false;
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private List<String> filter(String newText) {
+        List<String> l = new LinkedList<>();
+        for (String s : descrizioneCodice) {
+            if (s.toLowerCase().contains(newText))
+                l.add(s);
+        }
+        return l;
+
     }
 
     /**
