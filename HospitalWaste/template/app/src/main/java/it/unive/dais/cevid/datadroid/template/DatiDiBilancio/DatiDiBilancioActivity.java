@@ -15,10 +15,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import it.unive.dais.cevid.datadroid.template.DatiAppalti.Appalto;
 import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.FragmentStuff.FragmentAdapter;
 import it.unive.dais.cevid.datadroid.template.R;
 
@@ -28,8 +24,9 @@ import it.unive.dais.cevid.datadroid.template.R;
 
 public class DatiDiBilancioActivity extends AppCompatActivity {
     private String codiceEnte;
-    SearchView searchView;
-    FragmentAdapter adapter;
+    private SearchView searchView;
+    private FragmentAdapter adapter;
+
     /**
      * Questo metodo viene chiamato quando questa activity parte.
      * l'intent deve essere inviato con anche l'oggetto ULSS in modo da sapere cosa

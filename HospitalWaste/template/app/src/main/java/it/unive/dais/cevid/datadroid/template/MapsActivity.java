@@ -6,6 +6,8 @@ package it.unive.dais.cevid.datadroid.template;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -19,6 +21,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -61,7 +64,9 @@ import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
+import it.unive.dais.cevid.datadroid.template.DatabaseUtils.BilancioHelper;
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
+import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.Bilancio;
 import it.unive.dais.cevid.datadroid.template.DatiFornitori.FornitoriActivity;
 import it.unive.dais.cevid.datadroid.template.DatiULSS.RicercaInDettaglioActivity;
 import it.unive.dais.cevid.datadroid.template.DatiULSS.ULSS;
@@ -93,11 +98,15 @@ public class MapsActivity extends AppCompatActivity
      * Questo oggetto è la mappa di Google Maps. Viene inizializzato asincronamente dal metodo {@code onMapsReady}.
      */
     protected GoogleMap gMap;
+
+    private LatLng POSIZIONE_VENETO_CENTRALE = new LatLng(45.6670603, 12.0536513);
+
+    private SearchView searchView;
+
     /**
      * Pulsanti in sovraimpressione gestiti da questa app. Da non confondere con i pulsanti che GoogleMaps mette in sovraimpressione e che non
      * fanno parte degli oggetti gestiti manualmente dal codice.
      */
-    //protected ImageButton button_here, button_car;
 
     /**
      * API per i servizi di localizzazione.
@@ -116,8 +125,10 @@ public class MapsActivity extends AppCompatActivity
     @Nullable
     protected Marker hereMarker = null;
 
-
     private Map<String, String> mapDenominazioneCodice = Collections.EMPTY_MAP;
+
+    @Nullable
+    private Collection<Marker> markers;
 
     /**
      * Questo metodo viene invocato quando viene inizializzata questa activity.
@@ -136,15 +147,9 @@ public class MapsActivity extends AppCompatActivity
         longPressedMarker = new HashSet();
         confrontoMultiploButton = (Button) MapsActivity.this.findViewById(R.id.confronto_button);
 
-
         // inizializza le preferenze
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-        // trova gli oggetti che rappresentano i bottoni e li salva come campi d'istanza
-        /*
-        button_here = (ImageButton) findViewById(R.id.button_here);
-        button_car = (ImageButton) findViewById(R.id.button_car);
-        */
         // API per i servizi di localizzazione
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -169,11 +174,6 @@ public class MapsActivity extends AppCompatActivity
          } else
          Log.d(TAG, "no current position available");
          });*/
-
-
-
-
-        //dbHelper.deleteDatabase();
     }
 
 
@@ -274,7 +274,25 @@ public class MapsActivity extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.maps_with_options, menu);
 
-        return true;
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        MenuItem myMenuItem = menu.findItem(R.id.search);
+        searchView = (SearchView) myMenuItem.getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                myMenuItem.collapseActionView();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                BilancioHelper helper = new BilancioHelper();
+
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     /**
@@ -430,8 +448,6 @@ public class MapsActivity extends AppCompatActivity
     }
 
 
-    LatLng POSIZIONE_VENETO_CENTRALE = new LatLng(45.6670603, 12.0536513);
-
     /**
      * Questo metodo è molto importante: esso viene invocato dal sistema quando la mappa è pronta.
      * Il parametro è l'oggetto di tipo GoogleMap pronto all'uso, che viene immediatamente assegnato ad un campo interno della
@@ -567,6 +583,7 @@ public class MapsActivity extends AppCompatActivity
                     .position(i.getPosition())
                     .snippet(i.getDescription());
             r.add(gMap.addMarker(opts));
+
         }
         return r;
     }
@@ -635,9 +652,6 @@ public class MapsActivity extends AppCompatActivity
 
     // putMarkers code
 
-    @Nullable
-    private Collection<Marker> markers;
-
     private void putMarkers() {
         List<MapItem> l = new ArrayList<>();
 
@@ -655,7 +669,7 @@ public class MapsActivity extends AppCompatActivity
 
                 @Override
                 public String getDescription() {
-                    return "";
+                    return getString(R.string.marker_description);
                 }
             });
 

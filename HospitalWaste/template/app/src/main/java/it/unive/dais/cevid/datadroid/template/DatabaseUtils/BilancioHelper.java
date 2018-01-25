@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -141,5 +142,20 @@ public class BilancioHelper {
         }
         cur.close();
         return vociBilancio;
+    }
+
+    public List<String> getDescrizioneCodici () {
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        List<String> descrizioneSpesa = new LinkedList<>();
+
+        String query = "SELECT DISTINCT Descrizione from Bilancio";
+        Cursor cur = db.rawQuery(query, null);
+        for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
+            descrizioneSpesa.add(cur.getString(0));
+        }
+        cur.close();
+        return descrizioneSpesa;
     }
 }
