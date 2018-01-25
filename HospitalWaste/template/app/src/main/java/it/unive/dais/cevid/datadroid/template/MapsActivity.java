@@ -460,16 +460,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     @Override
     public void onMapLongClick(LatLng latLng) {
-
-        for (Marker marker : markers) {
-            // c'è solo onMapLongClickListner quindi vediamo se ha schiacciato abbastanza vicino al marker
-            if (Math.abs(marker.getPosition().latitude - latLng.latitude) < 0.098  //verticale
-                    && Math.abs(marker.getPosition().longitude - latLng.longitude) < 0.045// orizontale
-                    && marker.getPosition().latitude <= latLng.latitude + 0.01  // dove l'utente ha cliccato deve essere sopra al marker
-                    ) {
-                longPressedMarker(marker);
-            }
-        }
     }
 
     /**
@@ -581,6 +571,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //
     //
 
+    private boolean confrontaEnable = false;
     /**
      * Callback che viene invocata quando viene cliccato un marker.
      * Questo metodo viene invocato al click di QUALUNQUE marker nella mappa; pertanto, se è necessario
@@ -592,7 +583,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     @Override
     public boolean onMarkerClick(final Marker marker) {
-        marker.showInfoWindow();
+        if(confrontaEnable){
+            confrontaMarkerClick(marker);
+        }
+        else{
+            marker.showInfoWindow();
+        }
         /*
         button_car.setVisibility(View.VISIBLE);
         button_car.setOnClickListener(new View.OnClickListener() {
@@ -735,7 +731,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     Set<Marker> longPressedMarker; // will contains the long pressed marker
 
 
-    private void removeLongPressedMarker(Marker marker) {
+    private void removeUlssConfronto(Marker marker) {
         longPressedMarker.remove(marker); // remove from the list of pressed marker
         marker.setIcon(BitmapDescriptorFactory.defaultMarker()); // back to normal color
 
@@ -744,7 +740,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private void addLongPressedMarker(Marker marker) {
+    private void addUlssConfronto(Marker marker) {
         longPressedMarker.add(marker);
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 
@@ -753,11 +749,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private void longPressedMarker(Marker marker) {
+    private void confrontaMarkerClick(Marker marker) {
         if (longPressedMarker.contains(marker)) {
-            removeLongPressedMarker(marker);
+            removeUlssConfronto(marker);
         } else {
-            addLongPressedMarker(marker);
+            addUlssConfronto(marker);
         }
     }
 
@@ -773,7 +769,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         for (Marker marker : new HashSet<>(longPressedMarker)) {//for avoid ConcurrentModificationException
             ulssNameCodiceEnte.put(mapDenominazioneCodice.get(marker.getTitle()), marker.getTitle());
-            removeLongPressedMarker(marker);
+            removeUlssConfronto(marker);
         }
 
         confrontoMultiploIntent.putExtra("map", ulssNameCodiceEnte);
@@ -786,7 +782,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         int id = item.getItemId();
 
         if (id == R.id.drawer_confronta) {
-            // Handle the camera action
+            Context context = getApplicationContext();
+            Toast.makeText(context, getString(R.string.confronta_string), Toast.LENGTH_LONG).show();
+
+            confrontaEnable = true;
         } else if (id == R.id.drawer_fornitori) {
             startActivity(new Intent(this, FornitoriActivity.class));
         } else if (id == R.id.drawer_impostazioni) {
