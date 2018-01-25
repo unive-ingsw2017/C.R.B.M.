@@ -3,7 +3,6 @@ package it.unive.dais.cevid.datadroid.template.DatabaseUtils;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -162,11 +161,11 @@ public class BilancioHelper {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         List<String> codiciEnti = new LinkedList<>();
-        String joinString = joinString(descrizioni.size());
-        String [] strings = new String[descrizioni.size()];
-        descrizioni.toArray(strings);
+        String joinString = generateQuestionsMarks(descrizioni.size());
+
+
         String query = "SELECT DISTINCT codice_ente from Bilancio WHERE descrizione_codice IN ("+joinString+") AND importo != 0;";
-        Cursor cur = db.rawQuery(query, strings);
+        Cursor cur = db.rawQuery(query, descrizioni.toArray(new String[0]));
 
         for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
             codiciEnti.add(cur.getString(0));
@@ -175,11 +174,11 @@ public class BilancioHelper {
         return codiciEnti;
     }
 
-    private String joinString (int size) {
+    private String generateQuestionsMarks(int size) {
         String out = new String();
-        for (int i=0; i<size; i++)
-            out = "?, ";
-        return out.substring(0, out.length() - 2);
+        for (int i=0; i < size; i++)
+            out += "?, ";
+        return size == 0? "" : out.substring(0, out.lastIndexOf(", "));
     }
 
 }

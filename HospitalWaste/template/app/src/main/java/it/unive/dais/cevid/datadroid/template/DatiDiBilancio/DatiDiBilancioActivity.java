@@ -51,14 +51,11 @@ public class DatiDiBilancioActivity extends AppCompatActivity {
 
 
         //view pager stuff
-        Bundle bundle = new Bundle();
-        bundle.putString("codice_ente", codiceEnte);
-
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         adapter = new FragmentAdapter(
                 getSupportFragmentManager(),
                 tabLayout.getTabCount(),
-                bundle, // to send codice_ente
+                codiceEnte,
                 getApplicationContext() // to get string resources
         );
         viewPager.setAdapter(adapter);
@@ -140,8 +137,7 @@ public class DatiDiBilancioActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                myMenuItem.collapseActionView();
-                adapter.onQueryTextChange(query.toLowerCase());
+                searchView.clearFocus();
                 return true;
             }
 
