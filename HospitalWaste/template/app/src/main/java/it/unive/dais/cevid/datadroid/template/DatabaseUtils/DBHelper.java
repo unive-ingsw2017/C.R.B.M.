@@ -49,6 +49,8 @@ public class DBHelper extends SQLiteOpenHelper {
     private static DBHelper instance = null;
     private Context context;
 
+    private List<ULSS> ulss = Collections.EMPTY_LIST;
+    private Map<String, List<String>> ospedali = Collections.EMPTY_MAP;
 
     //Singleton
     private DBHelper(Context context) {
@@ -195,7 +197,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    private List<ULSS> ulss = Collections.EMPTY_LIST;
     public List<ULSS> getULSS() {
         if(ulss != Collections.EMPTY_LIST){
             return ulss;
@@ -208,6 +209,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return ulss;
     }
+
     public String getCodiceEnte(String ulssName){
         for(ULSS ulss: getULSS()){
             if(ulss.getDescrizione().equals(ulssName)){
@@ -216,6 +218,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return "";// ulssname is wrong
     }
+
     private List<ULSS> getULSS(SQLiteDatabase db) {
         Cursor cursor = db.rawQuery("SELECT * FROM ULSS", null);
         return fetchULSS(cursor);
@@ -384,19 +387,23 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //get the string of the ospedali_associati and split to have a list of ospedali_associati
     public List<String> getOspedali(String codiceEnte) {
+        if (ospedali.containsKey(codiceEnte))
+            return ospedali.get(codiceEnte);
+
         SQLiteDatabase db = this.getReadableDatabase();
-        List<String> ospedali = Collections.emptyList();
+        List<String> ospedaliList = Collections.emptyList();
 
         String query = "SELECT ospedali_associati from ULSS where codice_ente = ?";
         Cursor cur = db.rawQuery(query, new String[]{codiceEnte});
         cur.moveToFirst();
 
         if (!cur.isAfterLast()) {
-            ospedali = Arrays.asList(cur.getString(0).split(";"));
+            ospedaliList = Arrays.asList(cur.getString(0).split(";"));
         }
 
+        ospedali.put(codiceEnte, ospedaliList);
         cur.close();
-        return ospedali;
+        return ospedali.get(codiceEnte);
     }
 
     public CrossData getDatiIncrociati(String codiceEnte, String keyword) {

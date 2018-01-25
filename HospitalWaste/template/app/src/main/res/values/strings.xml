@@ -9,6 +9,7 @@
     <string name="conn_failed">Connessione fallita</string>
     <string name="conn_suspended">Connessione sospesa</string>
 
+    <string name="marker_description">Clicca per maggiori informazioni</string>
 
     <string name="menu_mapStyle_title">Stile Mappa</string>
     <string name="menu_mapStyle_summary">Scegli il tipo di mappa di Google Maps</string>

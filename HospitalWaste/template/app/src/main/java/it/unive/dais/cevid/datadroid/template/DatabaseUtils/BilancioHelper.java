@@ -142,4 +142,42 @@ public class BilancioHelper {
         cur.close();
         return vociBilancio;
     }
+
+    public List<String> getDescrizioneCodici () {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        List<String> descrizioneSpesa = new LinkedList<>();
+
+        String query = "SELECT DISTINCT descrizione_codice from Bilancio";
+        Cursor cur = db.rawQuery(query, null);
+        for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
+            descrizioneSpesa.add(cur.getString(0));
+        }
+        cur.close();
+        return descrizioneSpesa;
+    }
+
+    public List<String> filteredULSS (List<String> descrizioni) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        List<String> codiciEnti = new LinkedList<>();
+        String joinString = joinString(descrizioni);
+
+        String query = "SELECT DISTINCT codice_ente from Bilancio WHERE descrizione_codice IN (" + joinString + ") AND importo != 0;";
+        Cursor cur = db.rawQuery(query, null);
+
+        for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
+            codiciEnti.add(cur.getString(0));
+        }
+        cur.close();
+        return codiciEnti;
+    }
+
+    private String joinString (List<String> listString) {
+        String out = new String();
+        for (String s : listString)
+            out = "\"" + s + "\", ";
+        return out.substring(0, out.length() - 2);
+    }
+
 }

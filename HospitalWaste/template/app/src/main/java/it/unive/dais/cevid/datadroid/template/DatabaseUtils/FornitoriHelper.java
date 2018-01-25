@@ -3,6 +3,7 @@ package it.unive.dais.cevid.datadroid.template.DatabaseUtils;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,12 +14,16 @@ import java.util.List;
 public class FornitoriHelper {
     private DBHelper dbHelper;
 
+    private List<String> fornitori = Collections.EMPTY_LIST;
+
     public FornitoriHelper(){
         dbHelper = DBHelper.getSingleton();
     }
 
     public List<String> getFornitori() {
-        List<String> result = new LinkedList();
+        if (fornitori != Collections.EMPTY_LIST)
+            return fornitori;
+
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String query = "SELECT DISTINCT aggiudicatario " +
@@ -28,13 +33,13 @@ public class FornitoriHelper {
         cursorFornitori.moveToFirst();
 
         while (!cursorFornitori.isAfterLast()) {
-            result.add(cursorFornitori.getString(0));
+            fornitori.add(cursorFornitori.getString(0));
 
             cursorFornitori.moveToNext();
         }
 
         db.close();
-        return result;
+        return fornitori;
     }
 
     public List<String> getUlssFornite(String fornitore){
