@@ -4,13 +4,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.StringJoiner;
-import java.util.stream.Collectors;
 
 import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.Bilancio;
 
@@ -179,7 +176,7 @@ public class BilancioHelper {
     private String joinString (List<String> listString) {
         String out = new String();
         for (String s : listString)
-            out = "'" + s + "', ";
+            out = "\"" + s + "\", ";
         return out.substring(0, out.length() - 2);
     }
 
