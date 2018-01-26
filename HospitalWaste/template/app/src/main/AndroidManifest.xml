@@ -82,9 +82,11 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MapsActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -144,13 +146,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".SplashScreen" />
         </activity>
-
         <activity
             android:name=".DatiFornitori.ulssFornite.vociPerUlss.VociPerUlssActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DatiFornitori.ulssFornite.UlssFornite" />
+        </activity>
+        <activity
+            android:name=".HelpActivity"
+            android:parentActivityName=".MapsActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapsActivity">
+            </meta-data>
         </activity>
     </application>
 

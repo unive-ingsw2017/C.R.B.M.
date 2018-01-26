@@ -10,7 +10,11 @@
     <string name="conn_suspended">Connessione sospesa</string>
 
     <string name="marker_description">Clicca per maggiori informazioni</string>
-
+    <string name="icon_fornitori">Fornitori</string>
+    <string name="icon_impostazioni">Impostazioni</string>
+    <string name="icon_help">Help</string>
+    <string name="icon_info">Info</string>
+    <string name="icon_confronta_ulss">Confronta ULSS</string>
     <string name="menu_mapStyle_title">Stile Mappa</string>
     <string name="menu_mapStyle_summary">Scegli il tipo di mappa di Google Maps</string>
     <string name="menu_zoomThreshold_title">Soglia di Zoom</string>
@@ -54,7 +58,6 @@
     <string name="confronta_string">Confronta</string>
 
     <string name="search_hint">Cerca per voce di spesa</string>
-    <string name="icona_fornitori">Icona fornitori</string>
     <string name="fornitori_hardcoded">Fornitori</string>
 
     <string name="tab_one">2015</string>

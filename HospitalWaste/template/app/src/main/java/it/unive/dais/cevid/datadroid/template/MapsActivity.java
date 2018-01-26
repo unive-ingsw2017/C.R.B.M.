@@ -791,10 +791,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.drawer_info) {
             startActivity(new Intent(this, InfoActivity.class));
+        } else if (id == R.id.drawer_help) {
+            startActivity(new Intent(this, HelpActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    /**
+     * Created by gianmarcocallegher on 26/01/18.
+     */
+
 }
