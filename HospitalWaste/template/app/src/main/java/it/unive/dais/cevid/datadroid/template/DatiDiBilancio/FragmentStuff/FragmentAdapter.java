@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.SparseArray;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -21,16 +20,16 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
     private final String tabOne;
     private final String tabTwo;
     private final String tabThree;
+    private final String codiceEnte;
 
     int mNumOfTabs;
-    Bundle fragmentBundle;
 
     List<Fragment> registeredFragments = new ArrayList<>();
 
-    public FragmentAdapter(FragmentManager fm, int NumOfTabs, Bundle data, Context context) {
+    public FragmentAdapter(FragmentManager fm, int NumOfTabs, String codiceEnte, Context context) {
         super(fm);
         this.mNumOfTabs = NumOfTabs;
-        fragmentBundle = data;
+        this.codiceEnte = codiceEnte;
 
         tabOne = context.getString(R.string.tab_one);
         tabTwo = context.getString(R.string.tab_two);
@@ -40,21 +39,24 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         TabFragment tab = new TabFragment();
+        Bundle tabBundle = new Bundle();
+        tabBundle.putString("codice_ente", codiceEnte);
+
         switch (position) {
             case 0:
-                fragmentBundle.putString("anno", tabOne);
+                tabBundle.putString("anno", tabOne);
 
-                tab.setArguments(fragmentBundle);
+                tab.setArguments(tabBundle);
                 return tab;
             case 1:
-                fragmentBundle.putString("anno", tabTwo);
+                tabBundle.putString("anno", tabTwo);
 
-                tab.setArguments(fragmentBundle);
+                tab.setArguments(tabBundle);
                 return tab;
             case 2:
-                fragmentBundle.putString("anno", tabThree);
+                tabBundle.putString("anno", tabThree);
 
-                tab.setArguments(fragmentBundle);
+                tab.setArguments(tabBundle);
                 return tab;
             default:
                 return null;

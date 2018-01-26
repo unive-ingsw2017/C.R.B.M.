@@ -161,10 +161,11 @@ public class BilancioHelper {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         List<String> codiciEnti = new LinkedList<>();
-        String joinString = joinString(descrizioni);
+        String joinString = generateQuestionsMarks(descrizioni.size());
 
-        String query = "SELECT DISTINCT codice_ente from Bilancio WHERE descrizione_codice IN (" + joinString + ") AND importo != 0;";
-        Cursor cur = db.rawQuery(query, null);
+
+        String query = "SELECT DISTINCT codice_ente from Bilancio WHERE descrizione_codice IN ("+joinString+") AND importo != 0;";
+        Cursor cur = db.rawQuery(query, descrizioni.toArray(new String[0]));
 
         for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
             codiciEnti.add(cur.getString(0));
@@ -173,11 +174,11 @@ public class BilancioHelper {
         return codiciEnti;
     }
 
-    private String joinString (List<String> listString) {
+    private String generateQuestionsMarks(int size) {
         String out = new String();
-        for (String s : listString)
-            out = "\"" + s + "\", ";
-        return out.substring(0, out.length() - 2);
+        for (int i=0; i < size; i++)
+            out += "?, ";
+        return size == 0? "" : out.substring(0, out.lastIndexOf(", "));
     }
 
 }

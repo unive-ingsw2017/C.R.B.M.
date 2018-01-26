@@ -322,7 +322,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                myMenuItem.collapseActionView();
+                searchView.clearFocus();
                 return true;
             }
 
@@ -729,7 +729,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     // confronto multiplo stuff from here
     Button confrontoMultiploButton;
     Set<Marker> longPressedMarker; // will contains the long pressed marker
-
 
     private void removeUlssConfronto(Marker marker) {
         longPressedMarker.remove(marker); // remove from the list of pressed marker
