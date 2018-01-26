@@ -44,6 +44,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "HospitalWaste.db";
     private static final int MAX_DAYS = 15;
+    private static final int DATABSE_VERSION = 3;
     private static final int ANNO_APPALTI = 2016;
 
     private static DBHelper instance = null;
@@ -54,11 +55,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //Singleton
     private DBHelper(Context context) {
-        super(context.getApplicationContext(), DATABASE_NAME, null, 3);
+        super(context.getApplicationContext(), DATABASE_NAME, null, DATABSE_VERSION);
         this.context = context.getApplicationContext();
-
         // check if the DB is old
         updateDatabase();
+    }
+
+    public static int getDatabseVersion() {
+        return DATABSE_VERSION;
     }
 
     private void updateDatabase() {
