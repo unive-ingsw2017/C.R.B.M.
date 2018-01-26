@@ -18,6 +18,8 @@ import java.util.Map;
 import de.codecrafters.tableview.TableDataAdapter;
 import de.codecrafters.tableview.TableHeaderAdapter;
 import de.codecrafters.tableview.TableView;
+import de.codecrafters.tableview.model.TableColumnDpWidthModel;
+import de.codecrafters.tableview.model.TableColumnModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.BilancioHelper;
@@ -28,6 +30,7 @@ import it.unive.dais.cevid.datadroid.template.DatabaseUtils.BilancioHelper;
 
 public class ConfrontoMultiploActivity extends Activity implements AppCompatCallback {
     Map<String, String> ullsNameCodiceEnteMap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +54,7 @@ public class ConfrontoMultiploActivity extends Activity implements AppCompatCall
                 new SimpleTableDataAdapter(this.getApplicationContext(), genTableData(confrontoData));
 
         List<String> header = new LinkedList();
-        header.add("Voce di bilancio");
+        header.add("Voce di Bilancio");
         header.addAll(ullsNameCodiceEnteMap.values());
 
         //TODO check if the creation is right
@@ -60,8 +63,11 @@ public class ConfrontoMultiploActivity extends Activity implements AppCompatCall
                         Arrays.copyOf(header.toArray(), header.size(), String[].class)
                 );
 
+        TableColumnDpWidthModel tc = new TableColumnDpWidthModel(getApplicationContext(), header.size(), 100);
+        tc.setColumnWidth(0,200);
         table.setDataAdapter(myDataAdapter);
         table.setHeaderAdapter(myHeaderAdapter);
+        table.setColumnModel(tc);
         setContentView(table);
         delegate.onCreate(savedInstanceState);
         delegate.getSupportActionBar().setTitle("Confronto Multiplo");
