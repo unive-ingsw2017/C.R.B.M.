@@ -46,6 +46,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -66,7 +67,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringJoiner;
 import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
@@ -101,6 +101,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected static final int PERMISSIONS_REQUEST_ACCESS_BOTH_LOCATION = 501;
     // alcune costanti
     private static final String TAG = "MapsActivity";
+    private static final int MAX_CONFRONTA_NUMBER = 3;
     /**
      * Questo oggetto è la mappa di Google Maps. Viene inizializzato asincronamente dal metodo {@code onMapsReady}.
      */
@@ -161,7 +162,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mapDenominazioneCodice = new HashMap(); // mapping between name and codice ente for the ULSS
 
-        longPressedMarker = new HashSet();
+        confrontaUlssList = new HashSet();
         confrontoMultiploButton = (Button) MapsActivity.this.findViewById(R.id.confronto_button);
 
         // inizializza le preferenze
@@ -594,10 +595,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onMarkerClick(final Marker marker) {
         if(confrontaEnable){
             confrontaMarkerClick(marker);
+
+            CameraUpdate center = CameraUpdateFactory.newLatLng(marker.getPosition());
+            gMap.animateCamera(
+                    center,
+                    400,    // to move the camera faster
+                    null
+            );
+
+            return true; // we consume the event stop the callbacks
         }
-        else{
-            marker.showInfoWindow();
-        }
+        return false; // continue to call back the default staff (zoom, and show info)
         /*
         button_car.setVisibility(View.VISIBLE);
         button_car.setOnClickListener(new View.OnClickListener() {
@@ -610,7 +618,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
         */
-        return false;
     }
 
     @Override
@@ -736,30 +743,35 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     // confronto multiplo stuff from here
-    Button confrontoMultiploButton;
-    Set<Marker> longPressedMarker; // will contains the long pressed marker
-    String queryConfrontoSearch;
+    private Button confrontoMultiploButton;
+    private Set<Marker> confrontaUlssList; // will contains the long pressed marker
+    private String queryConfrontoSearch;
 
     private void removeUlssConfronto(Marker marker) {
-        longPressedMarker.remove(marker); // remove from the list of pressed marker
+        confrontaUlssList.remove(marker); // remove from the list of pressed marker
         marker.setIcon(BitmapDescriptorFactory.defaultMarker()); // back to normal color
 
-        if (longPressedMarker.size() <= 1) {
+        if (confrontaUlssList.size() <= 1) {
             confrontoMultiploButton.setVisibility(View.INVISIBLE);
         }
     }
 
     private void addUlssConfronto(Marker marker) {
-        longPressedMarker.add(marker);
-        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+        if(confrontaUlssList.size() < MAX_CONFRONTA_NUMBER){ // if ulss selected if less then MAX_CONFRONTA_NUMBER
+            confrontaUlssList.add(marker);
+            marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+        }
+        else{
+            Toast.makeText(this, getString(R.string.confronta_max_number), Toast.LENGTH_SHORT).show();
+        }
 
-        if(longPressedMarker.size() >= 2) {
+        if(confrontaUlssList.size() >= 2) {
             confrontoMultiploButton.setVisibility(View.VISIBLE);
         }
     }
 
     private void confrontaMarkerClick(Marker marker) {
-        if (longPressedMarker.contains(marker)) {
+        if (confrontaUlssList.contains(marker)) {
             removeUlssConfronto(marker);
         } else {
             addUlssConfronto(marker);
@@ -777,10 +789,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         HashMap ulssNameCodiceEnte = new HashMap();
         if (confrontaEnable) {
 
-            for (Marker marker : new HashSet<>(longPressedMarker)) {//for avoid ConcurrentModificationException
+            for (Marker marker : confrontaUlssList) {//for avoid ConcurrentModificationException
                 ulssNameCodiceEnte.put(mapDenominazioneCodice.get(marker.getTitle()), marker.getTitle());
-                removeUlssConfronto(marker);
             }
+            exitConfrontaModality(); // manage the exit of the compare modality
         }
         else {
             for (Marker marker : markers) {
@@ -790,21 +802,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
             confrontoMultiploIntent.putExtra("query", queryConfrontoSearch);
         }
+
+
         confrontoMultiploIntent.putExtra("map", ulssNameCodiceEnte);
         startActivity(confrontoMultiploIntent);
         //TODO: cambiare activity di intent?
     }
 
+    private Snackbar mSnackBar;
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.drawer_confronta) {
-            Context context = getApplicationContext();
-            Toast.makeText(context, getString(R.string.confronta_string), Toast.LENGTH_LONG).show();
-
-            confrontaEnable = true;
+            enterConfrontaModality();
         } else if (id == R.id.drawer_fornitori) {
             startActivity(new Intent(this, FornitoriActivity.class));
         } else if (id == R.id.drawer_impostazioni) {
@@ -818,6 +830,35 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    //stuff to manage the modality of compare
+
+    
+    private void enterConfrontaModality() {
+        mSnackBar = Snackbar.make(findViewById(R.id.nav_view), getString(R.string.confronta_string), Snackbar.LENGTH_INDEFINITE);
+        mSnackBar.setAction(R.string.esci_confronta,
+                v -> {// snackbar removed by default
+                    exitConfrontaModality();
+                }
+        );
+
+        mSnackBar.getView().post(
+                () -> gMap.setPadding(0, 0, 0, mSnackBar.getView().getHeight())
+        );
+        mSnackBar.show();
+
+        confrontaEnable = true;
+    }
+
+    private void exitConfrontaModality() {
+        gMap.setPadding(0, 0, 0, 0);
+
+        for (Marker marker : new HashSet<>(confrontaUlssList)) {//for avoid ConcurrentModificationException
+            removeUlssConfronto(marker);
+        }
+        mSnackBar.dismiss();
+        confrontaEnable = false;
     }
 
     /**

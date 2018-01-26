@@ -55,7 +55,7 @@
     <string name="incrocio_text">Incrocio Dati</string>
     <string name="bilanci_hardcode">Voci di Bilancio</string>
     <string name="bilanci_hint">EditText for the work Bianci</string>
-    <string name="confronta_string">Confronta</string>
+    <string name="confronta_string">Modalità Confronta</string>
 
     <string name="search_hint">Cerca per voce di spesa</string>
     <string name="fornitori_hardcoded">Fornitori</string>
@@ -67,5 +67,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="modalita_confronto">sei nella modalità confronto</string>
+    <string name="confronta_max_number">Numero massimo di ULSS da confrontare raggiunto</string>
+    <string name="esci_confronta">Esci</string>
 
 </resources>
