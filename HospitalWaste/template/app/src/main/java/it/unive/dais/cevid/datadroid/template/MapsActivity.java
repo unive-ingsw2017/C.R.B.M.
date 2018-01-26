@@ -66,6 +66,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
@@ -336,6 +337,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker.setVisible(true);
                     else
                         marker.setVisible(false);
+                }
+                if (visibleMarkers() > 1 && newText.length() > 2) {
+                    confrontoMultiploButton.setVisibility(View.VISIBLE);
+                    queryConfrontoSearch = newText;
+                }
+                else {
+                    confrontoMultiploButton.setVisibility(View.INVISIBLE);
+                    queryConfrontoSearch = "";
                 }
                 return false;
             }
@@ -729,6 +738,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     // confronto multiplo stuff from here
     Button confrontoMultiploButton;
     Set<Marker> longPressedMarker; // will contains the long pressed marker
+    String queryConfrontoSearch;
 
     private void removeUlssConfronto(Marker marker) {
         longPressedMarker.remove(marker); // remove from the list of pressed marker
@@ -765,14 +775,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent confrontoMultiploIntent = new Intent(this, ConfrontoMultiploActivity.class);
 
         HashMap ulssNameCodiceEnte = new HashMap();
+        if (confrontaEnable) {
 
-        for (Marker marker : new HashSet<>(longPressedMarker)) {//for avoid ConcurrentModificationException
-            ulssNameCodiceEnte.put(mapDenominazioneCodice.get(marker.getTitle()), marker.getTitle());
-            removeUlssConfronto(marker);
+            for (Marker marker : new HashSet<>(longPressedMarker)) {//for avoid ConcurrentModificationException
+                ulssNameCodiceEnte.put(mapDenominazioneCodice.get(marker.getTitle()), marker.getTitle());
+                removeUlssConfronto(marker);
+            }
         }
-
+        else {
+            for (Marker marker : markers) {
+                if (marker.isVisible()) {
+                    ulssNameCodiceEnte.put(mapDenominazioneCodice.get(marker.getTitle()), marker.getTitle());
+                }
+            }
+            confrontoMultiploIntent.putExtra("query", queryConfrontoSearch);
+        }
         confrontoMultiploIntent.putExtra("map", ulssNameCodiceEnte);
         startActivity(confrontoMultiploIntent);
+        //TODO: cambiare activity di intent?
     }
 
     @Override
@@ -804,4 +824,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      * Created by gianmarcocallegher on 26/01/18.
      */
 
+    private int visibleMarkers() {
+        int c = 0;
+        for (Marker marker : markers) {
+            if (marker.isVisible())
+                c++;
+        }
+        return c;
+    }
 }
