@@ -339,6 +339,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     else
                         marker.setVisible(false);
                 }
+                if (visibleMarkers() > 1 && newText.length() > 2) {
+                    confrontoMultiploButton.setVisibility(View.VISIBLE);
+                    queryConfrontoSearch = newText;
+                }
+                else {
+                    confrontoMultiploButton.setVisibility(View.INVISIBLE);
+                    queryConfrontoSearch = "";
+                }
                 return false;
             }
         });
@@ -735,8 +743,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     // confronto multiplo stuff from here
-    Button confrontoMultiploButton;
-    Set<Marker> confrontaUlssList; // will contains the long pressed marker
+    private Button confrontoMultiploButton;
+    private Set<Marker> confrontaUlssList; // will contains the long pressed marker
+    private String queryConfrontoSearch;
 
     private void removeUlssConfronto(Marker marker) {
         confrontaUlssList.remove(marker); // remove from the list of pressed marker
@@ -778,14 +787,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent confrontoMultiploIntent = new Intent(this, ConfrontoMultiploActivity.class);
 
         HashMap ulssNameCodiceEnte = new HashMap();
+        if (confrontaEnable) {
 
-        for (Marker marker : confrontaUlssList) {//for avoid ConcurrentModificationException
-            ulssNameCodiceEnte.put(mapDenominazioneCodice.get(marker.getTitle()), marker.getTitle());
+            for (Marker marker : confrontaUlssList) {//for avoid ConcurrentModificationException
+                ulssNameCodiceEnte.put(mapDenominazioneCodice.get(marker.getTitle()), marker.getTitle());
+            }
+            exitConfrontaModality(); // manage the exit of the compare modality
+        }
+        else {
+            for (Marker marker : markers) {
+                if (marker.isVisible()) {
+                    ulssNameCodiceEnte.put(mapDenominazioneCodice.get(marker.getTitle()), marker.getTitle());
+                }
+            }
+            confrontoMultiploIntent.putExtra("query", queryConfrontoSearch);
         }
 
-        exitConfrontaModality(); // manage the exif of the confronta modality
+
         confrontoMultiploIntent.putExtra("map", ulssNameCodiceEnte);
         startActivity(confrontoMultiploIntent);
+        //TODO: cambiare activity di intent?
     }
 
     private Snackbar mSnackBar;
@@ -844,4 +865,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      * Created by gianmarcocallegher on 26/01/18.
      */
 
+    private int visibleMarkers() {
+        int c = 0;
+        for (Marker marker : markers) {
+            if (marker.isVisible())
+                c++;
+        }
+        return c;
+    }
 }
