@@ -18,6 +18,8 @@
         >
 
         <!-- The main content view -->
+
+
         <include layout="@layout/content_main" />
 
         <!-- The navigation drawer -->
