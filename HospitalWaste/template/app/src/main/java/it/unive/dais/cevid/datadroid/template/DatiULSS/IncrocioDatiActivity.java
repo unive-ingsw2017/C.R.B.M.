@@ -5,8 +5,8 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatCallback;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.view.ActionMode;
@@ -15,6 +15,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
+import it.unive.dais.cevid.datadroid.template.DatiULSS.FragmentStuff.IncrocioFragment;
+import it.unive.dais.cevid.datadroid.template.DatiULSS.FragmentStuff.AppSectionsPageAdapter;
+
 import it.unive.dais.cevid.datadroid.template.R;
 
 /**
@@ -28,7 +31,10 @@ public class IncrocioDatiActivity extends FragmentActivity implements AppCompatC
     private String criterio;
     private String codiceEnte;
     private String ulssName;
-    //TODO fragment per bilanci e appalti e poi per anno
+
+    private ViewPager mViewPager;
+    private AppSectionsPageAdapter mAppSectionsPageAdapter;
+
     /**
      * Questo metodo viene chiamato quando questa activity parte.
      * l'intent deve essere inviato con anche l'oggetto ULSS in modo da sapere cosa
@@ -46,10 +52,10 @@ public class IncrocioDatiActivity extends FragmentActivity implements AppCompatC
         ulssName = intent.getStringExtra("ulssName");
         criterio = intent.getStringExtra("criterio");
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_one)));
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_two)));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mAppSectionsPageAdapter = new AppSectionsPageAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mAppSectionsPageAdapter);
+
 
         //get the recycler layout(there's two in the same layout)
         RecyclerView recyclerAppalto = (RecyclerView) findViewById(R.id.appalto_incrocio);
@@ -125,7 +131,8 @@ public class IncrocioDatiActivity extends FragmentActivity implements AppCompatC
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-
+        // When the given tab is selected, switch to the corresponding page in the ViewPager.
+        mViewPager.setCurrentItem(tab.getPosition());
     }
 
     @Override
