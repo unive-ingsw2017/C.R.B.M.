@@ -10,14 +10,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatCallback;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.view.ActionMode;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
-
-import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
-import it.unive.dais.cevid.datadroid.template.DatiULSS.FragmentStuff.IncrocioFragment;
 import it.unive.dais.cevid.datadroid.template.DatiULSS.FragmentStuff.AppSectionsPageAdapter;
-
 import it.unive.dais.cevid.datadroid.template.R;
 
 /**
@@ -28,8 +22,6 @@ public class IncrocioDatiActivity extends FragmentActivity implements AppCompatC
     private it.unive.dais.cevid.datadroid.template.DatiDiBilancio.RecyclerViewAdapter adapterVociBilancio;
     private it.unive.dais.cevid.datadroid.template.DatiAppalti.RecyclerViewAdapter adapterAppalti;
 
-    private String criterio;
-    private String codiceEnte;
     private String ulssName;
 
     private ViewPager mViewPager;
@@ -55,31 +47,6 @@ public class IncrocioDatiActivity extends FragmentActivity implements AppCompatC
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mAppSectionsPageAdapter = new AppSectionsPageAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mAppSectionsPageAdapter);
-
-
-        //get the recycler layout(there's two in the same layout)
-        RecyclerView recyclerAppalto = (RecyclerView) findViewById(R.id.appalto_incrocio);
-        recyclerAppalto.setLayoutManager(new LinearLayoutManager(this));
-
-        RecyclerView recyclerBilanci = (RecyclerView) findViewById(R.id.bilancio_incrocio);
-        recyclerBilanci.setLayoutManager(new LinearLayoutManager(this));
-
-        //get the crossed data
-        DBHelper helper = DBHelper.getSingleton();
-        DBHelper.CrossData datiIncrociati = helper.getDatiIncrociati(codiceEnte, criterio);
-
-        //adapter set stuff
-        adapterVociBilancio = new it.unive.dais.cevid.datadroid.template.DatiDiBilancio.RecyclerViewAdapter(
-                this,
-                datiIncrociati.getVociBilancio()
-        );
-        recyclerBilanci.setAdapter(adapterVociBilancio);
-
-        adapterAppalti = new it.unive.dais.cevid.datadroid.template.DatiAppalti.RecyclerViewAdapter(
-                this,
-                datiIncrociati.getAppalti()
-        );
-        recyclerAppalto.setAdapter(adapterAppalti);
 
         AppCompatDelegate delegate = AppCompatDelegate.create(this, this);
         delegate.onCreate(savedInstanceState);
