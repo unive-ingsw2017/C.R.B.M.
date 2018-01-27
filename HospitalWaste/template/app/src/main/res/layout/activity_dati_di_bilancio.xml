@@ -5,13 +5,12 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/bilanci_text"
+        android:id="@+id/totale_voci_bilancio_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/bilanci_hint"
-        android:inputType="textPersonName"
-        android:text="@string/bilanci_hardcode"
+        android:text="@string/voci_bilancio_hardcode"
+
         android:textAlignment="center"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -21,12 +20,11 @@
         android:cursorVisible="false"
         android:focusable="false"
         android:focusableInTouchMode="false"/>
-    <!--  ^ in this way not editable and not underlined -->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/bilancio"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/bilanci_text" />
+        android:layout_below="@+id/totale_voci_bilancio_text" />
 
 </RelativeLayout>

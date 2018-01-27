@@ -1,31 +1,32 @@
 package it.unive.dais.cevid.datadroid.template.DatiULSS;
 
-import android.app.Activity;
+import android.app.ActionBar;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatCallback;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.view.ActionMode;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
-
-import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
+import it.unive.dais.cevid.datadroid.template.DatiULSS.FragmentStuff.AppSectionsPageAdapter;
 import it.unive.dais.cevid.datadroid.template.R;
 
 /**
  * Created by francescobenvenuto on 11/01/2018.
  */
 
-public class IncrocioDatiActivity extends Activity implements AppCompatCallback {
+public class IncrocioDatiActivity extends FragmentActivity implements AppCompatCallback, ActionBar.TabListener {
     private it.unive.dais.cevid.datadroid.template.DatiDiBilancio.RecyclerViewAdapter adapterVociBilancio;
     private it.unive.dais.cevid.datadroid.template.DatiAppalti.RecyclerViewAdapter adapterAppalti;
 
-    private String criterio;
-    private String codiceEnte;
     private String ulssName;
-    //TODO fragment per bilanci e appalti e poi per anno
+
+    private ViewPager mViewPager;
+    private AppSectionsPageAdapter mAppSectionsPageAdapter;
+
     /**
      * Questo metodo viene chiamato quando questa activity parte.
      * l'intent deve essere inviato con anche l'oggetto ULSS in modo da sapere cosa
@@ -43,29 +44,9 @@ public class IncrocioDatiActivity extends Activity implements AppCompatCallback 
         ulssName = intent.getStringExtra("ulssName");
         criterio = intent.getStringExtra("criterio");
 
-        //get the recycler layout(there's two in the same layout)
-        RecyclerView recyclerAppalto = (RecyclerView) findViewById(R.id.appalto_incrocio);
-        recyclerAppalto.setLayoutManager(new LinearLayoutManager(this));
-
-        RecyclerView recyclerBilanci = (RecyclerView) findViewById(R.id.bilancio_incrocio);
-        recyclerBilanci.setLayoutManager(new LinearLayoutManager(this));
-
-        //get the crossed data
-        DBHelper helper = DBHelper.getSingleton();
-        DBHelper.CrossData datiIncrociati = helper.getDatiIncrociati(codiceEnte, criterio);
-
-        //adapter set stuff
-        adapterVociBilancio = new it.unive.dais.cevid.datadroid.template.DatiDiBilancio.RecyclerViewAdapter(
-                this,
-                datiIncrociati.getVociBilancio()
-        );
-        recyclerBilanci.setAdapter(adapterVociBilancio);
-
-        adapterAppalti = new it.unive.dais.cevid.datadroid.template.DatiAppalti.RecyclerViewAdapter(
-                this,
-                datiIncrociati.getAppalti()
-        );
-        recyclerAppalto.setAdapter(adapterAppalti);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mAppSectionsPageAdapter = new AppSectionsPageAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mAppSectionsPageAdapter);
 
         AppCompatDelegate delegate = AppCompatDelegate.create(this, this);
         delegate.onCreate(savedInstanceState);
@@ -113,5 +94,21 @@ public class IncrocioDatiActivity extends Activity implements AppCompatCallback 
     @Override
     public ActionMode onWindowStartingSupportActionMode(ActionMode.Callback callback) {
         return null;
+    }
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+        // When the given tab is selected, switch to the corresponding page in the ViewPager.
+        mViewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
     }
 }
