@@ -69,5 +69,7 @@
     <string name="confronta_max_number">Numero massimo di ULSS da confrontare raggiunto</string>
     <string name="esci_confronta">Esci</string>
     <string name="perform_confronto">Confronta</string>
+    <string name="add_to_confronto">Clicca per aggiungere ULSS a Confronto</string>
+    <string name="remove_from_confronto">Rimuovi dalle ULSS da confrontare</string>
 
 </resources>
