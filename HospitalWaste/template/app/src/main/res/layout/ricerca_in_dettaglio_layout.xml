@@ -1,31 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white">
 
-
-    <Button
-        android:id="@+id/mostra_bilanci"
-        android:layout_width="match_parent"
+    <GridView
+        android:id="@+id/dashboard_grid"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/dati_bilancio" />
+        android:listSelector="@android:color/transparent"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="20.0dip"
+        android:layout_centerInParent="true"
+        style="@style/dashboard" />
 
-    <Button
-        android:id="@+id/mostra_appalti"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/dati_appalti" />
-
-    <Button
-        android:id="@+id/mostra_incrocio"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/incrocio_dati" />
-
-    <Button
-        android:id="@+id/mostra_ospedali"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/osp_associati" />
-</LinearLayout>
+</RelativeLayout>

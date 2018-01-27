@@ -22,4 +22,18 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+
+    <array name="iconArray">
+        <item>@drawable/ic_assignment_black_24dp</item>
+        <item>@drawable/ic_shopping_cart_black_24dp</item>
+        <item>@drawable/ic_local_hospital_black_24dp</item>
+        <item>@drawable/ic_group_black_24dp</item>
+    </array>
+
+    <string-array name="iconNameArray">
+        <item>@string/dati_appalti</item>
+        <item>@string/dati_bilancio</item>
+        <item>@string/osp_associati</item>
+        <item>@string/incrocio_dati</item>
+    </string-array>
 </resources>
