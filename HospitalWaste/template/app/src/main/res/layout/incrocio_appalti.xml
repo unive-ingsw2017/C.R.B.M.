@@ -29,6 +29,7 @@
         android:id="@+id/appalto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/appalti_incrocio" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/appalto_text" />
 
 </RelativeLayout>
