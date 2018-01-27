@@ -46,7 +46,6 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -197,6 +196,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
+
     private void setDrawerMenu() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -342,8 +342,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (visibleMarkers() > 1 && newText.length() > 2) {
                     confrontoMultiploButton.setVisibility(View.VISIBLE);
                     queryConfrontoSearch = newText;
-                }
-                else {
+                } else {
                     confrontoMultiploButton.setVisibility(View.INVISIBLE);
                     queryConfrontoSearch = "";
                 }
@@ -582,6 +581,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //
 
     private boolean confrontaEnable = false;
+
     /**
      * Callback che viene invocata quando viene cliccato un marker.
      * Questo metodo viene invocato al click di QUALUNQUE marker nella mappa; pertanto, se è necessario
@@ -593,6 +593,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     @Override
     public boolean onMarkerClick(final Marker marker) {
+        /*
         if(confrontaEnable){
             confrontaMarkerClick(marker);
 
@@ -604,29 +605,37 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             );
 
             return true; // we consume the event stop the callbacks
-        }
+        }*/
+
+        marker.setSnippet(manageMarkerDescription(marker));
         return false; // continue to call back the default staff (zoom, and show info)
-        /*
-        button_car.setVisibility(View.VISIBLE);
-        button_car.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(v, R.string.msg_button_car, Snackbar.LENGTH_SHORT);
-                if (currentPosition != null) {
-                    navigate(currentPosition, marker.getPosition());
-                }
-            }
-        });
-        */
+    }
+
+    // change the description of the marker based on the situation
+    private String manageMarkerDescription(Marker marker) {
+        if (confrontaEnable && !confrontaUlssList.contains(marker)) {
+            // we are in the confronto modality but the ulss is not in the confronto list
+            return getString(R.string.add_to_confronto);
+        } else if (confrontaUlssList.contains(marker)) {// ulss is in confronto list
+            return getString(R.string.remove_from_confronto);
+        }
+        return getString(R.string.marker_description); // normal mode
     }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Intent ric_in_dett = new Intent(this, RicercaInDettaglioActivity.class);
+        marker.hideInfoWindow(); // hide the infoWindow in all the cases
 
-        ric_in_dett.putExtra("ULSS name", marker.getTitle());
-        ric_in_dett.putExtra("codiceEnte", mapDenominazioneCodice.get(marker.getTitle()));
-        startActivity(ric_in_dett);
+        if (confrontaEnable) { // manage the confronto modality
+            confrontaMarkerClick(marker);
+        } else { // manage the normal modality -> ricerca in dettaglio
+            Intent ric_in_dett = new Intent(this, RicercaInDettaglioActivity.class);
+
+            ric_in_dett.putExtra("ULSS name", marker.getTitle());
+            ric_in_dett.putExtra("codiceEnte", mapDenominazioneCodice.get(marker.getTitle()));
+            startActivity(ric_in_dett);
+        }
+
     }
 
     /**
@@ -757,15 +766,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void addUlssConfronto(Marker marker) {
-        if(confrontaUlssList.size() < MAX_CONFRONTA_NUMBER){ // if ulss selected if less then MAX_CONFRONTA_NUMBER
+        if (confrontaUlssList.size() < MAX_CONFRONTA_NUMBER) { // if ulss selected if less then MAX_CONFRONTA_NUMBER
             confrontaUlssList.add(marker);
             marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-        }
-        else{
+        } else {
             Toast.makeText(this, getString(R.string.confronta_max_number), Toast.LENGTH_SHORT).show();
         }
 
-        if(confrontaUlssList.size() >= 2) {
+        if (confrontaUlssList.size() >= 2) {
             confrontoMultiploButton.setVisibility(View.VISIBLE);
         }
     }
@@ -793,8 +801,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 ulssNameCodiceEnte.put(mapDenominazioneCodice.get(marker.getTitle()), marker.getTitle());
             }
             exitConfrontaModality(); // manage the exit of the compare modality
-        }
-        else {
+        } else {
             for (Marker marker : markers) {
                 if (marker.isVisible()) {
                     ulssNameCodiceEnte.put(mapDenominazioneCodice.get(marker.getTitle()), marker.getTitle());
@@ -810,6 +817,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private Snackbar mSnackBar;
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -834,7 +842,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //stuff to manage the modality of compare
 
-    
+
     private void enterConfrontaModality() {
         mSnackBar = Snackbar.make(findViewById(R.id.nav_view), getString(R.string.confronta_string), Snackbar.LENGTH_INDEFINITE);
         mSnackBar.setAction(R.string.esci_confronta,
