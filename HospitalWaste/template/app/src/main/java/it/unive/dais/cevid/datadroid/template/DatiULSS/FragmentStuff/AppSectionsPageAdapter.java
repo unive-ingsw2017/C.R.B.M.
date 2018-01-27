@@ -24,13 +24,11 @@ public class AppSectionsPageAdapter extends FragmentPagerAdapter {
         bundle.putString("criterio", criterio);
         switch (position) {
             case 0:
-                bundle.putString("tipo", "bilancio");
-                Fragment f0 = new Fragment();
+                Fragment f0 = new IncrocioBilancioFragment();
                 f0.setArguments(bundle);
                 return f0;
             case 1:
-                bundle.putString("tipo", "appalto");
-                Fragment f1 = new Fragment();
+                Fragment f1 = new IncrocioAppaltiFragment();
                 f1.setArguments(bundle);
                 return f1;
             default:
