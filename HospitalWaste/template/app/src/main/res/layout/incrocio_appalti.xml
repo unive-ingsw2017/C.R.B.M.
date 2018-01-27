@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/bilancio_incrocio"
+        android:id="@+id/appalti_incrocio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -14,11 +14,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/totale_voci_bilancio"
+            android:text="@string/totale_appalti"
             android:layout_margin="10dp"/>
 
         <TextView
-            android:id="@+id/somma_voci_bilancio"
+            android:id="@+id/somma_appalti"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
@@ -26,9 +26,9 @@
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/bilancio"
+        android:id="@+id/appalto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/bilancio_incrocio" />
+        android:layout_below="@+id/appalti_incrocio" />
 
 </RelativeLayout>

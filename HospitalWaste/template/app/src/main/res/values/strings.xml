@@ -53,8 +53,10 @@
     <string name="appalto_hint">text box for the word Appalti</string>
     <string name="appalto_hardcoded">Appalti</string>
     <string name="incrocio_text">Incrocio Dati</string>
-    <string name="bilanci_hardcode">Voci di Bilancio</string>
-    <string name="bilanci_hint">EditText for the work Bianci</string>
+    <string name="voci_bilancio_hardcode">Voci di Bilancio</string>
+    <string name="totale_voci_bilancio">Totale voci di Bilancio: </string>
+    <string name="totale_appalti">Totale Appalti: </string>
+    <string name="voci_bilancio_hint">EditText for the work Voci di Biancio</string>
 
     <string name="search_hint">Cerca per voce di spesa</string>
     <string name="fornitori_hardcoded">Fornitori</string>
