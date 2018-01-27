@@ -1,10 +1,13 @@
 package it.unive.dais.cevid.datadroid.template.DatiAppalti;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by francescobenvenuto on 04/01/2018.
  */
 
-public class Appalto {
+public class Appalto implements Parcelable {
     private String cig;
     private String oggetto;
     private String sceltaContraente;
@@ -23,6 +26,28 @@ public class Appalto {
         this.codiceEnte = codiceEnte;
     }
 
+    protected Appalto(Parcel in) {
+        cig = in.readString();
+        oggetto = in.readString();
+        sceltaContraente = in.readString();
+        codice_fiscale_aggiudicatario = in.readString();
+        aggiudicatario = in.readString();
+        importo = in.readDouble();
+        codiceEnte = in.readString();
+    }
+
+    public static final Creator<Appalto> CREATOR = new Creator<Appalto>() {
+        @Override
+        public Appalto createFromParcel(Parcel in) {
+            return new Appalto(in);
+        }
+
+        @Override
+        public Appalto[] newArray(int size) {
+            return new Appalto[size];
+        }
+    };
+
     public String getCig() {
 
         return cig;
@@ -36,7 +61,9 @@ public class Appalto {
         return codice_fiscale_aggiudicatario;
     }
 
-    public String getSceltaContraente() {return sceltaContraente;}
+    public String getSceltaContraente() {
+        return sceltaContraente;
+    }
 
     public String getAggiudicatario() {
         return aggiudicatario;
@@ -48,5 +75,24 @@ public class Appalto {
 
     public String getCodiceEnte() {
         return codiceEnte;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        Object myContainer[] = new Object[]{
+                cig,
+                oggetto,
+                sceltaContraente,
+                codice_fiscale_aggiudicatario,
+                aggiudicatario,
+                importo,
+                codiceEnte,
+        };
+        parcel.writeArray(myContainer);
     }
 }

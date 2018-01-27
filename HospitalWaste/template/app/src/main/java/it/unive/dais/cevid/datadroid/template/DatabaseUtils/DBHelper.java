@@ -419,8 +419,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public CrossData getDatiIncrociati(String codiceEnte, String keyword, int anno) {
         SQLiteDatabase db = this.getReadableDatabase();
-        List<Appalto> appalti = new LinkedList<>();
-        List<Bilancio> bilancio = new LinkedList<>();
+        ArrayList<Appalto> appalti = new ArrayList<>();
+        ArrayList<Bilancio> bilancio = new ArrayList<>();
 
 
         String queryBilancio = "SELECT * from Bilancio where codice_ente = ? AND descrizione_codice like '%' || ? || '%' AND anno = ?";
@@ -463,19 +463,19 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public class CrossData {
-        private List<Appalto> appalti;
-        private List<Bilancio> vociBilancio;
+        private ArrayList<Appalto> appalti;
+        private ArrayList<Bilancio> vociBilancio;
 
-        public CrossData(List<Appalto> appalti, List<Bilancio> vociBilancio) {
+        public CrossData(ArrayList<Appalto> appalti, ArrayList<Bilancio> vociBilancio) {
             this.appalti = appalti;
             this.vociBilancio = vociBilancio;
         }
 
-        public List<Appalto> getAppalti() {
+        public ArrayList<Appalto> getAppalti() {
             return appalti;
         }
 
-        public List<Bilancio> getVociBilancio() {
+        public ArrayList<Bilancio> getVociBilancio() {
             return vociBilancio;
         }
     }

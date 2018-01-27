@@ -108,7 +108,7 @@
                 android:value=".MapsActivity" />
         </activity>
         <activity
-            android:name=".DatiULSS.IncrocioDatiActivity"
+            android:name=".DatiULSS.IncrocioDati.IncrocioDatiActivity"
             android:parentActivityName=".DatiULSS.RicercaInDettaglioActivity"
             android:screenOrientation="portrait">
             <meta-data

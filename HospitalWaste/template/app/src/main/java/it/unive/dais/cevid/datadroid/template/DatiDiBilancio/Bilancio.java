@@ -1,5 +1,8 @@
 package it.unive.dais.cevid.datadroid.template.DatiDiBilancio;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -7,7 +10,7 @@ import java.util.List;
  * Created by francescobenvenuto on 04/01/2018.
  */
 
-public class Bilancio {
+public class Bilancio implements Parcelable {
     private String codiceSiope;
     private String codiceEnte;
 
@@ -24,15 +27,35 @@ public class Bilancio {
         this.importo = importo;
     }
 
+    protected Bilancio(Parcel in) {
+        codiceSiope = in.readString();
+        codiceEnte = in.readString();
+        anno = in.readInt();
+        importo = in.readDouble();
+        descrizioneCodice = in.readString();
+    }
+
+    public static final Creator<Bilancio> CREATOR = new Creator<Bilancio>() {
+        @Override
+        public Bilancio createFromParcel(Parcel in) {
+            return new Bilancio(in);
+        }
+
+        @Override
+        public Bilancio[] newArray(int size) {
+            return new Bilancio[size];
+        }
+    };
+
     //usa un oggetto bilancio gia esistente e ne crea un altro a partire da questo e modifica solo anno e importo
-    public Bilancio generateNewBilancio(int anno, double importo){
+    public Bilancio generateNewBilancio(int anno, double importo) {
         return new Bilancio(
                 this.codiceSiope,
                 this.codiceEnte,
                 anno,
                 this.descrizioneCodice,
                 importo
-                );
+        );
     }
 
 
@@ -56,8 +79,24 @@ public class Bilancio {
         return importo;
     }
 
-    public boolean isOfYear(int year){
-        return getAnno()==year;
+    public boolean isOfYear(int year) {
+        return getAnno() == year;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        Object myContainer[] = new Object[]{
+                codiceSiope,
+                codiceEnte,
+                anno,
+                descrizioneCodice,
+                importo,
+        };
+        parcel.writeArray(myContainer);
+    }
 }

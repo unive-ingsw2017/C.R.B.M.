@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import it.unive.dais.cevid.datadroid.template.DatiAppalti.DatiAppaltiActivity;
 import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.DatiDiBilancioActivity;
+import it.unive.dais.cevid.datadroid.template.DatiULSS.IncrocioDati.IncrocioDatiActivity;
 import it.unive.dais.cevid.datadroid.template.R;
 
 /**
