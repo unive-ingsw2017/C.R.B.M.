@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import it.unive.dais.cevid.datadroid.template.DatabaseUtils.BilancioHelper;
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
 import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.RecyclerViewAdapter;
 import it.unive.dais.cevid.datadroid.template.R;
@@ -16,7 +15,7 @@ import it.unive.dais.cevid.datadroid.template.R;
  * Created by gianmarcocallegher on 27/01/18.
  */
 
-public class IncrocioFragment extends Fragment {
+public class IncrocioAppaltiFragment extends Fragment {
     private String codiceEnte, criterio;
 
     public void onCreate(Bundle fragmentBundle) {
@@ -30,29 +29,20 @@ public class IncrocioFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //get the recycler layout(there's two in the same layout)
-        RecyclerView recyclerAppalto = (RecyclerView) findViewById(R.id.appalto);
-        recyclerAppalto.setLayoutManager(new LinearLayoutManager(this));
+        View view = inflater.inflate(R.layout.activity_incrocio_dati, container, false);
 
-        RecyclerView recyclerVociBilancio = (RecyclerView) findViewById(R.id.voce_bilancio);
-        recyclerVociBilancio.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView recyclerAppalto = (RecyclerView) view.findViewById(R.id.appalto);
+        recyclerAppalto.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
         //get the crossed data
         DBHelper helper = DBHelper.getSingleton();
         DBHelper.CrossData datiIncrociati = helper.getDatiIncrociati(codiceEnte, criterio);
 
-        //adapter set stuff
-        RecyclerViewAdapter adapterVociBilancio = new it.unive.dais.cevid.datadroid.template.DatiDiBilancio.RecyclerViewAdapter(
-                this.getContext(),
-                datiIncrociati.getVociBilancio()
-        );
-        recyclerVociBilancio.setAdapter(adapterVociBilancio);
-
-        RecyclerViewAdapter adapterAppalti = new it.unive.dais.cevid.datadroid.template.DatiAppalti.RecyclerViewAdapter(
-                this.getContext(),
+        /*RecyclerViewAdapter adapterAppalti = new it.unive.dais.cevid.datadroid.template.DatiAppalti.RecyclerViewAdapter(
+                this,
                 datiIncrociati.getAppalti()
-        );
-        recyclerAppalto.setAdapter(adapterAppalti);
+        );*/
+        //recyclerAppalto.setAdapter(adapterAppalti);
 
         return null;
     }

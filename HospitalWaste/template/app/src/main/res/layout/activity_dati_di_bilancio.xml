@@ -4,31 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/bilancio_incrocio"
+    <EditText
+        android:id="@+id/totale_voci_bilancio_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:ems="10"
+        android:text="@string/voci_bilancio_hardcode"
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/totale_voci_bilancio"
-            android:layout_margin="10dp"/>
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
 
-        <TextView
-            android:id="@+id/somma_voci_bilancio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:layout_margin="10dp"/>
-    </LinearLayout>
+        android:backgroundTint="@android:color/transparent"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/bilancio"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/bilancio_incrocio" />
+        android:layout_below="@+id/totale_voci_bilancio_text" />
 
 </RelativeLayout>
