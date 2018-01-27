@@ -108,9 +108,11 @@ public class BilancioHelper {
             return ulssImporto.get(codiceEnte);
         }
 
+
         public String getVoceBilancio() {
             return voceBilancio;
         }
+
     }
 
     public List<Bilancio> getVociBilancio(String codiceEnte) {

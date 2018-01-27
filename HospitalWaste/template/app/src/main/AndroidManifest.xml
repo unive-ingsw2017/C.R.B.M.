@@ -114,7 +114,7 @@
                 android:value=".MapsActivity" />
         </activity>
         <activity
-            android:name=".ConfrontoMultiploActivity"
+            android:name=".ConfrontoMultiplo.ConfrontoMultiploActivity"
             android:parentActivityName=".MapsActivity"
             android:screenOrientation="portrait">
             <meta-data
