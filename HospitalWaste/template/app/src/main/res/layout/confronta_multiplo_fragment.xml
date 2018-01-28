@@ -1,0 +1,15 @@
+<RelativeLayout
+    android:id="@+id/confronto_fragment_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DatiAppalti.DatiAppaltiActivity">
+
+
+    <android.support.v4.view.ViewPager
+        style="?android:textAppearanceMedium"
+        android:id="@+id/confronta_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</RelativeLayout>
