@@ -17,9 +17,6 @@ import it.unive.dais.cevid.datadroid.template.DatiAppalti.Appalto;
 import it.unive.dais.cevid.datadroid.template.DatiAppalti.RecyclerViewAdapter;
 import it.unive.dais.cevid.datadroid.template.R;
 
-/**
- * Created by gianmarcocallegher on 27/01/18.
- */
 
 public class IncrocioAppaltiFragment extends Fragment {
     private List<Appalto> appaltiList = Collections.EMPTY_LIST;
@@ -29,6 +26,7 @@ public class IncrocioAppaltiFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             appaltiList = bundle.getParcelableArrayList("appalti");
+            bundle.remove("appalti");
         }
     }
 

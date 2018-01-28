@@ -14,14 +14,10 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
-import it.unive.dais.cevid.datadroid.template.DatabaseUtils.BilancioHelper;
 import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.Bilancio;
 import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.RecyclerViewAdapter;
 import it.unive.dais.cevid.datadroid.template.R;
 
-/**
- * Created by gianmarcocallegher on 27/01/18.
- */
 
 public class IncrocioBilancioFragment extends Fragment {
     private List<Bilancio> vociBilancioList = Collections.EMPTY_LIST;
@@ -33,6 +29,9 @@ public class IncrocioBilancioFragment extends Fragment {
         if (bundle != null) {
             vociBilancioList = bundle.getParcelableArrayList("voci_bilancio");
             postiLetto = bundle.getInt("posti_letto");
+
+            bundle.remove("voci_bilancio");
+            bundle.remove("posti_letto");
         }
     }
 
