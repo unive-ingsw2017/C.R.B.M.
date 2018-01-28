@@ -48,7 +48,7 @@ public class IncrocioAppaltiFragment extends Fragment {
         recyclerAppalto.setAdapter(adapterAppalti);
 
         if(appaltiList.isEmpty()){
-            TextView prefixView = (TextView) view.findViewById(R.id.somma_appalti);
+            TextView prefixView = (TextView) view.findViewById(R.id.prefix_somma_appalti);
             prefixView.setText("Non vi sono Appalti");
         }
         else{
