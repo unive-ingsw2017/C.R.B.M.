@@ -44,7 +44,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.importo.setText(bilancio.getImporto() + " €");
         holder.voceDiSpesa.setText(bilancio.getDescrizioneCodice());
-        holder.spesaProCapite.setText((new BigDecimal((bilancio.getImporto() / postiLetto)).setScale(2 , BigDecimal.ROUND_UP).doubleValue()) + " €");
+        String spesaProCapiteString = (postiLetto != 0)?
+                (new BigDecimal((bilancio.getImporto() / postiLetto)).setScale(2 , BigDecimal.ROUND_UP).doubleValue())+ " €" :
+                "N.D."; //else
+        holder.spesaProCapite.setText(spesaProCapiteString);
     }
 
     // total number of rows
