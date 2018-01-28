@@ -7,14 +7,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
 
-/**
- * Created by gianmarcocallegher on 27/01/18.
- */
 
 public class IncrocioAdapter extends FragmentPagerAdapter {
     private final DBHelper.CrossData datiIncrociati;
-    private Bundle bundle;
     private int postiLetto;
+
+    private Bundle bundleAppalti = new Bundle();
+    private Bundle bundleBilanci = new Bundle();
+
 
     public IncrocioAdapter(FragmentManager fm, DBHelper.CrossData datiIncrociati, int postiLetto) {
         super(fm);
@@ -24,25 +24,30 @@ public class IncrocioAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        bundle = new Bundle();
-
         switch (position) {
             case 0:
-                bundle.putParcelableArrayList("voci_bilancio", datiIncrociati.getVociBilancio());
-                bundle.putInt("posti_letto", postiLetto);
-
-                Fragment bilancioFragment = new IncrocioBilancioFragment();
-                bilancioFragment.setArguments(bundle);
-                return bilancioFragment;
+                return getBilanciFragment();
             case 1:
-                bundle.putParcelableArrayList("appalti", datiIncrociati.getAppalti());
-
-                Fragment appaltoFragment = new IncrocioAppaltiFragment();
-                appaltoFragment.setArguments(bundle);
-                return appaltoFragment;
+                return getAppaltiFragment();
             default:
                 return null;
         }
+    }
+
+    private Fragment getBilanciFragment() {
+        bundleBilanci.putParcelableArrayList("voci_bilancio", datiIncrociati.getVociBilancio());
+        bundleBilanci.putInt("posti_letto", postiLetto);
+
+        IncrocioBilancioFragment bilanciFragment = new IncrocioBilancioFragment();
+        bilanciFragment.setArguments(bundleBilanci);
+        return bilanciFragment;
+    }
+    private Fragment getAppaltiFragment() {
+        bundleAppalti.putParcelableArrayList("appalti", datiIncrociati.getAppalti());
+
+        IncrocioAppaltiFragment appaltiFragment = new IncrocioAppaltiFragment();
+        appaltiFragment.setArguments(bundleAppalti);
+        return appaltiFragment;
     }
 
     @Override
