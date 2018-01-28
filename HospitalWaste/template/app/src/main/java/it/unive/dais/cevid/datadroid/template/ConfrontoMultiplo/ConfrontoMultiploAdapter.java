@@ -1,22 +1,15 @@
 package it.unive.dais.cevid.datadroid.template.ConfrontoMultiplo;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v7.app.AppCompatDelegate;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.BilancioHelper;
-import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.FragmentStuff.TabFragment;
-import it.unive.dais.cevid.datadroid.template.R;
 
 /**
  * Created by Aure on 26/01/2018.
@@ -58,7 +51,7 @@ public class ConfrontoMultiploAdapter extends FragmentStatePagerAdapter {
             i=0;
             for(BilancioHelper.DatiConfrontoContainer dcc: data){
                 bilanci[i]=dcc.getVoceBilancio();
-                importi[i]=dcc.getImporto(ullsNameCodiceEnteMap.get(codiceUlss));
+                importi[i]=dcc.getImporto(codiceUlss);
                 i++;
             }
 
