@@ -41,7 +41,6 @@ public class DatiDiBilancioActivity extends AppCompatActivity {
         Intent intent = getIntent();
         codiceEnte = intent.getStringExtra("codice_ente");
 
-
         //table layout stuff TODO use a query to get the last 3 year of data
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_one)));
@@ -57,6 +56,7 @@ public class DatiDiBilancioActivity extends AppCompatActivity {
                 tabLayout.getTabCount(),
                 codiceEnte,
                 getApplicationContext() // to get string resources
+
         );
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));

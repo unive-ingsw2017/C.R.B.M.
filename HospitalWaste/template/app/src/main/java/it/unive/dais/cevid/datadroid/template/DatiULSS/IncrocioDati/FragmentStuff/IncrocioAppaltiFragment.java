@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class IncrocioAppaltiFragment extends Fragment {
         recyclerAppalto.setAdapter(adapterAppalti);
 
         if(appaltiList.isEmpty()){
-            TextView prefixView = (TextView) view.findViewById(R.id.prefix_somma_appalti);
+            TextView prefixView = (TextView) view.findViewById(R.id.somma_appalti);
             prefixView.setText("Non vi sono Appalti");
         }
         else{
@@ -62,6 +63,7 @@ public class IncrocioAppaltiFragment extends Fragment {
         for (Appalto appalto : appaltiList) {
             importoTotale += appalto.getImporto();
         }
-        return importoTotale;
+
+        return new BigDecimal(importoTotale).setScale(2 , BigDecimal.ROUND_UP).doubleValue();
     }
 }

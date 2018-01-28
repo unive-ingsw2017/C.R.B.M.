@@ -479,4 +479,22 @@ public class DBHelper extends SQLiteOpenHelper {
             return vociBilancio;
         }
     }
+
+    public int getPostiLetto (String codiceEnte) {
+        SQLiteDatabase db = getReadableDatabase();
+        int postiLetto = 0;
+
+        String query = "SELECT posti_letto from ULSS where codice_ente = ?";
+        Cursor cur = db.rawQuery(query, new String[]{codiceEnte});
+        cur.moveToFirst();
+
+        if (!cur.isAfterLast()) {
+            postiLetto = Integer.parseInt(cur.getString(0));
+        }
+
+        cur.close();
+
+        return postiLetto;
+    }
+
 }

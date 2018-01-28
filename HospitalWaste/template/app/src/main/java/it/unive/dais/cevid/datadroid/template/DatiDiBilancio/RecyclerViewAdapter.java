@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,11 +20,13 @@ import it.unive.dais.cevid.datadroid.template.R;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     private List<Bilancio> vociBilancio = Collections.emptyList();
     private LayoutInflater mInflater;
+    private int postiLetto;
 
     // data is passed into the constructor
-    public RecyclerViewAdapter(Context context, List<Bilancio> data) {
+    public RecyclerViewAdapter(Context context, List<Bilancio> data, int postiLetto) {
         this.mInflater = LayoutInflater.from(context);
         this.vociBilancio = data;
+        this.postiLetto = postiLetto;
     }
 
     // inflates the row layout from xml when needed
@@ -39,9 +42,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         Bilancio bilancio = vociBilancio.get(position);
 
-        holder.importo.setText(bilancio.getImporto() + "");
+        holder.importo.setText(bilancio.getImporto() + " €");
         holder.voceDiSpesa.setText(bilancio.getDescrizioneCodice());
-        holder.spesaProCapite.setText("TODO"); //TODO mettere spesa procapite
+        holder.spesaProCapite.setText((new BigDecimal((bilancio.getImporto() / postiLetto)).setScale(2 , BigDecimal.ROUND_UP).doubleValue()) + " €");
     }
 
     // total number of rows

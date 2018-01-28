@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.view.ActionMode;
 import android.view.MenuItem;
 
+import it.unive.dais.cevid.datadroid.template.DatabaseUtils.BilancioHelper;
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
 import it.unive.dais.cevid.datadroid.template.DatiULSS.IncrocioDati.FragmentStuff.IncrocioAdapter;
 import it.unive.dais.cevid.datadroid.template.R;
@@ -50,7 +51,8 @@ public class IncrocioDatiActivity extends FragmentActivity implements AppCompatC
 
         IncrocioAdapter incrocioAdapter = new IncrocioAdapter(
                 getSupportFragmentManager(),
-                datiIncrocio
+                datiIncrocio,
+                helper.getPostiLetto(codiceEnte)
         );
         mViewPager.setAdapter(incrocioAdapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));

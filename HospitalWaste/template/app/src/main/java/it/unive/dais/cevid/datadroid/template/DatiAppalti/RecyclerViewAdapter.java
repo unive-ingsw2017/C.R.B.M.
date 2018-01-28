@@ -40,7 +40,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         Appalto appalto = appalti.get(position);
 
-        holder.importo.setText(appalto.getImporto() + "");
+        holder.importo.setText(appalto.getImporto() + " €");
         holder.voceDiSpesa.setText(appalto.getOggetto());
     }
 

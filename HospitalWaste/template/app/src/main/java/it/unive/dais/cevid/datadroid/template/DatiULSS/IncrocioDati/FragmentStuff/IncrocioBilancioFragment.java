@@ -10,9 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
+import it.unive.dais.cevid.datadroid.template.DatabaseUtils.BilancioHelper;
 import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.Bilancio;
 import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.RecyclerViewAdapter;
 import it.unive.dais.cevid.datadroid.template.R;
@@ -22,13 +24,15 @@ import it.unive.dais.cevid.datadroid.template.R;
  */
 
 public class IncrocioBilancioFragment extends Fragment {
-    private List<Bilancio> bilanciList = Collections.EMPTY_LIST;
+    private List<Bilancio> vociBilancioList = Collections.EMPTY_LIST;
+    private int postiLetto;
 
     public void onCreate(Bundle fragmentBundle) {
         super.onCreate(fragmentBundle);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            bilanciList = bundle.getParcelableArrayList("voci_bilancio");
+            vociBilancioList = bundle.getParcelableArrayList("voci_bilancio");
+            postiLetto = bundle.getInt("posti_letto");
         }
     }
 
@@ -41,15 +45,16 @@ public class IncrocioBilancioFragment extends Fragment {
         RecyclerView recyclerAppalto = (RecyclerView) view.findViewById(R.id.bilancio);
         recyclerAppalto.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
-        RecyclerViewAdapter adapterAppalti = new RecyclerViewAdapter(
+        RecyclerViewAdapter adapterBilancio = new RecyclerViewAdapter(
                 getContext(),
-                bilanciList
+                vociBilancioList,
+                postiLetto
         );
-        recyclerAppalto.setAdapter(adapterAppalti);
+        recyclerAppalto.setAdapter(adapterBilancio);
 
-        if(bilanciList.isEmpty()){
+        if(vociBilancioList.isEmpty()){
             TextView prefixBilanci = (TextView) view.findViewById(R.id.prefix_somma_bilanci);
-            prefixBilanci.setText("Non vi sono Bilanci");
+            prefixBilanci.setText("Non vi sono voci di Bilancio");
         }
         else{
             importoView.setText(getTotaleImportoBilanci().toString() + "€");
@@ -61,9 +66,10 @@ public class IncrocioBilancioFragment extends Fragment {
 
     private Double getTotaleImportoBilanci() {
         double importoTotale = 0;
-        for (Bilancio bilancio : bilanciList) {
+        for (Bilancio bilancio : vociBilancioList) {
             importoTotale += bilancio.getImporto();
         }
-        return importoTotale;
+
+        return new BigDecimal(importoTotale).setScale(2 , BigDecimal.ROUND_UP).doubleValue();
     }
 }

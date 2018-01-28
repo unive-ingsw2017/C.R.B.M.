@@ -14,10 +14,12 @@ import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
 public class IncrocioAdapter extends FragmentPagerAdapter {
     private final DBHelper.CrossData datiIncrociati;
     private Bundle bundle;
+    private int postiLetto;
 
-    public IncrocioAdapter(FragmentManager fm, DBHelper.CrossData datiIncrociati) {
+    public IncrocioAdapter(FragmentManager fm, DBHelper.CrossData datiIncrociati, int postiLetto) {
         super(fm);
         this.datiIncrociati = datiIncrociati;
+        this.postiLetto = postiLetto;
     }
 
     @Override
@@ -27,6 +29,7 @@ public class IncrocioAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 bundle.putParcelableArrayList("voci_bilancio", datiIncrociati.getVociBilancio());
+                bundle.putInt("posti_letto", postiLetto);
 
                 Fragment bilancioFragment = new IncrocioBilancioFragment();
                 bilancioFragment.setArguments(bundle);

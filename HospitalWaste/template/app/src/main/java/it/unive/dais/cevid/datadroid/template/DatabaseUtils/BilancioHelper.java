@@ -181,4 +181,7 @@ public class BilancioHelper {
         return size == 0? "" : out.substring(0, out.lastIndexOf(", "));
     }
 
+    public int getPostiLetto (String codiceEnte) {
+        return dbHelper.getPostiLetto(codiceEnte);
+    }
 }

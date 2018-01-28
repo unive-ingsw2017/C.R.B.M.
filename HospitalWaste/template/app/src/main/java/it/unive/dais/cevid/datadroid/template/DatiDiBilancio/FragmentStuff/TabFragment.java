@@ -52,7 +52,8 @@ public class TabFragment extends Fragment {
 
         adapter = new it.unive.dais.cevid.datadroid.template.DatiDiBilancio.RecyclerViewAdapter(
                 this.getContext(),
-                helper.getVociBilancio(codiceEnte, anno)
+                helper.getVociBilancio(codiceEnte, anno),
+                helper.getPostiLetto(codiceEnte)
         );
         recyclerView.setAdapter(adapter);
 
