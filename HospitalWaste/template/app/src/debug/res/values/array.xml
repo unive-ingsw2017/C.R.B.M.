@@ -27,7 +27,7 @@
         <item>@drawable/ic_assignment_black_24dp</item>
         <item>@drawable/ic_shopping_cart_black_24dp</item>
         <item>@drawable/ic_local_hospital_black_24dp</item>
-        <item>@drawable/ic_group_black_24dp</item>
+        <item>@drawable/ic_compare_arrows_black_24dp</item>
     </array>
 
     <string-array name="iconNameArray">

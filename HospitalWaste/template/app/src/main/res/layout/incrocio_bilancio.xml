@@ -1,29 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/bilancio_incrocio"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/prefix_somma_bilanci"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/totale_voci_bilancio"
+            android:textSize="20sp"
             android:layout_margin="10dp"/>
 
         <TextView
             android:id="@+id/somma_voci_bilancio"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:layout_margin="10dp"/>
-    </LinearLayout>
+            android:layout_margin="10dp"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/bilancio"
@@ -31,4 +38,4 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/totale_voci_bilancio_text" />
 
-</RelativeLayout>
+</LinearLayout>

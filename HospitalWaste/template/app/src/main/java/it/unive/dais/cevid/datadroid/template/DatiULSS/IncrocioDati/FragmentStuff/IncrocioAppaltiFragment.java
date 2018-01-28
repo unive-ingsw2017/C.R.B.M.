@@ -7,10 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.List;
 
+import it.unive.dais.cevid.datadroid.template.DatiAppalti.Appalto;
 import it.unive.dais.cevid.datadroid.template.DatiAppalti.RecyclerViewAdapter;
 import it.unive.dais.cevid.datadroid.template.R;
 
@@ -19,7 +21,7 @@ import it.unive.dais.cevid.datadroid.template.R;
  */
 
 public class IncrocioAppaltiFragment extends Fragment {
-    private List appaltiList = Collections.EMPTY_LIST;
+    private List<Appalto> appaltiList = Collections.EMPTY_LIST;
 
     public void onCreate(Bundle fragmentBundle) {
         super.onCreate(fragmentBundle);
@@ -33,6 +35,8 @@ public class IncrocioAppaltiFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.incrocio_appalti, container, false);
 
+        TextView importoView = (TextView) view.findViewById(R.id.somma_appalti);
+
         RecyclerView recyclerAppalto = (RecyclerView) view.findViewById(R.id.appalto);
         recyclerAppalto.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
@@ -42,6 +46,22 @@ public class IncrocioAppaltiFragment extends Fragment {
         );
         recyclerAppalto.setAdapter(adapterAppalti);
 
+        if(appaltiList.isEmpty()){
+            TextView prefixView = (TextView) view.findViewById(R.id.prefix_somma_appalti);
+            prefixView.setText("Non vi sono Appalti");
+        }
+        else{
+            importoView.setText(getAppaltiImporto().toString() + "€");
+        }
+
         return view;
+    }
+
+    private Double getAppaltiImporto() {
+        double importoTotale = 0;
+        for (Appalto appalto : appaltiList) {
+            importoTotale += appalto.getImporto();
+        }
+        return importoTotale;
     }
 }

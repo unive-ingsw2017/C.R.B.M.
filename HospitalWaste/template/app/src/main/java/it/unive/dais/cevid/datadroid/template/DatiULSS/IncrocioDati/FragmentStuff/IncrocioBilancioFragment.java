@@ -8,10 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.List;
 
+import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.Bilancio;
 import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.RecyclerViewAdapter;
 import it.unive.dais.cevid.datadroid.template.R;
 
@@ -20,7 +22,7 @@ import it.unive.dais.cevid.datadroid.template.R;
  */
 
 public class IncrocioBilancioFragment extends Fragment {
-    private List bilanciList = Collections.EMPTY_LIST;
+    private List<Bilancio> bilanciList = Collections.EMPTY_LIST;
 
     public void onCreate(Bundle fragmentBundle) {
         super.onCreate(fragmentBundle);
@@ -34,6 +36,8 @@ public class IncrocioBilancioFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.incrocio_bilancio, container, false);
 
+        TextView importoView = (TextView) view.findViewById(R.id.somma_voci_bilancio);
+
         RecyclerView recyclerAppalto = (RecyclerView) view.findViewById(R.id.bilancio);
         recyclerAppalto.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
@@ -43,6 +47,23 @@ public class IncrocioBilancioFragment extends Fragment {
         );
         recyclerAppalto.setAdapter(adapterAppalti);
 
+        if(bilanciList.isEmpty()){
+            TextView prefixBilanci = (TextView) view.findViewById(R.id.prefix_somma_bilanci);
+            prefixBilanci.setText("Non vi sono Bilanci");
+        }
+        else{
+            importoView.setText(getTotaleImportoBilanci().toString() + "€");
+        }
+
+
         return view;
+    }
+
+    private Double getTotaleImportoBilanci() {
+        double importoTotale = 0;
+        for (Bilancio bilancio : bilanciList) {
+            importoTotale += bilancio.getImporto();
+        }
+        return importoTotale;
     }
 }
