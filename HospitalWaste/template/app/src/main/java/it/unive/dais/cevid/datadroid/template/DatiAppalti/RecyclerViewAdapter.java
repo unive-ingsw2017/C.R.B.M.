@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -70,6 +71,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     // convenience method for getting data at click position
     public Appalto getItem(int id) {
         return appalti.get(id);
+    }
+
+    public void filter (List<Appalto> filteredFornitori) {
+        appalti = new ArrayList<>();
+        appalti.addAll(filteredFornitori);
+        notifyDataSetChanged();
     }
 
 }

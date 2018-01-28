@@ -26,7 +26,7 @@ public class IncrocioBilancioFragment extends Fragment {
         super.onCreate(fragmentBundle);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            bilanciList = bundle.getParcelableArrayList("bilanci");
+            bilanciList = bundle.getParcelableArrayList("voci_bilancio");
         }
     }
 

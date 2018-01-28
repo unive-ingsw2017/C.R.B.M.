@@ -59,6 +59,7 @@ public class IncrocioDatiActivity extends FragmentActivity implements AppCompatC
 
         tabLayout.addTab(tabLayout.newTab().setText(incrocioAdapter.getPageTitle(0)));
         tabLayout.addTab(tabLayout.newTab().setText(incrocioAdapter.getPageTitle(1)));
+
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.addOnTabSelectedListener(
                 new TabLayout.OnTabSelectedListener() {

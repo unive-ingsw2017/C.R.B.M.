@@ -26,7 +26,7 @@ public class IncrocioAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                bundle.putParcelableArrayList("bilanci", datiIncrociati.getVociBilancio());
+                bundle.putParcelableArrayList("voci_bilancio", datiIncrociati.getVociBilancio());
 
                 Fragment bilancioFragment = new IncrocioBilancioFragment();
                 bilancioFragment.setArguments(bundle);
@@ -45,5 +45,17 @@ public class IncrocioAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return 2;
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        switch (position) {
+            case 0:
+                return "Bilancio";
+            case 1:
+                return "Appalti";
+            default:
+                return null;
+        }
     }
 }
