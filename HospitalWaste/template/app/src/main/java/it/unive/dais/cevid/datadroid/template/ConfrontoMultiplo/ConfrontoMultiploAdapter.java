@@ -34,7 +34,7 @@ public class ConfrontoMultiploAdapter extends FragmentStatePagerAdapter {
         super(fm);
         this.data = data;
         this.ullsNameCodiceEnteMap=ullsNameCodiceEnteMap;
-        n_pages = data.size();
+        n_pages = ullsNameCodiceEnteMap.size();
 
     }
 
@@ -47,19 +47,18 @@ public class ConfrontoMultiploAdapter extends FragmentStatePagerAdapter {
         if ( position >=0 && position < n_pages){
 
             int i=0;
-            String nomeUlss=null;
+            String codiceUlss=null;
             for(String s:ullsNameCodiceEnteMap.keySet()){
                 if( i==position)
-                    nomeUlss= s;
+                    codiceUlss= s;
                 i++;
             }
-
-            tabBundle.putString("nomeUlss", nomeUlss);
+            tabBundle.putString("nomeUlss", ullsNameCodiceEnteMap.get(codiceUlss));
 
             i=0;
             for(BilancioHelper.DatiConfrontoContainer dcc: data){
                 bilanci[i]=dcc.getVoceBilancio();
-                importi[i]=dcc.getImporto(ullsNameCodiceEnteMap.get(nomeUlss));
+                importi[i]=dcc.getImporto(ullsNameCodiceEnteMap.get(codiceUlss));
                 i++;
             }
 
@@ -78,7 +77,7 @@ public class ConfrontoMultiploAdapter extends FragmentStatePagerAdapter {
         return n_pages;
     }
 
-    public void onQueryTextChange(String query) {
+    /*public void onQueryTextChange(String query) {
         for (Fragment f : registeredFragments) {
             ((TabFragment) f).onQueryTextChange(query);
         }
@@ -99,5 +98,5 @@ public class ConfrontoMultiploAdapter extends FragmentStatePagerAdapter {
 
     public Fragment getRegisteredFragment(int position) {
         return registeredFragments.get(position);
-    }
+    }*/
 }

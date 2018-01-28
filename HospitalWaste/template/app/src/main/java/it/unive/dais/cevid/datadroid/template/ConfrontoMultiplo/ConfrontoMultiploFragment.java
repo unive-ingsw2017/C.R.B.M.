@@ -43,14 +43,15 @@ public class ConfrontoMultiploFragment extends android.support.v4.app.Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_confronta_multiplo, container, false);
+        ViewGroup view = (ViewGroup)inflater.inflate(R.layout.activity_confronta_multiplo, container, false);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.confronta_multiplo);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
-        TabLayout et = (TabLayout) view.findViewById(R.id.confronta_tab_layout);
-        et.addTab(et.newTab().setText(nomeUlss),0);
-
+        /*EditText et = (EditText) view.findViewById(R.id.confronta_multiplo_text);
+        et.setText(nomeUlss);*/
+        TabLayout tl = (TabLayout) view.findViewById(R.id.confronta_tab_layout);
+        tl.addTab(tl.newTab().setText(nomeUlss),0);
 
         List<String> lBilanci = new ArrayList<>();
         List<Double> lImporti = new ArrayList<>();

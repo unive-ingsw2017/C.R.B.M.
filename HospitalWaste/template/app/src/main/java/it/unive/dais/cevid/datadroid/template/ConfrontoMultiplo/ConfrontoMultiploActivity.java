@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatCallback;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.view.ActionMode;
@@ -62,7 +63,7 @@ public class ConfrontoMultiploActivity extends FragmentActivity implements AppCo
 
 
         Intent intent = getIntent();
-        List<String> dati = new LinkedList();
+        List<String> dati = new LinkedList<>();
         ullsNameCodiceEnteMap = (Map<String, String>) intent.getSerializableExtra("map");
 
         BilancioHelper helper = new BilancioHelper();
@@ -115,6 +116,7 @@ public class ConfrontoMultiploActivity extends FragmentActivity implements AppCo
         table.setHeaderAdapter(myHeaderAdapter);
         table.setColumnModel(tc);
         setContentView(table);*/
+        delegate.onCreate(savedInstanceState);
         delegate.getSupportActionBar().setTitle("Confronto Multiplo");
 
 
@@ -159,7 +161,6 @@ public class ConfrontoMultiploActivity extends FragmentActivity implements AppCo
      */
     @Override
     public void onSupportActionModeStarted(ActionMode mode) {
-
     }
 
     /**
@@ -169,7 +170,6 @@ public class ConfrontoMultiploActivity extends FragmentActivity implements AppCo
      */
     @Override
     public void onSupportActionModeFinished(ActionMode mode) {
-
     }
 
     /**
