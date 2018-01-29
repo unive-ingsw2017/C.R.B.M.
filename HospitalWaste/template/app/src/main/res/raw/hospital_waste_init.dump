@@ -12,8 +12,9 @@ INSERT INTO ULSS VALUES  (  "000178873000316", "ULSS 3", 45.747673, 11.744139700
 INSERT INTO ULSS VALUES  (  "000178887000000", "ULSS 4", 45.7289047, 11.411778099999992, 451, "Ospedale Alto Vicentino;Casa della Salute di Schio;Centro Sanitario Polifunzionale di Thiene");
 INSERT INTO ULSS VALUES  (  "000501239000515", "ULSS 22", 45.4758527, 10.849280300000032, 1212, "Ospedale di Bussolengo;Ospedale di Isola della Scala;Ospedale di Malcesine;Ospedale di Villafranca;Centro Polifunzionale di Caprino Veronese");
 INSERT INTO ULSS VALUES  (  "000515308000000", "ULSS 14", 45.1984097, 12.283111899999994, 450, "Ospedale di Chioggia");
-INSERT INTO ULSS VALUES  (  "000501239000026", "ULSS 12", 45.5088116, 12.226319999999987, 1603, "Ospedale dell'Angelo di Mestre;Ospedale Villa Salus;Ospedale Ss Giovanni e Paolo di Venezia;Ospedale della pieta di Murano");
+INSERT INTO ULSS VALUES  (  "000515336000047", "ULSS 12", 45.5088116, 12.226319999999987, 1603, "Ospedale dell'Angelo di Mestre;Ospedale Villa Salus;Ospedale Ss Giovanni e Paolo di Venezia;Ospedale della pieta di Murano");
 INSERT INTO ULSS VALUES  (  "000515355000000", "ULSS 10", 45.6315995, 12.567563699999937, 694, "Ospedale di San Donà di Piave;Ospedale di Portogruaro;Ospedale di Jesolo");
+INSERT INTO ULSS VALUES  (  "000200173000000", "ULSS 19", 45.0481, 12.055150000000026, 450, "Ospedale Civile di Adria;Pronto Soccorso Santa Maria Regina degli Angeli di Adria");
 
 
 

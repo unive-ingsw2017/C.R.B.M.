@@ -3,6 +3,7 @@ package it.unive.dais.cevid.datadroid.template.DatiULSS;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -11,12 +12,15 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatCallback;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.view.ActionMode;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -26,6 +30,9 @@ import it.unive.dais.cevid.datadroid.template.DatiAppalti.DatiAppaltiActivity;
 import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.DatiDiBilancioActivity;
 import it.unive.dais.cevid.datadroid.template.DatiULSS.IncrocioDati.IncrocioDatiActivity;
 import it.unive.dais.cevid.datadroid.template.R;
+
+import static android.view.inputmethod.EditorInfo.IME_ACTION_DONE;
+import static android.view.inputmethod.EditorInfo.IME_ACTION_SEND;
 
 /**
  * Created by Aure on 10/01/2018.
@@ -102,11 +109,13 @@ public class RicercaInDettaglioActivity extends Activity implements AppCompatCal
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
         alert.setTitle("Voce di incrocio");
-        alert.setMessage("inserisci la parola su cui vuoi incrociare");
+        alert.setMessage("Inserisci la keyword di incrocio");
 
         // Set an EditText view to get user input
         final EditText input = new EditText(this);
         alert.setView(input);
+        input.setSingleLine();
+        input.setImeOptions(IME_ACTION_DONE);
 
         alert.setPositiveButton("Incrocia", (dialog, whichButton) -> {
             Intent ricIncrocio = new Intent(

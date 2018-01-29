@@ -45,11 +45,11 @@ public class RecycleViewConfrontoMultiplo extends RecyclerView.Adapter<RecycleVi
     @Override
     public void onBindViewHolder(RecycleViewConfrontoMultiplo.ViewHolder holder, int position) {
         holder.voceDiSpesa.setText(vociBilancio.get(position));
-        holder.importo.setText(String.valueOf(importi.get(position)) + " €");
+        holder.importo.setText("Importo voce di Bilancio: " + String.valueOf(importi.get(position)) + " €");
         String spesaProCapiteString = (postiLetto != 0)?
                 (new BigDecimal((importi.get(position) / postiLetto)).setScale(2 , BigDecimal.ROUND_UP).doubleValue())+ " €" :
                 "N.D."; //else
-        holder.spesaProCapite.setText(spesaProCapiteString);
+        holder.spesaProCapite.setText("Importo / Posti letto: " + spesaProCapiteString);
     }
 
     // total number of rows

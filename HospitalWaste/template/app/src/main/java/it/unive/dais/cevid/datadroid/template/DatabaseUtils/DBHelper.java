@@ -44,7 +44,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "HospitalWaste.db";
     private static final int MAX_DAYS = 15;
-    private static final int DATABSE_VERSION = 20;
+    private static final int DATABSE_VERSION = 3;
     private static final int ANNO_APPALTI = 2016;
 
     private static DBHelper instance = null;
@@ -421,8 +421,8 @@ public class DBHelper extends SQLiteOpenHelper {
         ArrayList<Bilancio> bilancio = new ArrayList<>();
 
 
-        String queryBilancio = "SELECT * from Bilancio where codice_ente = ? AND importo != 0 AND descrizione_codice like '%' || ? || '%' AND anno = ?";
-        String queryAppalto = "SELECT * from Appalti where codice_ente = ? AND importo != 0 AND oggetto like '%' || ? || '%'";
+        String queryBilancio = "SELECT * from Bilancio where codice_ente = ? AND importo != 0 AND descrizione_codice LIKE '%' || ? || '%' AND anno = ?";
+        String queryAppalto = "SELECT * from Appalti where codice_ente = ? AND importo != 0 AND oggetto LIKE '%' || ? || '%'";
 
         Cursor cursorBilancio = db.rawQuery(queryBilancio, new String[]{codiceEnte, keyword, String.valueOf(anno)});
         Cursor cursorAppalti = db.rawQuery(queryAppalto, new String[]{codiceEnte, keyword});

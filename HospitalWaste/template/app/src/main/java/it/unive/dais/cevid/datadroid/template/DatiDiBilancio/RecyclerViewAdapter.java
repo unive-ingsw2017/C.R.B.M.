@@ -42,12 +42,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         Bilancio bilancio = vociBilancio.get(position);
 
-        holder.importo.setText(bilancio.getImporto() + " €");
+        holder.importo.setText("Importo voce di Bilancio: " + bilancio.getImporto() + " €");
         holder.voceDiSpesa.setText(bilancio.getDescrizioneCodice());
         String spesaProCapiteString = (postiLetto != 0)?
                 (new BigDecimal((bilancio.getImporto() / postiLetto)).setScale(2 , BigDecimal.ROUND_UP).doubleValue())+ " €" :
                 "N.D."; //else
-        holder.spesaProCapite.setText(spesaProCapiteString);
+        holder.spesaProCapite.setText("Importo / Posti letto: " + spesaProCapiteString);
     }
 
     // total number of rows

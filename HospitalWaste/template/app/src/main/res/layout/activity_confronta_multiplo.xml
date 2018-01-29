@@ -29,13 +29,14 @@
         android:cursorVisible="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:layout_above="@id/confronta_tab_layout"/>
+        android:layout_above="@id/confronta_tab_layout" />
     <!--  ^ in this way not editable and not underlined -->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/confronta_multiplo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/confronta_multiplo_text" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/confronta_tab_layout" />
 
 </RelativeLayout>

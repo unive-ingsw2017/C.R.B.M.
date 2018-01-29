@@ -50,12 +50,12 @@ public class ConfrontoMultiploActivity extends FragmentActivity implements AppCo
     Map<String, String> ullsNameCodiceEnteMap;
     int n_pages;
 
+    private String queryConfrontoSearch = null;
     private ConfrontoMultiploAdapter adapter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //TODO fare il confronto veramente questo è solo per mostrare cosa è stato selezionato
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confronta_multiplo_fragment);
 
@@ -65,10 +65,12 @@ public class ConfrontoMultiploActivity extends FragmentActivity implements AppCo
         Intent intent = getIntent();
         List<String> dati = new LinkedList<>();
         ullsNameCodiceEnteMap = (Map<String, String>) intent.getSerializableExtra("map");
+        queryConfrontoSearch = intent.getStringExtra("query");
 
         BilancioHelper helper = new BilancioHelper();
         List<BilancioHelper.DatiConfrontoContainer> confrontoData = helper.
-                getConfrontoMultiploDati(ullsNameCodiceEnteMap.keySet(), 2016);
+                    getConfrontoMultiploDati(ullsNameCodiceEnteMap.keySet(), 2016, queryConfrontoSearch);
+
 
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.confronta_pager);

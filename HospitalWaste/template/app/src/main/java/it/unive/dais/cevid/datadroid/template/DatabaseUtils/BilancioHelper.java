@@ -29,16 +29,16 @@ public class BilancioHelper {
      * genera una lista di DatiConfrontoContainer che rappresentano per ogni voce di bilancio in comune tra tutte
      * le ULSS quanto ognuna ha speso per quello specifico dato
      */
-    public List<DatiConfrontoContainer> getConfrontoMultiploDati(Collection<String> codiciEnte, int anno) {
+    public List<DatiConfrontoContainer> getConfrontoMultiploDati(Collection<String> codiciEnte, int anno, String querySearch) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         FactoryDatiConfronto factory = new FactoryDatiConfronto();
 
         String query = "SELECT descrizione_codice, importo " +
                 "FROM Bilancio " +
-                "WHERE codice_ente = ? and anno = ? and importo != 0";
+                "WHERE codice_ente = ? and anno = ? and importo != 0 and descrizione_codice LIKE '%' || ? || '%'";
 
         for (String codiceEnte : codiciEnte) {
-            Cursor cursorBilancio = db.rawQuery(query, new String[]{codiceEnte, anno + ""});
+            Cursor cursorBilancio = db.rawQuery(query, new String[]{codiceEnte, anno + "", querySearch});
             cursorBilancio.moveToFirst();
 
             while (!cursorBilancio.isAfterLast()) {

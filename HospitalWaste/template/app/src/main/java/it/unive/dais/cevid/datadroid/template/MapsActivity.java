@@ -755,7 +755,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     // confronto multiplo stuff from here
     private Button confrontoMultiploButton;
     private Set<Marker> confrontaUlssList; // will contains the long pressed marker
-    private String queryConfrontoSearch;
+    private String queryConfrontoSearch = "";
 
     private void removeUlssConfronto(Marker marker) {
         confrontaUlssList.remove(marker); // remove from the list of pressed marker
@@ -808,13 +808,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     ulssNameCodiceEnte.put(mapDenominazioneCodice.get(marker.getTitle()), marker.getTitle());
                 }
             }
-            confrontoMultiploIntent.putExtra("query", queryConfrontoSearch);
         }
 
-
+        confrontoMultiploIntent.putExtra("query", queryConfrontoSearch);
         confrontoMultiploIntent.putExtra("map", ulssNameCodiceEnte);
         startActivity(confrontoMultiploIntent);
-        //TODO: cambiare activity di intent?
     }
 
     private Snackbar mSnackBar;
