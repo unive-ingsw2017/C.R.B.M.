@@ -1,5 +1,5 @@
 link;ULSS;
-'http://www.ulss13mirano.ven.it/index.cfm?method=mys.apridoc&iddoc=4374'; 000174948000389
+'http://www.ulss13mirano.ven.it/index.cfm?method=mys.apridoc&iddoc=4374'; 000515357000000
 'http://www.ulss15.pd.it/media/trasparenza/Legge190/Anno2016/dataset_20170323_132136.xml'; 000068615000507
 'http://www.ulss.belluno.it/public/trasparenza/Legge190/2016/ds000001.xml'; 000059309000506
 'http://www.ulss.belluno.it/public/trasparenza/Legge190/2016/ds000002.xml'; 000059309000506
@@ -11,10 +11,36 @@ link;ULSS;
 'http://www.ulss.belluno.it/public/trasparenza/Legge190/2016/ds000008.xml'; 000059309000506
 'http://www.ulss.belluno.it/public/trasparenza/Legge190/2016/ds000009.xml'; 000059309000506
 'http://www.ulss.belluno.it/public/trasparenza/Legge190/2016/ds000010.xml'; 000059309000506
-'http://trasparenza.aulsslegnago.it/media/Trasparenza/AVCP/dataset_2016_parte_1_di_2.xml'; 000068615000289
-'http://trasparenza.aulsslegnago.it/media/Trasparenza/AVCP/dataset_2016_parte_2_di_2.xml'; 000068615000289
+'http://trasparenza.aulsslegnago.it/media/Trasparenza/AVCP/dataset_2016_parte_1_di_2.xml'; 000501239000514
+'http://trasparenza.aulsslegnago.it/media/Trasparenza/AVCP/dataset_2016_parte_2_di_2.xml'; 000501239000514
 
-non funzionano
-'http://www.ulss20.verona.it/upload/amm-trasparente/dataset_2015_parte_1_di_3.xml'; 000501239000026
-'http://www.ulss20.verona.it/upload/amm-trasparente/dataset_2015_parte_2_di_3.xml'; 000501239000026
-'http://www.ulss20.verona.it/upload/amm-trasparente/dataset_2015_parte_3_di_3.xml'; 000501239000026
+//  verificare che quelli belluno non sia feltre
+
+//  link da provare
+'http://www.ulssvicenza.it/avcp/dataset/dataset-2016-1.xml'; 000487124000023
+'http://www.ulssvicenza.it/avcp/dataset/dataset-2016-2.xml'; 000487124000023
+'http://www.ulssvicenza.it/avcp/dataset/dataset-2016-3.xml'; 000487124000023
+'http://www.ulssvicenza.it/avcp/dataset/dataset-2016-4.xml'; 000487124000023
+'http://www.ulssvicenza.it/avcp/dataset/dataset-2016-5.xml'; 000487124000023
+'http://www.ulssvicenza.it/avcp/dataset/dataset-2016-6.xml'; 000487124000023
+'http://www.ulssvicenza.it/avcp/dataset/dataset-2016-7.xml'; 000487124000023
+'http://www.ulssvicenza.it/avcp/dataset/dataset-2016-8.xml'; 000487124000023
+'http://www.ulssvicenza.it/avcp/dataset/dataset-2016-9.xml'; 000487124000023
+'http://www.ulssvicenza.it/avcp/dataset/dataset-2016-10.xml'; 000487124000023
+'http://www.ulssvicenza.it/avcp/dataset/dataset-2016-11.xml'; 000487124000023
+'http://www.ulssvicenza.it/avcp/dataset/dataset-2016-12.xml'; 000487124000023
+'http://www.ulssvicenza.it/avcp/dataset/dataset-2016-13.xml'; 000487124000023
+'http://www.aslbassano.it/atti-pubblicazione/Legge190/a2016.xml'; 000178873000316
+'http://www.ulss22.ven.it/UploadDocs/11151_avcpLegge190.xml'; 000501239000515    //scritte strane
+'http://sannet.asl14chioggia.veneto.it:433/albo/benefici/appalti/esportazione_appalti_2016.xml'; 000515308000000
+'http://www.ulss12.ve.it/docs/Bandi/dataset_20170113_132756.xml'; 000515336000047
+'http://trasparenza.ulss20.verona.it/media/trasparenza/bandi%20di%20gara/Info_singole_procedure/sal/dataset_2016_parte_1_di_2.xml'; 000501239000026
+'http://trasparenza.ulss20.verona.it/media/trasparenza/bandi%20di%20gara/Info_singole_procedure/sal/dataset_2016_parte_2_di_2.xml'; 000501239000026
+'https://secure.ulss4.veneto.it/web/ulss4/Ospedale/DSS/distretti/dss_schio/ulss4/Azienda/gare_appalti/avcp_dati/avcpdataset_2016.xml'; 000178887000000
+'http://www.ulss10.veneto.it/sites/default/files/avcp/dataset_20170215_102536.xml'; 000515355000000
+'http://www.ulss10.veneto.it/sites/default/files/avcp/dataset_20170215_102623.xml'; 000515355000000
+'http://www.ulss10.veneto.it/sites/default/files/avcp/dataset_20170215_102703.xml'; 000515355000000
+'http://www.ulss10.veneto.it/sites/default/files/avcp/dataset_20170215_102743.xml'; 000515355000000
+'http://www.ulss10.veneto.it/sites/default/files/avcp/dataset_20170215_102821.xml'; 000515355000000
+'http://www.ulss10.veneto.it/sites/default/files/avcp/dataset_20170215_102902.xml'; 000515355000000
+'http://www.ulss10.veneto.it/sites/default/files/avcp/dataset_20170215_102939.xml'; 000515355000000
