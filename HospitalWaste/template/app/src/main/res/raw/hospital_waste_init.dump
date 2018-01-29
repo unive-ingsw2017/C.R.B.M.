@@ -6,14 +6,14 @@ INSERT INTO ULSS VALUES  (  "000059309000506", "ULSS 2",  46.0216887,  11.905294
 INSERT INTO ULSS VALUES  (  "000515357000000", "ULSS 13", 45.49782, 12.114120599999978, 739, "Ospedale di Dolo;Ospedale di Mirano;Ospedale di Noale");
 INSERT INTO ULSS VALUES  (  "000068615000507", "ULSS 15", 45.645886, 11.78589999999997, 801, "Ospedale Civile Pietro Cosma;Ospedale di Cittadella");
 INSERT INTO ULSS VALUES  (  "000501239000514", "ULSS 21", 45.1859717, 11.313989200000037, 543, "Ospedale Mater Salutis di Legnagno;Ospedale San Biagio di Bovolone");
-INSERT INTO ULSS VALUES  (  "000501239000026", "ULSS 20", 45.4352139, 10.9846921, 0, "Ospedale Fracastoro - San Bonifacio Verona");
-INSERT INTO ULSS VALUES  (  "000487124000023", "ULSS 6", 45.5501806, 11.53797499999996, 0, "Ospedale San Bortolo di Vicenza;Ospedale Pietro Milani di Noventa Vicentina");
-INSERT INTO ULSS VALUES  (  "000178873000316", "ULSS 3", 45.747673, 11.744139700000005, 0, "Ospedale San Bassiano di Bassano del Grappa;Ospedale di Asiago");
-INSERT INTO ULSS VALUES  (  "000178887000000", "ULSS 4", 45.7289047, 11.411778099999992, 0, "Ospedale Alto Vicentino;Casa della Salute di Schio;Centro Sanitario Polifunzionale di Thiene");
-INSERT INTO ULSS VALUES  (  "000501239000515", "ULSS 22", 45.4758527, 10.849280300000032, 0, "Ospedale di Bussolengo;Ospedale di Isola della Scala;Ospedale di Malcesine;Ospedale di Villafranca;Centro Polifunzionale di Caprino Veronese");
-INSERT INTO ULSS VALUES  (  "000501239000026", "ULSS 14", 45.1984097, 12.283111899999994, 0, "Ospedale di Chioggia");
-INSERT INTO ULSS VALUES  (  "000501239000026", "ULSS 12", 45.5088116, 12.226319999999987, 0, "Ospedale dell'Angelo di Mestre;Ospedale Villa Salus;Ospedale Ss Giovanni e Paolo di Venezia;Ospedale della pieta di Murano");
-INSERT INTO ULSS VALUES  (  "000515355000000", "ULSS 10", 45.6315995, 12.567563699999937, 0, "Ospedale di San Donà di Piave;Ospedale di Portogruaro;Ospedale di Jesolo");
+INSERT INTO ULSS VALUES  (  "000501239000026", "ULSS 20", 45.4352139, 10.9846921, 679, "Ospedale Fracastoro - San Bonifacio Verona");
+INSERT INTO ULSS VALUES  (  "000487124000023", "ULSS 6", 45.5501806, 11.53797499999996, 1225, "Ospedale San Bortolo di Vicenza;Ospedale Pietro Milani di Noventa Vicentina");
+INSERT INTO ULSS VALUES  (  "000178873000316", "ULSS 3", 45.747673, 11.744139700000005, 538, "Ospedale San Bassiano di Bassano del Grappa;Ospedale di Asiago");
+INSERT INTO ULSS VALUES  (  "000178887000000", "ULSS 4", 45.7289047, 11.411778099999992, 451, "Ospedale Alto Vicentino;Casa della Salute di Schio;Centro Sanitario Polifunzionale di Thiene");
+INSERT INTO ULSS VALUES  (  "000501239000515", "ULSS 22", 45.4758527, 10.849280300000032, 1212, "Ospedale di Bussolengo;Ospedale di Isola della Scala;Ospedale di Malcesine;Ospedale di Villafranca;Centro Polifunzionale di Caprino Veronese");
+INSERT INTO ULSS VALUES  (  "000501239000026", "ULSS 14", 45.1984097, 12.283111899999994, 450, "Ospedale di Chioggia");
+INSERT INTO ULSS VALUES  (  "000501239000026", "ULSS 12", 45.5088116, 12.226319999999987, 1603, "Ospedale dell'Angelo di Mestre;Ospedale Villa Salus;Ospedale Ss Giovanni e Paolo di Venezia;Ospedale della pieta di Murano");
+INSERT INTO ULSS VALUES  (  "000515355000000", "ULSS 10", 45.6315995, 12.567563699999937, 694, "Ospedale di San Donà di Piave;Ospedale di Portogruaro;Ospedale di Jesolo");
 
 
 
