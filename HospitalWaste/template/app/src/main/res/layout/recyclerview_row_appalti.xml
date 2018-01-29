@@ -11,10 +11,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="30sp"/>
+
     <TextView
-        android:id="@+id/importo"
+        android:id="@+id/scelta_contraente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"/>
+
+    <TextView
+    android:id="@+id/importo"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="20sp"/>
 
 </LinearLayout>

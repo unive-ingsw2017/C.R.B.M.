@@ -1,11 +1,14 @@
 package it.unive.dais.cevid.datadroid.template.DatiAppalti;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,9 +42,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Appalto appalto = appalti.get(position);
+        String s = appalto.getSceltaContraente();
 
-        holder.importo.setText(appalto.getImporto() + " €");
+        holder.importo.setText("Importo appalto: " + appalto.getImporto() + " €");
         holder.voceDiSpesa.setText(appalto.getOggetto());
+        holder.sceltaContraente.setText(s);
+
+        if (s.toLowerCase().contains("08") ||
+                s.toLowerCase().contains("16") ||
+                s.toLowerCase().contains("19"))
+            holder.sceltaContraente.setTextColor(Color.RED);
+        if (s.toLowerCase().contains("04"))
+            holder.sceltaContraente.setTextColor(Color.YELLOW);
+        if (s.toLowerCase().contains("06"))
+            holder.sceltaContraente.setTextColor(Color.rgb(255, 128, 0));
+        else
+            holder.sceltaContraente.setTextColor(Color.GREEN);
     }
 
     // total number of rows
@@ -55,11 +71,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView voceDiSpesa;
         public TextView importo;
+        public TextView sceltaContraente;
 
         public ViewHolder(View itemView) {
             super(itemView);
             voceDiSpesa = (TextView) itemView.findViewById(R.id.voce_di_spesa);
             importo = (TextView) itemView.findViewById(R.id.importo);
+            sceltaContraente = (TextView) itemView.findViewById(R.id.scelta_contraente);
         }
 
         @Override
