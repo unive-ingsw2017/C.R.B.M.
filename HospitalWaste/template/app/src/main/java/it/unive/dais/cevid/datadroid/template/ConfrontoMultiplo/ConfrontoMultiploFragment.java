@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
 import it.unive.dais.cevid.datadroid.template.R;
 
 /**
@@ -23,6 +24,7 @@ public class ConfrontoMultiploFragment extends android.support.v4.app.Fragment {
     private String [] vociBilancio;
     private double [] importi;
     private String nomeUlss;
+    private String codiceUlss;
     //private List<Bilancio> vociBilancio;
 
     public void onCreate(Bundle fragmentBundle) {
@@ -32,6 +34,7 @@ public class ConfrontoMultiploFragment extends android.support.v4.app.Fragment {
             vociBilancio = bundle.getStringArray("vociBilancio");
             nomeUlss = bundle.getString("nomeUlss");
             importi = bundle.getDoubleArray("importi");
+            codiceUlss = bundle.getString("codiceUlss");
         }
 
     }
@@ -55,8 +58,7 @@ public class ConfrontoMultiploFragment extends android.support.v4.app.Fragment {
             lImporti.add(importi[i]);
         }
 
-
-        adapter = new RecycleViewConfrontoMultiplo(this.getContext(), lVociBilancio,lImporti, nomeUlss);
+        adapter = new RecycleViewConfrontoMultiplo(this.getContext(), lVociBilancio,lImporti, nomeUlss, DBHelper.getSingleton().getPostiLetto(codiceUlss));
         recyclerView.setAdapter(adapter);
 
         return view;

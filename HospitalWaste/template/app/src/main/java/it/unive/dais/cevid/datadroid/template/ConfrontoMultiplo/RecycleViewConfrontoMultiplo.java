@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import it.unive.dais.cevid.datadroid.template.R;
@@ -17,15 +18,17 @@ import it.unive.dais.cevid.datadroid.template.R;
 
 public class RecycleViewConfrontoMultiplo extends RecyclerView.Adapter<RecycleViewConfrontoMultiplo.ViewHolder> {
     private LayoutInflater mInflater;
-    List<String> vociBilancio;
-    List<Double> importi;
-    String nomeUlss;
+    private List<String> vociBilancio;
+    private List<Double> importi;
+    private String nomeUlss;
+    private int postiLetto;
     // data is passed into the constructor
-    public RecycleViewConfrontoMultiplo(Context context, List<String> vociBilancio, List<Double> importi, String nomeUlss) {
+    public RecycleViewConfrontoMultiplo(Context context, List<String> vociBilancio, List<Double> importi, String nomeUlss, int postiLetto) {
         this.mInflater = LayoutInflater.from(context);
         this.vociBilancio = vociBilancio;
-        this.nomeUlss=nomeUlss;
-        this.importi=importi;
+        this.nomeUlss = nomeUlss;
+        this.importi = importi;
+        this.postiLetto = postiLetto;
     }
 
     // inflates the row layout from xml when needed
@@ -41,9 +44,12 @@ public class RecycleViewConfrontoMultiplo extends RecyclerView.Adapter<RecycleVi
     // binds the data to the textview in each row
     @Override
     public void onBindViewHolder(RecycleViewConfrontoMultiplo.ViewHolder holder, int position) {
-        holder.importo.setText(vociBilancio.get(position));
         holder.voceDiSpesa.setText(vociBilancio.get(position));
-        holder.spesaProCapite.setText("TODO"); //TODO mettere spesa procapite
+        holder.importo.setText(String.valueOf(importi.get(position)) + " €");
+        String spesaProCapiteString = (postiLetto != 0)?
+                (new BigDecimal((importi.get(position) / postiLetto)).setScale(2 , BigDecimal.ROUND_UP).doubleValue())+ " €" :
+                "N.D."; //else
+        holder.spesaProCapite.setText(spesaProCapiteString);
     }
 
     // total number of rows

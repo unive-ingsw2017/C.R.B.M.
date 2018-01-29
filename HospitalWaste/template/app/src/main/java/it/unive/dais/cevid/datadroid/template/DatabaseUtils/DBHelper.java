@@ -44,7 +44,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "HospitalWaste.db";
     private static final int MAX_DAYS = 15;
-    private static final int DATABSE_VERSION = 10;
+    private static final int DATABSE_VERSION = 20;
     private static final int ANNO_APPALTI = 2016;
 
     private static DBHelper instance = null;

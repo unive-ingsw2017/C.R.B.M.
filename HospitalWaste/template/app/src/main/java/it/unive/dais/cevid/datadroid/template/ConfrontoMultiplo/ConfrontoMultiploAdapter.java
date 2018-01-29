@@ -26,7 +26,7 @@ public class ConfrontoMultiploAdapter extends FragmentStatePagerAdapter {
                                     Map<String, String> ullsNameCodiceEnteMap) {
         super(fm);
         this.data = data;
-        this.ullsNameCodiceEnteMap=ullsNameCodiceEnteMap;
+        this.ullsNameCodiceEnteMap = ullsNameCodiceEnteMap;
         n_pages = ullsNameCodiceEnteMap.size();
 
     }
@@ -43,10 +43,11 @@ public class ConfrontoMultiploAdapter extends FragmentStatePagerAdapter {
             String codiceUlss=null;
             for(String s:ullsNameCodiceEnteMap.keySet()){
                 if( i==position)
-                    codiceUlss= s;
+                    codiceUlss = s;
                 i++;
             }
             tabBundle.putString("nomeUlss", ullsNameCodiceEnteMap.get(codiceUlss));
+            tabBundle.putString("codiceUlss", codiceUlss);
 
             i=0;
             for(BilancioHelper.DatiConfrontoContainer dcc: data){
