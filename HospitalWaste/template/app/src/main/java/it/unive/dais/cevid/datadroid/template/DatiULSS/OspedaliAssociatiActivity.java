@@ -10,6 +10,7 @@ import android.support.v7.view.ActionMode;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
 import it.unive.dais.cevid.datadroid.template.R;
@@ -41,6 +42,9 @@ public class OspedaliAssociatiActivity extends Activity implements AppCompatCall
 
         ListView listView = (ListView) findViewById(R.id.ospedali_list);
         listView.setAdapter(adapter);
+
+        TextView textView = (TextView) findViewById(R.id.numero_posti_letto);
+        textView.setText("Numero posti letto totali: " + DBHelper.getSingleton().getPostiLetto(codiceEnte));
 
     }
 

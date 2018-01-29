@@ -44,7 +44,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "HospitalWaste.db";
     private static final int MAX_DAYS = 15;
-    private static final int DATABSE_VERSION = 3;
+    private static final int DATABSE_VERSION = 5;
     private static final int ANNO_APPALTI = 2016;
 
     private static DBHelper instance = null;
@@ -86,7 +86,7 @@ public class DBHelper extends SQLiteOpenHelper {
         long currentTime = System.currentTimeMillis();
 
         dataInputStream.close();
-        // cannot use LocalDate because of the API level TODO migliorare
+        // cannot use LocalDate because of the API level
         long diffTime = (currentTime - lastTime) / (1000 * 60 * 60 * 24);// diff time in days
         if (diffTime > MAX_DAYS) {
             return true;
@@ -119,7 +119,7 @@ public class DBHelper extends SQLiteOpenHelper {
         while (insertReader.ready()) {
             String insertStmt = insertReader.readLine();
 
-            if (!insertStmt.equals("")) {//TODO cambiare sta ....
+            if (!insertStmt.equals("")) {
                 db.execSQL(insertStmt);
             }
         }
@@ -347,7 +347,6 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     private void insertAppalti(SQLiteDatabase db, List<AppaltiParser.Data> appalti, String codice_ente) {
         List<Appalto> l = new ArrayList<>();
-
         for (AppaltiParser.Data appalto : appalti) {
             l.add(new Appalto(
                     appalto.cig,

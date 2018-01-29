@@ -80,44 +80,7 @@ public class ConfrontoMultiploActivity extends FragmentActivity implements AppCo
                 ullsNameCodiceEnteMap
                 );
         viewPager.setAdapter(adapter);
-        /*viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });*/
-
-        /*TableView<String[]> table = new TableView(getApplicationContext());
-        TableDataAdapter<String[]> myDataAdapter =
-                new SimpleTableDataAdapter(this.getApplicationContext(), genTableData(confrontoData));
-
-
-        List<String> header = new LinkedList();
-        header.add("Voce di Bilancio");
-        header.addAll(ullsNameCodiceEnteMap.values());
-
-        //TODO check if the creation is right
-        TableHeaderAdapter myHeaderAdapter =
-                new SimpleTableHeaderAdapter(this.getApplicationContext(),
-                        Arrays.copyOf(header.toArray(), header.size(), String[].class)
-                );
-        TableColumnDpWidthModel tc = new TableColumnDpWidthModel(getApplicationContext(), header.size(), 100);
-        tc.setColumnWidth(0,180);
-        table.setDataAdapter(myDataAdapter);
-        table.setHeaderAdapter(myHeaderAdapter);
-        table.setColumnModel(tc);
-        setContentView(table);*/
         delegate.onCreate(savedInstanceState);
         delegate.getSupportActionBar().setTitle("Confronto Multiplo");
 

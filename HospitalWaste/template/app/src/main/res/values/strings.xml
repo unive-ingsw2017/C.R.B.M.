@@ -73,5 +73,7 @@
     <string name="perform_confronto">Confronta</string>
     <string name="add_to_confronto">Clicca per aggiungere ULSS a Confronto</string>
     <string name="remove_from_confronto">Rimuovi dalle ULSS da confrontare</string>
+    <string name="previous_button">Indietro</string>
+    <string name="next_button">Avanti</string>
 
 </resources>
