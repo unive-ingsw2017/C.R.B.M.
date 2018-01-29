@@ -35,7 +35,7 @@ public class ConfrontoMultiploAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         ConfrontoMultiploFragment tab = new ConfrontoMultiploFragment();
         Bundle tabBundle = new Bundle();
-        String [] bilanci = new String[data.size()];
+        String [] vociBilancio = new String[data.size()];
         double [] importi = new double[data.size()];
         if ( position >=0 && position < n_pages){
 
@@ -50,12 +50,12 @@ public class ConfrontoMultiploAdapter extends FragmentStatePagerAdapter {
 
             i=0;
             for(BilancioHelper.DatiConfrontoContainer dcc: data){
-                bilanci[i]=dcc.getVoceBilancio();
+                vociBilancio[i]=dcc.getVoceBilancio();
                 importi[i]=dcc.getImporto(codiceUlss);
                 i++;
             }
 
-            tabBundle.putStringArray("bilanci", bilanci);
+            tabBundle.putStringArray("vociBilancio", vociBilancio);
             tabBundle.putDoubleArray("importi", importi);
             tab.setArguments(tabBundle);
             return tab;

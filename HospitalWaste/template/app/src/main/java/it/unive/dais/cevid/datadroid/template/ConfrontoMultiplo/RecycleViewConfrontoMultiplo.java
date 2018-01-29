@@ -7,11 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.Collections;
 import java.util.List;
 
-import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.Bilancio;
-import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.RecyclerViewAdapter;
 import it.unive.dais.cevid.datadroid.template.R;
 
 /**
@@ -20,13 +17,13 @@ import it.unive.dais.cevid.datadroid.template.R;
 
 public class RecycleViewConfrontoMultiplo extends RecyclerView.Adapter<RecycleViewConfrontoMultiplo.ViewHolder> {
     private LayoutInflater mInflater;
-    List<String> bilanci;
+    List<String> vociBilancio;
     List<Double> importi;
     String nomeUlss;
     // data is passed into the constructor
-    public RecycleViewConfrontoMultiplo(Context context, List<String> bilanci, List<Double> importi, String nomeUlss) {
+    public RecycleViewConfrontoMultiplo(Context context, List<String> vociBilancio, List<Double> importi, String nomeUlss) {
         this.mInflater = LayoutInflater.from(context);
-        this.bilanci=bilanci;
+        this.vociBilancio = vociBilancio;
         this.nomeUlss=nomeUlss;
         this.importi=importi;
     }
@@ -44,15 +41,15 @@ public class RecycleViewConfrontoMultiplo extends RecyclerView.Adapter<RecycleVi
     // binds the data to the textview in each row
     @Override
     public void onBindViewHolder(RecycleViewConfrontoMultiplo.ViewHolder holder, int position) {
-        holder.importo.setText(bilanci.get(position));
-        holder.voceDiSpesa.setText(bilanci.get(position));
+        holder.importo.setText(vociBilancio.get(position));
+        holder.voceDiSpesa.setText(vociBilancio.get(position));
         holder.spesaProCapite.setText("TODO"); //TODO mettere spesa procapite
     }
 
     // total number of rows
     @Override
     public int getItemCount() {
-        return bilanci.size();
+        return vociBilancio.size();
     }
 
     // stores and recycles views as they are scrolled off screen

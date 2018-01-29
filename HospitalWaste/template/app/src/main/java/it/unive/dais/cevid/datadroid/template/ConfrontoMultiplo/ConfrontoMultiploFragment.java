@@ -1,6 +1,5 @@
 package it.unive.dais.cevid.datadroid.template.ConfrontoMultiplo;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,14 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TableLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unive.dais.cevid.datadroid.template.DatabaseUtils.BilancioHelper;
-import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.RecyclerViewAdapter;
 import it.unive.dais.cevid.datadroid.template.R;
 
 /**
@@ -25,7 +20,7 @@ import it.unive.dais.cevid.datadroid.template.R;
 public class ConfrontoMultiploFragment extends android.support.v4.app.Fragment {
     private RecycleViewConfrontoMultiplo adapter;
 
-    private String [] bilanci;
+    private String [] vociBilancio;
     private double [] importi;
     private String nomeUlss;
     //private List<Bilancio> vociBilancio;
@@ -34,7 +29,7 @@ public class ConfrontoMultiploFragment extends android.support.v4.app.Fragment {
         super.onCreate(fragmentBundle);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            bilanci = bundle.getStringArray("bilanci");
+            vociBilancio = bundle.getStringArray("vociBilancio");
             nomeUlss = bundle.getString("nomeUlss");
             importi = bundle.getDoubleArray("importi");
         }
@@ -53,15 +48,15 @@ public class ConfrontoMultiploFragment extends android.support.v4.app.Fragment {
         TabLayout tl = (TabLayout) view.findViewById(R.id.confronta_tab_layout);
         tl.addTab(tl.newTab().setText(nomeUlss),0);
 
-        List<String> lBilanci = new ArrayList<>();
+        List<String> lVociBilancio = new ArrayList<>();
         List<Double> lImporti = new ArrayList<>();
-        for (int i = 0; i < bilanci.length ; i++) {
-            lBilanci.add(bilanci[i]);
+        for (int i = 0; i < vociBilancio.length ; i++) {
+            lVociBilancio.add(vociBilancio[i]);
             lImporti.add(importi[i]);
         }
 
 
-        adapter = new RecycleViewConfrontoMultiplo(this.getContext(), lBilanci,lImporti, nomeUlss);
+        adapter = new RecycleViewConfrontoMultiplo(this.getContext(), lVociBilancio,lImporti, nomeUlss);
         recyclerView.setAdapter(adapter);
 
         return view;
@@ -72,7 +67,7 @@ public class ConfrontoMultiploFragment extends android.support.v4.app.Fragment {
         super.onActivityCreated(savedInstanceState);
 
         if (savedInstanceState != null) {
-            bilanci = savedInstanceState.getStringArray("bilanci");
+            vociBilancio = savedInstanceState.getStringArray("vociBilancio");
             nomeUlss = savedInstanceState.getString("nomeUlss");
             importi = savedInstanceState.getDoubleArray("importi");
         }
@@ -81,7 +76,7 @@ public class ConfrontoMultiploFragment extends android.support.v4.app.Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putStringArray("bilanci", bilanci);
+        outState.putStringArray("vociBilancio", vociBilancio);
         outState.putString("nomeUlss", nomeUlss);
         outState.putDoubleArray("importi", importi);
 
