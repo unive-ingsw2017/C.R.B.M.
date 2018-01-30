@@ -6,15 +6,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.coreutils.BuildConfig;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
 
 import java.io.DataInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.DBHelper;
 
@@ -34,19 +29,22 @@ public class InfoActivity extends AppCompatActivity {
     public String credits(Context ctx) throws IOException {
         ApplicationInfo ai = ctx.getApplicationInfo();
         StringBuffer buf = new StringBuffer();
+        StringBuffer developers = new StringBuffer();
         DBHelper helper = DBHelper.getSingleton();
 
         DataInputStream dataInputStream = new DataInputStream(getApplicationContext().openFileInput("db_creation_time.txt"));
 
         long lastTime = dataInputStream.readLong();
 
-        Date date = new Date(lastTime);
-        DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
+        String lastUpdateString = DBHelper.getSingleton().getCreationDateString();
 
         int version = helper.getDatabseVersion();
 
+
         buf.append("\tVERSION.RELEASE {").append(Build.VERSION.RELEASE).append("}");
         buf.append("\n\tVERSION.INCREMENTAL {").append(Build.VERSION.INCREMENTAL).append("}");
+        buf.append("\n\tDATADROID IS USED IN THIS APP");
+        /*
         buf.append("\n\tVERSION.SDK {").append(Build.VERSION.SDK_INT).append("}");
         buf.append("\n\tBOARD {").append(Build.BOARD).append("}");
         buf.append("\n\tBRAND {").append(Build.BRAND).append("}");
@@ -54,19 +52,27 @@ public class InfoActivity extends AppCompatActivity {
         buf.append("\n\tFINGERPRINT {").append(Build.FINGERPRINT).append("}");
         buf.append("\n\tHOST {").append(Build.HOST).append("}");
         buf.append("\n\tID {").append(Build.ID).append("}");
+        */
 
+        developers.append("\tFrancesco Benvenuto");
+        developers.append("\n\tGianmarco Callegher");
+        developers.append("\n\tAurelio Makaj");
+        developers.append("\n\tAlessio Ragazzo");
+        
         return String.format(
                 "--- APP ---\n" +
                         "%s v%s [%s]\nDatabase last update: %s\nDatabase version: %s\n" +
                         "(c) %s %s @ %s - %s \n\n" +
-                        "--- ANDROID ---\n%s",
+                        "--- ANDROID ---\n%s\n" +
+                        "--- DEVELOPERS ---\n%s",
                 ctx.getString(ai.labelRes),
                 BuildConfig.VERSION_NAME,
                 BuildConfig.BUILD_TYPE,
-                dateFormat.format(date),
+                lastUpdateString,
                 Integer.toString(version),
                 R.string.credits_year, R.string.credits_project, R.string.credits_company, R.string.credits_authors,
-                buf);
+                buf,
+                developers);
     }
 
     /**
