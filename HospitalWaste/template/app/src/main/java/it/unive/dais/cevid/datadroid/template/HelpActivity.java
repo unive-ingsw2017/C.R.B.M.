@@ -1,5 +1,6 @@
 package it.unive.dais.cevid.datadroid.template;
 
+import android.content.res.TypedArray;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,26 +11,28 @@ import android.widget.ViewSwitcher;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 public class HelpActivity extends AppCompatActivity {
     private ImageSwitcher imageSwitcher;
     private Button next;
     private Button previous;
-    private static final int MAX_IMGS = 10;
-    private List<Integer> images = Collections.EMPTY_LIST;
+    private int tot_img;
+    private List<Integer> tutorialImages = Collections.EMPTY_LIST;
     private int current_position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
-
+        TypedArray imgs = getResources().obtainTypedArray(R.array.tutorial_imgs);
         next = (Button) findViewById(R.id.next);
         previous = (Button) findViewById(R.id.prev);
-
-        images = new ArrayList<>();
+        tot_img = imgs.length();
+        tutorialImages = new ArrayList<>();
+        for (int i = 0; i < tot_img; i++){
+            tutorialImages.add(imgs.getResourceId(i,-1));
+        }
         current_position = 0;
 
         imageSwitcher = (ImageSwitcher) findViewById(R.id.imgsw);
@@ -52,7 +55,10 @@ public class HelpActivity extends AppCompatActivity {
                 current_position--;
                 if (current_position == 0)
                     previous.setVisibility(View.INVISIBLE);
-                imageSwitcher.setImageResource(R.drawable.big_logo);
+                if (current_position != tot_img - 1){
+                    next.setVisibility(View.VISIBLE);
+                }
+                imageSwitcher.setImageResource(tutorialImages.get(current_position));
             }
         });
 
@@ -62,7 +68,10 @@ public class HelpActivity extends AppCompatActivity {
                 current_position++;
                 if (current_position == 1)
                     previous.setVisibility(View.VISIBLE);
-                imageSwitcher.setImageResource(R.drawable.big_logo);
+                if (current_position == tot_img - 1){
+                    next.setVisibility(View.INVISIBLE);
+                }
+                imageSwitcher.setImageResource(tutorialImages.get(current_position));
             }
         });
     }
