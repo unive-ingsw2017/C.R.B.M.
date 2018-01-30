@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -50,18 +49,18 @@ public class IncrocioAppaltiFragment extends Fragment {
             prefixView.setText("Non vi sono Appalti");
         }
         else{
-            importoView.setText(getAppaltiImporto().toString() + "€");
+            importoView.setText(String.format("%.2f €", getTotaleImportoAppalti()));
         }
 
         return view;
     }
 
-    private Double getAppaltiImporto() {
+    private Double getTotaleImportoAppalti() {
         double importoTotale = 0;
         for (Appalto appalto : appaltiList) {
             importoTotale += appalto.getImporto();
         }
 
-        return new BigDecimal(importoTotale).setScale(2 , BigDecimal.ROUND_UP).doubleValue();
+        return importoTotale;
     }
 }

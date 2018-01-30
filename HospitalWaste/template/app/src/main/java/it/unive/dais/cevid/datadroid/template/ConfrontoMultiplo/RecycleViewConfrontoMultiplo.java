@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import it.unive.dais.cevid.datadroid.template.R;
@@ -44,12 +43,12 @@ public class RecycleViewConfrontoMultiplo extends RecyclerView.Adapter<RecycleVi
     // binds the data to the textview in each row
     @Override
     public void onBindViewHolder(RecycleViewConfrontoMultiplo.ViewHolder holder, int position) {
+        holder.importo.setText(String.format("Importto voce di Bilancio: %.2f €", importi.get(position)));
         holder.voceDiSpesa.setText(vociBilancio.get(position));
-        holder.importo.setText("Importo voce di Bilancio: " + String.valueOf(importi.get(position)) + " €");
-        String spesaProCapiteString = (postiLetto != 0)?
-                (new BigDecimal((importi.get(position) / postiLetto)).setScale(2 , BigDecimal.ROUND_UP).doubleValue())+ " €" :
-                "N.D."; //else
-        holder.spesaProCapite.setText("Importo / Posti letto: " + spesaProCapiteString);
+        if (postiLetto != 0)
+            holder.spesaProCapite.setText(String.format("Importo / Posti letto: %.2f €", importi.get(position) / postiLetto));
+        else
+            holder.spesaProCapite.setText("N.D.");
     }
 
     // total number of rows

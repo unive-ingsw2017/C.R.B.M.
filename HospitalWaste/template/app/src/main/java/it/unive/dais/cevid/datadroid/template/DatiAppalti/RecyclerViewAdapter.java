@@ -44,7 +44,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Appalto appalto = appalti.get(position);
         String s = appalto.getSceltaContraente();
 
-        holder.importo.setText("Importo appalto: " + appalto.getImporto() + " €");
+        holder.importo.setText(String.format("Importo appalto: %.2f €", appalto.getImporto()));
         holder.voceDiSpesa.setText(appalto.getOggetto());
         holder.sceltaContraente.setText(s);
 

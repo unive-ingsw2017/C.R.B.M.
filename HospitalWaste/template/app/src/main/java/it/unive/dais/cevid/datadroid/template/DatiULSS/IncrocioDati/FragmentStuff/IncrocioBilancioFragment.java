@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -56,7 +55,7 @@ public class IncrocioBilancioFragment extends Fragment {
             prefixBilanci.setText("Non vi sono voci di Bilancio");
         }
         else{
-            importoView.setText(getTotaleImportoBilanci().toString() + "€");
+            importoView.setText(String.format("%.2f €", getTotaleImportoBilanci()));
         }
 
 
@@ -69,6 +68,6 @@ public class IncrocioBilancioFragment extends Fragment {
             importoTotale += bilancio.getImporto();
         }
 
-        return new BigDecimal(importoTotale).setScale(2 , BigDecimal.ROUND_UP).doubleValue();
+        return importoTotale;
     }
 }
