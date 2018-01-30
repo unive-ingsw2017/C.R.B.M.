@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -13,6 +14,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,11 +22,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -44,7 +48,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "HospitalWaste.db";
     private static final int MAX_DAYS = 15;
-    private static final int DATABSE_VERSION = 5;
+    private static final int DATABSE_VERSION = 10;
     private static final int ANNO_APPALTI = 2016;
 
     private static DBHelper instance = null;
@@ -66,29 +70,51 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     private void updateDatabase() {
-        SQLiteDatabase db = null;
-        try {
-            db = SQLiteDatabase.openDatabase(DATABASE_NAME, null, SQLiteDatabase.OPEN_READONLY);
-            db.close();
+        File dbFile = context.getDatabasePath(DATABASE_NAME);
 
-            if (isOldDatabase()) {
-                deleteDatabase();
-            }
-        } catch (Exception e) { //the database doesn't exist
-            Log.d("Database", "the couldn't be old because not exist yet");
+        if (dbFile.exists() && isOldDatabase()) {
+            deleteDatabase();
         }
+
     }
 
-    private boolean isOldDatabase() throws IOException {
-        DataInputStream dataInputStream = new DataInputStream(context.openFileInput("db_creation_time.txt"));
 
-        long lastTime = dataInputStream.readLong();
+    private long getCreationTimestamp() {
+        long lastTime = 0L;
+        try {
+            DataInputStream dataInputStream = new DataInputStream(context.openFileInput("db_creation_time.txt"));
+            lastTime = dataInputStream.readLong();
+
+            dataInputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lastTime;
+    }
+
+    public String getCreationDateString() {
+        String result = "N.D.";
+
+        Calendar cal = getTimestampCal(getCreationTimestamp());
+        result = DateFormat.format("dd-MM-yyyy hh:mm", cal).toString();
+
+        return result;
+    }
+
+    private Calendar getTimestampCal(long timestamp) {
+        Calendar timeStampCal = Calendar.getInstance(Locale.ITALIAN);
+        timeStampCal.setTimeInMillis(timestamp);
+
+        return timeStampCal;
+    }
+
+    private boolean isOldDatabase() {
+        long creationTime = getCreationTimestamp();
         long currentTime = System.currentTimeMillis();
 
-        dataInputStream.close();
         // cannot use LocalDate because of the API level
-        long diffTime = (currentTime - lastTime) / (1000 * 60 * 60 * 24);// diff time in days
-        if (diffTime > MAX_DAYS) {
+        long diffTimeinDays = (currentTime - creationTime) / (24 * 60 * 60 * 1000); // get the diff in days
+        if (diffTimeinDays > MAX_DAYS) {
             return true;
         }
         return false;
@@ -153,8 +179,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 List<AppaltiParser.Data> appaltiList = new ArrayList<>();
 
                 for (AppaltiParser.Data appalto : l) {
-                    if (!appalto.aggiudicatario.toLowerCase().equals("dati assenti o mal formattati"));
-                        appaltiList.add(appalto);
+                    if (!appalto.aggiudicatario.toLowerCase().equals("dati assenti o mal formattati"))
+                        ;
+                    appaltiList.add(appalto);
                 }
 
                 insertAppalti(db, appaltiList, codiceEnte);
@@ -200,7 +227,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     public List<ULSS> getULSS() {
-        if(ulss != Collections.EMPTY_LIST){
+        if (ulss != Collections.EMPTY_LIST) {
             return ulss;
         }
 
@@ -212,9 +239,9 @@ public class DBHelper extends SQLiteOpenHelper {
         return ulss;
     }
 
-    public String getCodiceEnte(String ulssName){
-        for(ULSS ulss: getULSS()){
-            if(ulss.getDescrizione().equals(ulssName)){
+    public String getCodiceEnte(String ulssName) {
+        for (ULSS ulss : getULSS()) {
+            if (ulss.getDescrizione().equals(ulssName)) {
                 return ulss.getCodiceEnte();
             }
         }
@@ -477,7 +504,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public int getPostiLetto (String codiceEnte) {
+    public int getPostiLetto(String codiceEnte) {
         SQLiteDatabase db = getReadableDatabase();
         int postiLetto = 0;
 
