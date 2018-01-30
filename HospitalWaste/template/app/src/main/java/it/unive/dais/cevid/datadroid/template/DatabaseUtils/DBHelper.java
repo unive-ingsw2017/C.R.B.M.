@@ -96,7 +96,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String result = "N.D.";
 
         Calendar cal = getTimestampCal(getCreationTimestamp());
-        result = DateFormat.format("dd-MM-yyyy hh:mm", cal).toString();
+        result = DateFormat.format("dd-MM-yyyy HH:mm", cal).toString();
 
         return result;
     }
