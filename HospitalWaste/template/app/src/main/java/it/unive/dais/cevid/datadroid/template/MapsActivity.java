@@ -101,7 +101,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected static final int PERMISSIONS_REQUEST_ACCESS_BOTH_LOCATION = 501;
     // alcune costanti
     private static final String TAG = "MapsActivity";
-    private static final int MAX_CONFRONTA_NUMBER = 3;
     /**
      * Questo oggetto è la mappa di Google Maps. Viene inizializzato asincronamente dal metodo {@code onMapsReady}.
      */
@@ -767,12 +766,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void addUlssConfronto(Marker marker) {
-        if (confrontaUlssList.size() < MAX_CONFRONTA_NUMBER) { // if ulss selected if less then MAX_CONFRONTA_NUMBER
-            confrontaUlssList.add(marker);
-            marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-        } else {
-            Toast.makeText(this, getString(R.string.confronta_max_number), Toast.LENGTH_SHORT).show();
-        }
+        confrontaUlssList.add(marker);
+        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 
         if (confrontaUlssList.size() >= 2) {
             confrontoMultiploButton.setVisibility(View.VISIBLE);
