@@ -36,7 +36,7 @@ public class InfoActivity extends AppCompatActivity {
 
         long lastTime = dataInputStream.readLong();
 
-        String lastUpdateString = DBHelper.getSingleton().getCreationDateString();
+        String lastUpdateString = helper.getCreationDateString();
 
         int version = helper.getDatabseVersion();
 
