@@ -39,13 +39,12 @@
 
     <integer-array name="tutorial_imgs">
         <item>@drawable/mappa</item>
+        <item>@drawable/mappa_filtrata</item>
         <item>@drawable/nav</item>
         <item>@drawable/confronto_multiplo</item>
         <item>@drawable/confronto</item>
-        <item>@drawable/mappa_filtrata</item>
         <item>@drawable/fornitori</item>
         <item>@drawable/ulss_rifornite</item>
-        <item>@drawable/incrocio_query</item>
     </integer-array>
 
 </resources>

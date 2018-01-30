@@ -46,7 +46,7 @@ public class HelpActivity extends AppCompatActivity {
             }
         });
 
-        imageSwitcher.setImageResource(R.drawable.big_logo);
+        imageSwitcher.setImageResource(tutorialImages.get(0));
         previous.setVisibility(View.INVISIBLE);
 
         previous.setOnClickListener(new View.OnClickListener() {
