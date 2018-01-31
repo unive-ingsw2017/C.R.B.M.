@@ -32,6 +32,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import Parser.SoldiPubbliciBilancioData;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.CsvRowParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
@@ -161,11 +162,16 @@ public class DBHelper extends SQLiteOpenHelper {
             //to insert voci di appalto for the ULSS
             List<ULSS> ulssList = getULSS(db);
             for (ULSS ulss : ulssList) {
-                SoldipubbliciParser soldipubbliciParser = new SoldipubbliciParser("SAN", ulss.getCodiceEnte());
+                SoldiPubbliciBilancioData soldiPubbliciBilancioData = new SoldiPubbliciBilancioData("SAN", ulss.getCodiceEnte());
+                List<Bilancio> vociBilancio = soldiPubbliciBilancioData.getBilancio();
+                /*SoldipubbliciParser soldipubbliciParser = new SoldipubbliciParser("SAN", ulss.getCodiceEnte());
                 soldipubbliciParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                List<SoldipubbliciParser.Data> soldipubbliciList = new ArrayList<>(soldipubbliciParser.getAsyncTask().get());
+                List<SoldipubbliciParser.Data> soldipubbliciList = new ArrayList<>(soldipubbliciParser.getAsyncTask().get());*/
 
-                insertVociBilancio(db, soldipubbliciList);
+                //insertVociBilancio(db, soldipubbliciList);
+                if (vociBilancio == null)
+                    Log.e("Errore", "AAAAAAAAAAAAAAAAA");
+                insertVociBilancio(db, vociBilancio);
             }
 
             // to insert the appalti for the ULSS
@@ -346,7 +352,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return vociBilancio;
     }
 
-    private void insertVociBilancio(SQLiteDatabase db, List<SoldipubbliciParser.Data> vociBilancio) {
+    /*private void insertVociBilancio(SQLiteDatabase db, List<SoldipubbliciParser.Data> vociBilancio) {
         List<Bilancio> l = new ArrayList<>();
 
         for (SoldipubbliciParser.Data voceBilancio : vociBilancio) {
@@ -355,6 +361,19 @@ public class DBHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         for (Bilancio bilancio : l) {
+            values.put("codice_siope", bilancio.getCodiceSiope());
+            values.put("codice_ente", bilancio.getCodiceEnte());
+            values.put("anno", bilancio.getAnno());
+            values.put("descrizione_codice", bilancio.getDescrizioneCodice());
+            values.put("importo", bilancio.getImporto());
+
+            db.insert("Bilancio", null, values);
+        }
+    }*/
+
+    private void insertVociBilancio (SQLiteDatabase db, List<Bilancio> vociBilancio) {
+        ContentValues values = new ContentValues();
+        for (Bilancio bilancio : vociBilancio) {
             values.put("codice_siope", bilancio.getCodiceSiope());
             values.put("codice_ente", bilancio.getCodiceEnte());
             values.put("anno", bilancio.getAnno());

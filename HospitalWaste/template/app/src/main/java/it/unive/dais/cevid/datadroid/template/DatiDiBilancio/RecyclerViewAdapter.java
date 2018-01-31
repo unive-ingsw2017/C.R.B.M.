@@ -41,7 +41,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         Bilancio bilancio = vociBilancio.get(position);
 
-        holder.importo.setText(String.format("Importto voce di Bilancio: %.2f €", bilancio.getImporto()));
+        holder.importo.setText(String.format("Importo voce di Bilancio: %.2f €", bilancio.getImporto()));
         holder.voceDiSpesa.setText(bilancio.getDescrizioneCodice());
         if (postiLetto != 0)
             holder.spesaProCapite.setText(String.format("Importo / Posti letto: %.2f €", bilancio.getImporto() / postiLetto));
