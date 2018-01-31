@@ -165,7 +165,7 @@ public class BilancioHelper {
         String joinString = generateQuestionsMarks(descrizioni.size());
 
 
-        String query = "SELECT DISTINCT codice_ente from Bilancio WHERE descrizione_codice IN (" + joinString + ") AND importo != 0;";
+        String query = "SELECT DISTINCT codice_ente from Bilancio WHERE descrizione_codice IN (" + joinString + ") AND importo != 0 and anno = 2016;";
         Cursor cur = db.rawQuery(query, descrizioni.toArray(new String[0]));
 
         for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {

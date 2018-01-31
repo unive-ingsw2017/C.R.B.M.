@@ -753,7 +753,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     // confronto multiplo stuff from here
     private Button confrontoMultiploButton;
-    private Set<Marker> confrontaUlssList; // will contains the long pressed marker
+    private Set<Marker> confrontaUlssList; // will contains the long choosed marker
     private String queryConfrontoSearch = "";
 
     private void removeUlssConfronto(Marker marker) {
