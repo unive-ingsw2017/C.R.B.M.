@@ -1,14 +1,12 @@
 package Parser;
 
-import android.support.annotation.NonNull;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
 
-import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.Bilancio;
+import it.unive.dais.crbm.DatiDiBilancio.Bilancio;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

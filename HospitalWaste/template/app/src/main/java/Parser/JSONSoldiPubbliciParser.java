@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 import java.util.List;
 
-import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.Bilancio;
+import it.unive.dais.crbm.DatiDiBilancio.Bilancio;
 
 /**
  * Created by gianmarcocallegher on 31/01/18.

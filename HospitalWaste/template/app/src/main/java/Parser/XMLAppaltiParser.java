@@ -20,7 +20,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import it.unive.dais.cevid.datadroid.template.DatiAppalti.Appalto;
+import it.unive.dais.crbm.DatiAppalti.Appalto;
 
 /**
  * Created by francescobenvenuto on 31/01/2018.
