@@ -1,45 +1,21 @@
 package it.unive.dais.cevid.datadroid.template.ConfrontoMultiplo;
 
-import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatCallback;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.view.ActionMode;
-
 import android.view.MenuItem;
-import android.widget.EditText;
-
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-
-import de.codecrafters.tableview.TableDataAdapter;
-import de.codecrafters.tableview.TableHeaderAdapter;
-import de.codecrafters.tableview.TableView;
-import de.codecrafters.tableview.model.TableColumnDpWidthModel;
-import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
-import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 import it.unive.dais.cevid.datadroid.template.DatabaseUtils.BilancioHelper;
-import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.FragmentStuff.FragmentAdapter;
-import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.FragmentStuff.TabFragment;
 import it.unive.dais.cevid.datadroid.template.R;
 
 /**

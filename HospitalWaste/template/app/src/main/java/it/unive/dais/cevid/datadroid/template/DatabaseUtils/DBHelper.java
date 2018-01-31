@@ -5,11 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.AsyncTask;
 import android.text.format.DateFormat;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -33,8 +36,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import Parser.SoldiPubbliciBilancioData;
-import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
-import it.unive.dais.cevid.datadroid.lib.parser.CsvRowParser;
+import Parser.XMLAppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 import it.unive.dais.cevid.datadroid.template.DatiAppalti.Appalto;
 import it.unive.dais.cevid.datadroid.template.DatiDiBilancio.Bilancio;
@@ -164,13 +166,7 @@ public class DBHelper extends SQLiteOpenHelper {
             for (ULSS ulss : ulssList) {
                 SoldiPubbliciBilancioData soldiPubbliciBilancioData = new SoldiPubbliciBilancioData("SAN", ulss.getCodiceEnte());
                 List<Bilancio> vociBilancio = soldiPubbliciBilancioData.getBilancio();
-                /*SoldipubbliciParser soldipubbliciParser = new SoldipubbliciParser("SAN", ulss.getCodiceEnte());
-                soldipubbliciParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                List<SoldipubbliciParser.Data> soldipubbliciList = new ArrayList<>(soldipubbliciParser.getAsyncTask().get());*/
 
-                //insertVociBilancio(db, soldipubbliciList);
-                if (vociBilancio == null)
-                    Log.e("Errore", "AAAAAAAAAAAAAAAAA");
                 insertVociBilancio(db, vociBilancio);
             }
 
@@ -178,19 +174,10 @@ public class DBHelper extends SQLiteOpenHelper {
             Map<String, List<URL>> appalti = takeUrlFromFile();
             for (String codiceEnte : appalti.keySet()) {
                 List<URL> urlList = appalti.get(codiceEnte);
-                AppaltiParser appaltiParser = new AppaltiParser(urlList);
-                appaltiParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                List<AppaltiParser.Data> l = new ArrayList<>(appaltiParser.getAsyncTask().get());
 
-                List<AppaltiParser.Data> appaltiList = new ArrayList<>();
-
-                for (AppaltiParser.Data appalto : l) {
-                    if (!appalto.aggiudicatario.toLowerCase().equals("dati assenti o mal formattati"))
-                        ;
-                    appaltiList.add(appalto);
-                }
-
-                insertAppalti(db, appaltiList, codiceEnte);
+                XMLAppaltiParser appaltiParser = XMLAppaltiParser.getInstance();
+                List<Appalto> partialResult = appaltiParser.parseAppalti(urlList, codiceEnte);
+                insertAppalti(db, partialResult, codiceEnte);
             }
 
             // serialize date of creation object to a file
@@ -208,24 +195,35 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    private Map<String, List<URL>> takeUrlFromFile() throws InterruptedException, ExecutionException {
+    private Map<String, List<URL>> takeUrlFromFile() throws InterruptedException, ExecutionException, IOException {
         HashMap<String, List<URL>> map = new HashMap<>();
-        InputStream is = context.getResources().openRawResource(R.raw.link_appalti);
-        CsvRowParser csvRowParser = new CsvRowParser(new InputStreamReader(is), true, ";");
-        List<CsvRowParser.Row> rows = csvRowParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get();
-        for (final CsvRowParser.Row r : rows) {
-            String codiceEnte = r.get("ULSS");
+
+        InputStreamReader reader = new InputStreamReader(
+                context.getResources().openRawResource(R.raw.link_appalti)
+        );
+
+        CSVParser csvParser = new CSVParser(
+                reader,
+                CSVFormat.DEFAULT
+                        .withFirstRecordAsHeader()
+                        .withIgnoreHeaderCase()
+                        .withTrim()
+                        .withQuote('\'')
+        );
+
+        for (CSVRecord row : csvParser.getRecords()) {
+            String codiceEnte = row.get("ulss");
             try {
                 if (map.containsKey(codiceEnte)) {
-                    map.get(codiceEnte).add(new URL(r.get("link")));
+                    map.get(codiceEnte).add(new URL(row.get("link")));
                 } else {
                     List<URL> l = new LinkedList<>();
-                    l.add(new URL(r.get("link")));
+                    l.add(new URL(row.get("link")));
                     map.put(codiceEnte, l);
                 }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
-                Log.e("URLError", r.get("link"));
+                Log.e("URLError", row.get("link"));
             }
         }
         return map;
@@ -391,23 +389,10 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param appalti
      * @param codice_ente
      */
-    private void insertAppalti(SQLiteDatabase db, List<AppaltiParser.Data> appalti, String codice_ente) {
-        List<Appalto> l = new ArrayList<>();
-        for (AppaltiParser.Data appalto : appalti) {
-            l.add(new Appalto(
-                    appalto.cig,
-                    appalto.oggetto,
-                    appalto.sceltac,
-                    appalto.codiceFiscaleAgg,
-                    appalto.aggiudicatario,
-                    Double.parseDouble(appalto.importo),
-                    codice_ente
-            ));
-        }
-
+    private void insertAppalti(SQLiteDatabase db, List<Appalto> appalti, String codice_ente) {
         ContentValues values = new ContentValues();
 
-        for (Appalto appalto : l) {
+        for (Appalto appalto : appalti) {
             if (!appalto.getAggiudicatario().equals("Dati assenti o mal formattati")) {
                 values.put("cig", appalto.getCig());
                 values.put("oggetto", appalto.getOggetto());

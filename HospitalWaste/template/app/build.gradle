@@ -38,7 +38,7 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.8.1'
     compile 'com.android.support:recyclerview-v7:25.4.0'
     compile 'com.android.support:appcompat-v7:25.4.0'
-    compile 'de.codecrafters.tableview:tableview:2.8.0'
+    compile group: 'org.apache.commons', name: 'commons-csv', version: '1.5'
+
     testCompile 'junit:junit:4.12'
-    compile project(path: ':lib')
 }

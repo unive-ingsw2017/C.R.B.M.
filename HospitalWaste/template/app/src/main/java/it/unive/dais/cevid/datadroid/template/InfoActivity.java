@@ -43,7 +43,6 @@ public class InfoActivity extends AppCompatActivity {
 
         buf.append("\tVERSION.RELEASE {").append(Build.VERSION.RELEASE).append("}");
         buf.append("\n\tVERSION.INCREMENTAL {").append(Build.VERSION.INCREMENTAL).append("}");
-        buf.append("\n\tDATADROID IS USED IN THIS APP");
         /*
         buf.append("\n\tVERSION.SDK {").append(Build.VERSION.SDK_INT).append("}");
         buf.append("\n\tBOARD {").append(Build.BOARD).append("}");
