@@ -17,9 +17,6 @@ import com.google.android.gms.maps.GoogleMap;
 
 import java.util.Map;
 
-import it.unive.dais.cevid.datadroid.lib.util.UnexpectedException;
-
-
 /**
  * Activity che rappresenta la schermata delle impostazioni accessibile tramite il menu.
  * Contiene metodi e utilità per la manipolazione rapida e sicura delle preferenze.
@@ -69,7 +66,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             case 3:
                 return GoogleMap.MAP_TYPE_HYBRID;
             default:
-                throw new UnexpectedException(String.format("undefined map style value: %d", n));
+                throw new IllegalStateException(String.format("undefined map style value: %d", n));
         }
     }
 
@@ -103,7 +100,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             case 2:
                 return (float) ctx.getResources().getInteger(R.integer.zoomFactor_high);
             default:
-                throw new UnexpectedException(String.format("undefined zoom threshold value: %d", n));
+                throw new IllegalStateException(String.format("undefined zoom threshold value: %d", n));
         }
     }
 
@@ -198,7 +195,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                         s = getString(R.string.menu_mapStyle_hybrid);
                         break;
                     default:
-                        throw new UnexpectedException(String.format("undefined map style value: %d", n));
+                        throw new IllegalStateException(String.format("undefined map style value: %d", n));
                 }
                 updateSummaryWithActiveValue(p, s);
 
@@ -214,7 +211,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 else if (x.compareTo((float) getResources().getInteger(R.integer.zoomFactor_mid)) == 0)
                     s = getString(R.string.menu_zoomThreshold_mid);
                 else
-                    throw new UnexpectedException(String.format("undefined zoom threshold value: %g", x));
+                    throw new IllegalStateException(String.format("undefined zoom threshold value: %g", x));
                 updateSummaryWithActiveValue(p, s);
                 break;
             }

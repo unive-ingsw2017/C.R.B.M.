@@ -5,6 +5,7 @@
 package it.unive.dais.crbm;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
@@ -13,7 +14,6 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -22,6 +22,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -57,7 +58,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -66,10 +66,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
-import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
-import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 import it.unive.dais.crbm.ConfrontoMultiplo.ConfrontoMultiploActivity;
 import it.unive.dais.crbm.DatabaseUtils.BilancioHelper;
 import it.unive.dais.crbm.DatabaseUtils.DBHelper;
@@ -291,11 +288,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      * @param grantResults array con l'azione da intraprende per ciascun dei permessi richiesti.
      * @see Activity#onRequestPermissionsResult(int, String[], int[])
      */
+    @SuppressLint("MissingPermission") // we already check for the permission
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ACCESS_BOTH_LOCATION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    gMap.setMyLocationEnabled(true);
                     Log.d(TAG, "permissions granted: ACCESS_FINE_LOCATION + ACCESS_COARSE_LOCATION");
                 } else {
                     Log.e(TAG, "permissions not granted: ACCESS_FINE_LOCATION + ACCESS_COARSE_LOCATION");
@@ -347,6 +346,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     queryConfrontoSearch = "";
                 }
                 return false;
+            }
+        });
+        MenuItemCompat.setOnActionExpandListener(myMenuItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                //the searchview has been closed
+                for (Marker marker : markers) {
+                    marker.setVisible(true);
+                }
+                return true;  // Return true to collapse action view
+            }
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;  // Return true to expand action view
             }
         });
         return super.onCreateOptionsMenu(menu);
@@ -515,7 +529,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_BOTH_LOCATION);
         } else {
             gMap.setMyLocationEnabled(true);
@@ -530,11 +545,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         UiSettings uis = gMap.getUiSettings();
         uis.setZoomGesturesEnabled(true);
         uis.setMyLocationButtonEnabled(true);
-        gMap.setOnMyLocationButtonClickListener(
-                () -> {
-                    gpsCheck();
-                    return false;
-                });
+        //gMap.setOnMyLocationButtonClickListener(
+          //      () -> {
+            //        gpsCheck();
+              //      return false;
+                //à});
 
         uis.setCompassEnabled(true);
         uis.setZoomControlsEnabled(true);
@@ -548,6 +563,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         putMarkers();
     }
+
 
     /**
      * Metodo proprietario che forza l'applicazione le impostazioni (o preferenze) che riguardano la mappa.
@@ -638,50 +654,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    /**
-     * Metodo di utilità che permette di posizionare rapidamente sulla mappa una lista di MapItem.
-     * Attenzione: l'oggetto gMap deve essere inizializzato, questo metodo va pertanto chiamato preferibilmente dalla
-     * callback onMapReady().
-     *
-     * @param l   la lista di oggetti di tipo I tale che I sia sottotipo di MapItem.
-     * @param <I> sottotipo di MapItem.
-     * @return ritorna la collection di oggetti Marker aggiunti alla mappa.
-     */
-    @NonNull
-    protected <I extends MapItem> Collection<Marker> putMarkersFromMapItems(List<I> l) {
-        Collection<Marker> r = new ArrayList<>();
-        for (MapItem i : l) {
-            MarkerOptions opts = new MarkerOptions()
-                    .title(i.getTitle())
-                    .position(i.getPosition())
-                    .snippet(i.getDescription());
-            r.add(gMap.addMarker(opts));
-
-        }
-        return r;
-    }
-
-    /**
-     * Metodo proprietario di utilità per popolare la mappa con i dati provenienti da un parser.
-     * Si tratta di un metodo che può essere usato direttamente oppure può fungere da esempio per come
-     * utilizzare i parser con informazioni geolocalizzate.
-     *
-     * @param parser un parser che produca sottotipi di MapItem, con qualunque generic Progress o Input
-     * @param <I>    parametro di tipo che estende MapItem.
-     * @return ritorna una collection di marker se tutto va bene; null altrimenti.
-     */
-    @Nullable
-    protected <I extends MapItem> Collection<Marker> putMarkersFromData(@NonNull AsyncParser<I, ?> parser) {
-        try {
-            List<I> l = parser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get();
-            Log.i(TAG, String.format("parsed %d lines", l.size()));
-            return putMarkersFromMapItems(l);
-        } catch (InterruptedException | ExecutionException e) {
-            Log.e(TAG, String.format("exception caught while parsing: %s", e));
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     /**
      * Controlla lo stato del GPS e dei servizi di localizzazione, comportandosi di conseguenza.
@@ -724,31 +696,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     // putMarkers code
-
     private void putMarkers() {
-        List<MapItem> l = new ArrayList<>();
+        Collection<Marker> markers = new LinkedList();
 
         for (ULSS ulss : DBHelper.getSingleton().getULSS()) {
-            l.add(new MapItem() {
-                @Override
-                public LatLng getPosition() {
-                    return ulss.getCoordinate();
-                }
-
-                @Override
-                public String getTitle() {
-                    return ulss.getDescrizione();
-                }
-
-                @Override
-                public String getDescription() {
-                    return getString(R.string.marker_description);
-                }
-            });
+            MarkerOptions opts = new MarkerOptions()
+                    .title(ulss.getDescrizione())
+                    .position(ulss.getCoordinate())
+                    .snippet(getString(R.string.marker_description));
+            markers.add(gMap.addMarker(opts));
 
             mapDenominazioneCodice.put(ulss.getDescrizione(), ulss.getCodiceEnte());
         }
-        markers = putMarkersFromMapItems(l);
+        this.markers = markers;
     }
 
     // confronto multiplo stuff from here

@@ -17,6 +17,7 @@ import it.unive.dais.crbm.DatiDiBilancio.Bilancio;
 
 public class BilancioHelper {
     private static DBHelper dbHelper;
+    private static int LAST_CONFRONTO_YEAR = 2016;
 
     public BilancioHelper() {
         if (dbHelper == null) {
@@ -165,7 +166,11 @@ public class BilancioHelper {
         String joinString = generateQuestionsMarks(descrizioni.size());
 
 
-        String query = "SELECT DISTINCT codice_ente from Bilancio WHERE descrizione_codice IN (" + joinString + ") AND importo != 0;";
+        String query = "SELECT DISTINCT codice_ente from Bilancio " +
+                "WHERE descrizione_codice IN (" + joinString + ") " +
+                "AND importo != 0 and anno = ?;";
+        
+        descrizioni.add(LAST_CONFRONTO_YEAR + "");
         Cursor cur = db.rawQuery(query, descrizioni.toArray(new String[0]));
 
         for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {

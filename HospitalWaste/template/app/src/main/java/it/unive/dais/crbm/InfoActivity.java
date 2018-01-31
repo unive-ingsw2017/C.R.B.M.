@@ -53,11 +53,11 @@ public class InfoActivity extends AppCompatActivity {
         buf.append("\n\tID {").append(Build.ID).append("}");
         */
 
-        developers.append("\tFrancesco Benvenuto");
-        developers.append("\n\tGianmarco Callegher");
-        developers.append("\n\tAurelio Makaj");
-        developers.append("\n\tAlessio Ragazzo");
-        
+        developers.append("\n\tCallegher Gianmarco");
+        developers.append("\n\tRagazzo Alessio");
+        developers.append("\tBenvenuto Francesco");
+        developers.append("\n\tMakaj Aurelio");
+
         return String.format(
                 "--- APP ---\n" +
                         "%s v%s [%s]\nDatabase last update: %s\nDatabase version: %s\n" +

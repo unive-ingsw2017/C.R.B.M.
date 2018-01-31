@@ -37,7 +37,6 @@ import java.util.concurrent.ExecutionException;
 
 import Parser.SoldiPubbliciBilancioData;
 import Parser.XMLAppaltiParser;
-import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 import it.unive.dais.crbm.DatiAppalti.Appalto;
 import it.unive.dais.crbm.DatiDiBilancio.Bilancio;
 import it.unive.dais.crbm.DatiULSS.ULSS;
@@ -303,71 +302,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public void deleteDatabase() {
         context.deleteDatabase(DATABASE_NAME); // remove the database
     }
-
-    /**
-     * prende un istanza della classe SoldipubbliciParser.Data e crea un array di Bilancio
-     * ed utilizza un altro metodo per inserire oggetti di tipo Bilancio
-     *
-     * @param bilancioData
-     */
-    private List<Bilancio> createVociBilancio(SoldipubbliciParser.Data bilancioData) {
-        List<Bilancio> vociBilancio = new LinkedList();
-        Bilancio bilancio_2013 = new Bilancio(
-                bilancioData.codice_siope,
-                bilancioData.cod_ente,
-                2013,
-                bilancioData.descrizione_codice,
-                Double.parseDouble(bilancioData.importo_2013)
-        );
-
-        vociBilancio.add(bilancio_2013);
-
-        vociBilancio.add(
-                bilancio_2013.generateNewBilancio(
-                        2014,
-                        Double.parseDouble(bilancioData.importo_2014)
-                )
-        );
-        vociBilancio.add(
-                bilancio_2013.generateNewBilancio(
-                        2015,
-                        Double.parseDouble(bilancioData.importo_2015)
-                )
-        );
-        vociBilancio.add(
-                bilancio_2013.generateNewBilancio(
-                        2016,
-                        Double.parseDouble(bilancioData.importo_2016)
-                )
-        );
-        vociBilancio.add(
-                bilancio_2013.generateNewBilancio(
-                        2017,
-                        Double.parseDouble(bilancioData.importo_2017)
-                )
-        );
-
-        return vociBilancio;
-    }
-
-    /*private void insertVociBilancio(SQLiteDatabase db, List<SoldipubbliciParser.Data> vociBilancio) {
-        List<Bilancio> l = new ArrayList<>();
-
-        for (SoldipubbliciParser.Data voceBilancio : vociBilancio) {
-            l.addAll(createVociBilancio(voceBilancio));
-        }
-
-        ContentValues values = new ContentValues();
-        for (Bilancio bilancio : l) {
-            values.put("codice_siope", bilancio.getCodiceSiope());
-            values.put("codice_ente", bilancio.getCodiceEnte());
-            values.put("anno", bilancio.getAnno());
-            values.put("descrizione_codice", bilancio.getDescrizioneCodice());
-            values.put("importo", bilancio.getImporto());
-
-            db.insert("Bilancio", null, values);
-        }
-    }*/
 
     private void insertVociBilancio (SQLiteDatabase db, List<Bilancio> vociBilancio) {
         ContentValues values = new ContentValues();
