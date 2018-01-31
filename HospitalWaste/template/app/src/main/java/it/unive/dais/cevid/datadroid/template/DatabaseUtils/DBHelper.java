@@ -352,25 +352,6 @@ public class DBHelper extends SQLiteOpenHelper {
         return vociBilancio;
     }
 
-    /*private void insertVociBilancio(SQLiteDatabase db, List<SoldipubbliciParser.Data> vociBilancio) {
-        List<Bilancio> l = new ArrayList<>();
-
-        for (SoldipubbliciParser.Data voceBilancio : vociBilancio) {
-            l.addAll(createVociBilancio(voceBilancio));
-        }
-
-        ContentValues values = new ContentValues();
-        for (Bilancio bilancio : l) {
-            values.put("codice_siope", bilancio.getCodiceSiope());
-            values.put("codice_ente", bilancio.getCodiceEnte());
-            values.put("anno", bilancio.getAnno());
-            values.put("descrizione_codice", bilancio.getDescrizioneCodice());
-            values.put("importo", bilancio.getImporto());
-
-            db.insert("Bilancio", null, values);
-        }
-    }*/
-
     private void insertVociBilancio (SQLiteDatabase db, List<Bilancio> vociBilancio) {
         ContentValues values = new ContentValues();
         for (Bilancio bilancio : vociBilancio) {
