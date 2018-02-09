@@ -15,8 +15,3 @@ INSERT INTO ULSS VALUES  (  "000515308000000", "ULSS 14", 45.1984097, 12.2831118
 INSERT INTO ULSS VALUES  (  "000515336000047", "ULSS 12", 45.5088116, 12.226319999999987, 1603, "Ospedale dell'Angelo di Mestre;Ospedale Villa Salus;Ospedale Ss Giovanni e Paolo di Venezia;Ospedale della pieta di Murano");
 INSERT INTO ULSS VALUES  (  "000515355000000", "ULSS 10", 45.6315995, 12.567563699999937, 694, "Ospedale di San Donà di Piave;Ospedale di Portogruaro;Ospedale di Jesolo");
 INSERT INTO ULSS VALUES  (  "000200173000000", "ULSS 19", 45.0481, 12.055150000000026, 450, "Ospedale Civile di Adria;Pronto Soccorso Santa Maria Regina degli Angeli di Adria");
-
-
-
-
-
