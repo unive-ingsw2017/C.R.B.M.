@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="it.unive.dais.cevid.datadroid.template">
+    package="it.unive.dais.crbm">
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -34,7 +34,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".SplashScreen"
+            android:name="it.unive.dais.crbm.SplashScreen"
             android:label="@string/title_activity_maps"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -52,36 +52,36 @@
                 android:value=".MapsActivity" />
         </activity>
         <activity
-            android:name=".InfoActivity"
-            android:parentActivityName=".MapsActivity"
+            android:name="it.unive.dais.crbm.InfoActivity"
+            android:parentActivityName="it.unive.dais.crbm.MapsActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapsActivity" />
+                android:value="it.unive.dais.crbm.MapsActivity" />
         </activity>
         <activity
-            android:name=".SettingsActivity"
-            android:parentActivityName=".MapsActivity"
+            android:name="it.unive.dais.crbm.SettingsActivity"
+            android:parentActivityName="it.unive.dais.crbm.MapsActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapsActivity" />
+                android:value="it.unive.dais.crbm.MapsActivity" />
         </activity>
         <activity
-            android:name=".DatiULSS.RicercaInDettaglioActivity"
-            android:parentActivityName=".MapsActivity"
+            android:name="it.unive.dais.crbm.DatiULSS.RicercaInDettaglioActivity"
+            android:parentActivityName="it.unive.dais.crbm.MapsActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapsActivity" />
+                android:value="it.unive.dais.crbm.MapsActivity" />
         </activity>
         <activity
-            android:name=".DatiDiBilancio.DatiDiBilancioActivity"
-            android:parentActivityName=".DatiULSS.RicercaInDettaglioActivity"
+            android:name="it.unive.dais.crbm.DatiDiBilancio.DatiDiBilancioActivity"
+            android:parentActivityName="it.unive.dais.crbm.DatiULSS.RicercaInDettaglioActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapsActivity" />
+                android:value="it.unive.dais.crbm.MapsActivity" />
 
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -92,74 +92,74 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".DatiAppalti.DatiAppaltiActivity"
-            android:parentActivityName=".DatiULSS.RicercaInDettaglioActivity"
+            android:name="it.unive.dais.crbm.DatiAppalti.DatiAppaltiActivity"
+            android:parentActivityName="it.unive.dais.crbm.DatiULSS.RicercaInDettaglioActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapsActivity" />
+                android:value="it.unive.dais.crbm.MapsActivity" />
         </activity>
         <activity
-            android:name=".DatiULSS.OspedaliAssociatiActivity"
-            android:parentActivityName=".DatiULSS.RicercaInDettaglioActivity"
+            android:name="it.unive.dais.crbm.DatiULSS.OspedaliAssociatiActivity"
+            android:parentActivityName="it.unive.dais.crbm.DatiULSS.RicercaInDettaglioActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapsActivity" />
+                android:value="it.unive.dais.crbm.MapsActivity" />
         </activity>
         <activity
-            android:name=".DatiULSS.IncrocioDati.IncrocioDatiActivity"
-            android:parentActivityName=".DatiULSS.RicercaInDettaglioActivity"
+            android:name="it.unive.dais.crbm.DatiULSS.IncrocioDati.IncrocioDatiActivity"
+            android:parentActivityName="it.unive.dais.crbm.DatiULSS.RicercaInDettaglioActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapsActivity" />
+                android:value="it.unive.dais.crbm.MapsActivity" />
         </activity>
         <activity
-            android:name=".ConfrontoMultiplo.ConfrontoMultiploActivity"
-            android:parentActivityName=".MapsActivity"
+            android:name="it.unive.dais.crbm.ConfrontoMultiplo.ConfrontoMultiploActivity"
+            android:parentActivityName="it.unive.dais.crbm.MapsActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapsActivity" />
+                android:value="it.unive.dais.crbm.MapsActivity" />
         </activity>
         <activity
-            android:name=".DatiFornitori.FornitoriActivity"
-            android:parentActivityName=".MapsActivity"
+            android:name="it.unive.dais.crbm.DatiFornitori.FornitoriActivity"
+            android:parentActivityName="it.unive.dais.crbm.MapsActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapsActivity" />
+                android:value="it.unive.dais.crbm.MapsActivity" />
         </activity>
         <activity
-            android:name=".DatiFornitori.ulssFornite.UlssFornite"
-            android:parentActivityName=".DatiFornitori.FornitoriActivity"
+            android:name="it.unive.dais.crbm.DatiFornitori.ulssFornite.UlssFornite"
+            android:parentActivityName="it.unive.dais.crbm.DatiFornitori.FornitoriActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapsActivity" />
+                android:value="it.unive.dais.crbm.MapsActivity" />
         </activity>
         <activity
-            android:name=".MapsActivity"
+            android:name="it.unive.dais.crbm.MapsActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SplashScreen" />
+                android:value="it.unive.dais.crbm.SplashScreen" />
         </activity>
         <activity
-            android:name=".DatiFornitori.ulssFornite.vociPerUlss.VociPerUlssActivity"
+            android:name="it.unive.dais.crbm.DatiFornitori.ulssFornite.vociPerUlss.VociPerUlssActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DatiFornitori.ulssFornite.UlssFornite" />
+                android:value="it.unive.dais.crbm.DatiFornitori.ulssFornite.UlssFornite" />
         </activity>
         <activity
-            android:name=".HelpActivity"
-            android:parentActivityName=".MapsActivity"
+            android:name="it.unive.dais.crbm.HelpActivity"
+            android:parentActivityName="it.unive.dais.crbm.MapsActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapsActivity">
+                android:value="it.unive.dais.crbm.MapsActivity">
             </meta-data>
         </activity>
     </application>
